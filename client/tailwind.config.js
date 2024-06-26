@@ -12,6 +12,7 @@ export default {
                 success: "#2DD36F",
                 warning: "#FFC409",
                 failure: "#EB445A",
+                plain: "#fff",
             },
         },
     },
