@@ -13,6 +13,12 @@ type ErrorRequestHandler = (
     next: NextFunction
 ) => void;
 
+interface ITrackerApp {
+    port: number;
+    corsOpts?: CorsOptions;
+    loggerEnabled?: boolean;
+}
+
 type DatabaseConnectionFunction = () => void;
 
 class TrackerApp {
@@ -20,19 +26,20 @@ class TrackerApp {
     private port: number;
     private appLogger: AppLogger;
 
-    constructor(PORT: number, corsOptions: CorsOptions) {
+    constructor({ port, corsOpts, loggerEnabled = false }: ITrackerApp) {
         this.app = express();
         this.app.use(express.json());
-        this.port = PORT;
+        this.port = port;
         this.appLogger = new AppLogger(this.port);
 
-        this.app.use(cookieParser())
+        this.app.use(cookieParser());
         this.app.use(express.json());
-        this.app.use(cors(corsOptions));
-        this.app.use((req, res, next) => {
-            this.appLogger.request(req);
-            next();
-        });
+        if (corsOpts) this.app.use(cors(corsOpts));
+        if (loggerEnabled)
+            this.app.use((req, res, next) => {
+                this.appLogger.request(req);
+                next();
+            });
     }
 
     private handleErrorRequest: ErrorRequestHandler = (err, req, res, next) => {
