@@ -9,9 +9,11 @@ import { user } from "../common/api";
 import { signInSchema } from "../validation/user";
 import { SignInData } from "../types/auth";
 import { useUser } from "../contexts/User";
+import { useToast } from "../contexts/Toast";
 
 const SignIn: FC = () => {
     const { refetchAuth } = useUser();
+    const { error } = useToast();
     const [showPass, setShowPass] = useState(false);
 
     const { mutateAsync } = useMutation<any, any, SignInData>({
@@ -27,10 +29,12 @@ const SignIn: FC = () => {
                 validationSchema={signInSchema}
                 validateOnBlur={true}
                 validateOnChange={true}
-                onSubmit={async (val) => {
+                onSubmit={async (val, { resetForm }) => {
                     const res = await mutateAsync(val);
 
                     if (res.status >= 400) {
+                        error(res.data.message);
+                        resetForm();
                         return;
                     }
 
