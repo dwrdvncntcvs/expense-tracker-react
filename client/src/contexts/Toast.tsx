@@ -43,7 +43,7 @@ const ToastProvider: FC<PropsWithChildren> = ({ children }) => {
         setToasts((val) => [...val, toast]);
     };
 
-    const success = (message: string, timeout: number = 2000) =>
+    const success = (message: string, timeout: number = 5000) =>
         addToast({
             id: `${toasts.length + 1}`,
             message,
@@ -51,7 +51,7 @@ const ToastProvider: FC<PropsWithChildren> = ({ children }) => {
             type: "success",
         });
 
-    const error = (message: string, timeout: number = 2000) =>
+    const error = (message: string, timeout: number = 5000) =>
         addToast({
             id: `${toasts.length + 1}`,
             message,
@@ -59,7 +59,7 @@ const ToastProvider: FC<PropsWithChildren> = ({ children }) => {
             type: "error",
         });
 
-    const warning = (message: string, timeout: number = 2000) =>
+    const warning = (message: string, timeout: number = 5000) =>
         addToast({
             id: `${toasts.length + 1}`,
             message,
@@ -67,7 +67,7 @@ const ToastProvider: FC<PropsWithChildren> = ({ children }) => {
             type: "warning",
         });
 
-    const info = (message: string, timeout: number = 2000) =>
+    const info = (message: string, timeout: number = 5000) =>
         addToast({
             id: `${toasts.length + 1}`,
             message,

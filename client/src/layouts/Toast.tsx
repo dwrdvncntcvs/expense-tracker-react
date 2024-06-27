@@ -27,12 +27,12 @@ const Toast: FC = () => {
 
     return (
         toasts.length > 0 && (
-            <div className="fixed max-h-screen w-96 flex flex-col gap-2 right-0 bottom-0 p-4">
+            <div className="fixed max-h-screen w-96 flex flex-col gap-2 right-0 top-0 p-4">
                 {toasts.map((toast) => {
                     const Icon = toastIconByType[toast.type];
                     return (
                         <div
-                            className={`p-2 rounded-lg flex gap-4 items-center relative ${
+                            className={`p-2 rounded-lg border-2 flex gap-4 items-center relative ${
                                 toastTypeClass[toast.type]
                             }`}
                             key={toast.id}
