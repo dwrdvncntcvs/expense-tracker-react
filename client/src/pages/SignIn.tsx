@@ -74,14 +74,6 @@ const SignIn: FC = () => {
                                     value: errors.password,
                                 }}
                             />
-                        </div>
-                        <Link
-                            to="/forgot-password"
-                            className="text-end text-primary"
-                        >
-                            Forgot Password?
-                        </Link>
-                        <div className="flex gap-2 items-end justify-end">
                             <button
                                 className="h-10 w-14 border flex items-center justify-center text-primary rounded-xl"
                                 type="button"
@@ -91,14 +83,21 @@ const SignIn: FC = () => {
                             >
                                 {showPass ? <HiEyeSlash /> : <HiEye />}
                             </button>
-                            <button
-                                className="w-40 h-10 flex self-end justify-center mt-4 items-center bg-primary text-plain text-end p-2 rounded-xl disabled:cursor-not-allowed disabled:opacity-5"
-                                type="submit"
-                                disabled={isSubmitting}
-                            >
-                                Sign In
-                            </button>
                         </div>
+                        <Link
+                            to="/forgot-password"
+                            className="text-end text-primary"
+                        >
+                            Forgot Password?
+                        </Link>
+
+                        <button
+                            className="w-40 h-10 flex self-end justify-center mt-4 items-center bg-primary text-plain text-end p-2 rounded-xl disabled:cursor-not-allowed disabled:opacity-5"
+                            type="submit"
+                            disabled={isSubmitting}
+                        >
+                            Sign In
+                        </button>
                     </form>
                 )}
             </Formik>
