@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { Input } from "../components/Fields";
-import { HiEye, HiLockClosed, HiUser, HiEyeSlash } from "react-icons/hi2";
+import { HiEye, HiLockClosed, HiUser, HiEyeSlash, HiAtSymbol } from "react-icons/hi2";
 import { AuthLayout } from "../layouts";
 import { Link } from "react-router-dom";
 import { useAuthForm } from "../hooks";
@@ -11,7 +11,7 @@ const SignIn: FC = () => {
     const { authData, handleAuthChange, handleAuthSubmit, response } =
         useAuthForm<"signIn">({
             password: "",
-            username: "",
+            email: "",
         });
 
     return (
@@ -22,10 +22,10 @@ const SignIn: FC = () => {
             >
                 <Input
                     type="text"
-                    placeholder="Username"
-                    icon={{ val: HiUser, position: "start" }}
-                    name="username"
-                    value={authData.username || ""}
+                    placeholder="Email"
+                    icon={{ val: HiAtSymbol, position: "start" }}
+                    name="email"
+                    value={authData.email || ""}
                     onChange={handleAuthChange}
                 />
                 <div className="flex gap-2">

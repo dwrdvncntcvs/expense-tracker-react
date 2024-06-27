@@ -25,6 +25,8 @@ const useAuthForm = <T extends AuthDataType>(data: AuthData[T]) => {
             const url =
                 "first_name" in data ? "/users/sign-up" : "/users/sign-in";
 
+            console.log("Auth Data: ", authData);
+
             return axios.post(url, JSON.stringify(authData));
         },
     });
