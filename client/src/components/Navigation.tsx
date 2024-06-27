@@ -60,7 +60,7 @@ const Navigation: FC = () => {
                 ))}
                 <li className="flex items-center justify-center  h-10 ">
                     <button
-                        className="w-10 h-10 rounded-full flex justify-center items-center hover:border-2  hover:border-primary text-primary bg-plain"
+                        className="w-10 h-10 rounded-lg border-2 flex justify-center items-center  border-primary text-primary hover:border-failure hover:text-failure bg-plain"
                         type="button"
                         onClick={signOutAction}
                     >
