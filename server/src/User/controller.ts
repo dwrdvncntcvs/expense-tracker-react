@@ -37,7 +37,7 @@ class UserController implements IUserController {
             secure: false,
         });
 
-        return res.send({ data: req.user as any, accessToken, refreshToken });
+        return res.send({ user: req.user as any, accessToken, refreshToken });
     };
 
     signOut: RequestHandler = async (req, res, next) => {

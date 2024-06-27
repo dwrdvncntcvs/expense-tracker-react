@@ -1,8 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import { ChangeEvent, SyntheticEvent, useState } from "react";
-import axios from "../common/api/";
-import { SignInData, SignUpData } from "../types/auth";
 import { useNavigate } from "react-router-dom";
+import axios from "../common/api/";
+import { useUser } from "../contexts/User";
+import { SignInData, SignUpData } from "../types/auth";
 
 type AuthDataType = "signIn" | "signUp";
 
@@ -12,6 +13,7 @@ interface AuthData {
 }
 
 const useAuthForm = <T extends AuthDataType>(data: AuthData[T]) => {
+    const { refetchAuth } = useUser();
     const [authData, setAuthData] = useState<Partial<AuthData[T]>>(() => data);
 
     const navigate = useNavigate();
@@ -24,8 +26,6 @@ const useAuthForm = <T extends AuthDataType>(data: AuthData[T]) => {
         mutationFn: () => {
             const url =
                 "first_name" in data ? "/users/sign-up" : "/users/sign-in";
-
-            console.log("Auth Data: ", authData);
 
             return axios.post(url, JSON.stringify(authData));
         },
@@ -43,6 +43,8 @@ const useAuthForm = <T extends AuthDataType>(data: AuthData[T]) => {
             setAuthData(data);
             return;
         }
+
+        refetchAuth();
 
         if ("first_name" in data) {
             navigate("/sign-in");

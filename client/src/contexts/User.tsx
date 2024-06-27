@@ -1,22 +1,22 @@
 import { QueryStatus, useQuery } from "@tanstack/react-query";
 import {
-    Dispatch,
     FC,
     PropsWithChildren,
-    SetStateAction,
     createContext,
     useContext,
     useEffect,
-    useState,
 } from "react";
 import axios from "../common/api";
 import { User, UserResponse } from "../types/auth";
+import { useNavigate } from "react-router-dom";
 
 interface IUserContext {
     isAuthenticated: boolean;
     user: User | null;
     loading: QueryStatus;
     error: object | null;
+    signOutAction: () => void;
+    refetchAuth: any;
 }
 
 const UserContext = createContext<IUserContext>({
@@ -24,6 +24,8 @@ const UserContext = createContext<IUserContext>({
     user: null,
     loading: "success",
     error: null,
+    signOutAction: () => {},
+    refetchAuth: () => {},
 });
 
 const UserProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -37,6 +39,14 @@ const UserProvider: FC<PropsWithChildren> = ({ children }) => {
         enabled: false,
     });
 
+    const { refetch: signOutRefetch } = useQuery({
+        queryKey: ["sign-out"],
+        queryFn: () => axios.get("/users/sign-out"),
+        enabled: false,
+    });
+
+    const navigate = useNavigate();
+
     const userResponse: UserResponse = data ? JSON.parse(data.data) : null;
 
     const user: User | null = userResponse ? userResponse.user : null;
@@ -44,6 +54,16 @@ const UserProvider: FC<PropsWithChildren> = ({ children }) => {
     const isAuthenticated = !!userResponse?.accessToken;
 
     const error = data && data?.status >= 400 ? JSON.parse(data.data) : null;
+
+    const signOutAction = async () => {
+        const res = await signOutRefetch();
+
+        if (res.data && res.data.status >= 400) return;
+
+        if (res.status === "success") navigate("/sign-in", { replace: true });
+
+        refetch();
+    };
 
     useEffect(() => {
         refetch();
@@ -56,6 +76,8 @@ const UserProvider: FC<PropsWithChildren> = ({ children }) => {
                 user,
                 loading,
                 error,
+                signOutAction,
+                refetchAuth: refetch,
             }}
         >
             {children}

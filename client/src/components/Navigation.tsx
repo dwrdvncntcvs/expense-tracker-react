@@ -1,10 +1,14 @@
 import { FC } from "react";
+import { HiLogout } from "react-icons/hi";
 import { HiCog8Tooth, HiHome, HiUser } from "react-icons/hi2";
 import { NavLink } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import { ILink } from "../types/navigation";
+import { useUser } from "../contexts/User";
 
 const Navigation: FC = () => {
+    const { signOutAction } = useUser();
+
     const links: ILink[] = [
         {
             icon: HiHome,
@@ -43,9 +47,9 @@ const Navigation: FC = () => {
                         <NavLink
                             to={link.path}
                             className={({ isActive }) =>
-                                `w-10 h-10 rounded-full flex justify-center items-center ${
+                                `w-10 h-10 rounded-full flex justify-center items-center hover:border-2  hover:border-primary ${
                                     isActive
-                                        ? "text-plain bg-primary "
+                                        ? "text-plain bg-primary pointer-events-none"
                                         : "text-secondary"
                                 }`
                             }
@@ -54,6 +58,15 @@ const Navigation: FC = () => {
                         </NavLink>
                     </li>
                 ))}
+                <li className="flex items-center justify-center  h-10 ">
+                    <button
+                        className="w-10 h-10 rounded-full flex justify-center items-center hover:border-2  hover:border-primary text-primary bg-plain"
+                        type="button"
+                        onClick={signOutAction}
+                    >
+                        <HiLogout size={22} />
+                    </button>
+                </li>
             </ul>
         </div>
     );
