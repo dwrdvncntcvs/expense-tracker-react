@@ -32,9 +32,11 @@ class TrackerApp {
         this.port = port;
         this.appLogger = new AppLogger(this.port);
 
+        if (corsOpts) {
+            this.app.use(cors(corsOpts));
+        }
         this.app.use(cookieParser());
         this.app.use(express.json());
-        if (corsOpts) this.app.use(cors(corsOpts));
         if (loggerEnabled)
             this.app.use((req, res, next) => {
                 this.appLogger.request(req);

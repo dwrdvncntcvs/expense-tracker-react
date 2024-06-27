@@ -17,15 +17,22 @@ router.createRoutes("post", "/sign-in", userController.signIn, [
     userMiddleware.validatePassword,
 ]);
 
-router.createRoutes("get", "/sign-out", userController.signOut, [], { isAuthenticated: true, middlewares: [userMiddleware.canAccess] })
+router.createRoutes("get", "/sign-out", userController.signOut, [], {
+    isAuthenticated: true,
+    middlewares: [userMiddleware.canAccess],
+});
 
-router.createRoutes("get", "/isAuthenticated", userController.isAuthenticated, [], { isAuthenticated: true })
+router.createRoutes(
+    "get",
+    "/is-authenticated",
+    userController.isAuthenticated,
+    [],
+    { isAuthenticated: true }
+);
 
 router.createRoutes("get", "/:username", userController.account, [], {
     isAuthenticated: true,
     middlewares: [userMiddleware.canAccess],
 });
-
-
 
 export default router.routerDetails();

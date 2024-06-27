@@ -13,3 +13,9 @@ export interface User {
 }
 
 export type SignUpData = Omit<User, "id">;
+
+export interface UserResponse {
+    user: User;
+    accessToken: string;
+    refreshToken: string;
+}

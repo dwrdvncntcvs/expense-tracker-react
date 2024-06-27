@@ -1,9 +1,9 @@
 import { FC, useState } from "react";
-import { Input } from "../components/Fields";
-import { HiEye, HiLockClosed, HiUser, HiEyeSlash, HiAtSymbol } from "react-icons/hi2";
-import { AuthLayout } from "../layouts";
+import { HiAtSymbol, HiEye, HiEyeSlash, HiLockClosed } from "react-icons/hi2";
 import { Link } from "react-router-dom";
+import { Input } from "../components/Fields";
 import { useAuthForm } from "../hooks";
+import { AuthLayout } from "../layouts";
 
 const SignIn: FC = () => {
     const [showPass, setShowPass] = useState(false);

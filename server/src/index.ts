@@ -7,7 +7,7 @@ import { MONGO_URL, PORT } from "./variables";
 
 new TrackerApp({
     port: PORT,
-    corsOpts: { credentials: true, origin: ["http://localhost:5173"] },
+    corsOpts: { credentials: true, origin: "http://localhost:5173" },
     loggerEnabled: true,
 })
     .addDatabaseConnection(() => {
