@@ -3,28 +3,35 @@ import ToastProvider from "./contexts/Toast";
 import UserProvider from "./contexts/User";
 import { MainLayout, Private, Public, Toast } from "./layouts";
 import { ForgotPassword, Home, Profile, SignIn, SignUp } from "./pages";
+import ModalProvider from "./contexts/Modal";
 
 function App() {
     return (
         <ToastProvider>
-            <UserProvider>
-                <MainLayout>
-                    <Routes>
-                        <Route element={<Public />}>
-                            <Route path="/sign-in" element={<SignIn />} />
-                            <Route path="/sign-up" element={<SignUp />} />
-                            <Route
-                                path="/forgot-password"
-                                element={<ForgotPassword />}
-                            />
-                        </Route>
-                        <Route element={<Private />}>
-                            <Route path="/" index element={<Home />}></Route>
-                            <Route path="/:id" element={<Profile />} />
-                        </Route>
-                    </Routes>
-                </MainLayout>
-            </UserProvider>
+            <ModalProvider>
+                <UserProvider>
+                    <MainLayout>
+                        <Routes>
+                            <Route element={<Public />}>
+                                <Route path="/sign-in" element={<SignIn />} />
+                                <Route path="/sign-up" element={<SignUp />} />
+                                <Route
+                                    path="/forgot-password"
+                                    element={<ForgotPassword />}
+                                />
+                            </Route>
+                            <Route element={<Private />}>
+                                <Route
+                                    path="/"
+                                    index
+                                    element={<Home />}
+                                ></Route>
+                                <Route path="/:id" element={<Profile />} />
+                            </Route>
+                        </Routes>
+                    </MainLayout>
+                </UserProvider>
+            </ModalProvider>
             <Toast />
         </ToastProvider>
     );
