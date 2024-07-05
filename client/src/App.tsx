@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
-import { ForgotPassword, Home, Profile, SignIn, SignUp } from "./pages";
-import { MainLayout, Private, Public, Toast } from "./layouts";
-import UserProvider from "./contexts/User";
 import ToastProvider from "./contexts/Toast";
+import UserProvider from "./contexts/User";
+import { MainLayout, Private, Public, Toast } from "./layouts";
+import { ForgotPassword, Home, Profile, SignIn, SignUp } from "./pages";
 
 function App() {
     return (
