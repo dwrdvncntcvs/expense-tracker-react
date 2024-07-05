@@ -12,3 +12,4 @@ const axios = new Axios({
 export default axios;
 
 export { default as user } from "./requests/user";
+export { default as expense } from "./requests/expense";
