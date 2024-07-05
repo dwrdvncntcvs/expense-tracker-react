@@ -20,9 +20,9 @@ const Field: FC<InputProps> = ({ icon, ...props }) => {
     return (
         <div className="flex flex-col w-full items-end">
             <div
-                className={`border rounded-xl w-full overflow-auto flex items-center ${
-                    error && touched ? "border-failure" : ""
-                }`}
+                className={`border rounded-xl w-full overflow-auto flex ${
+                    icon?.position === "end" ? "flex-row-reverse" : "flex-row"
+                } items-center ${error && touched ? "border-failure" : ""}`}
             >
                 {icon && (
                     <div className="px-4 text-primary">
@@ -30,7 +30,7 @@ const Field: FC<InputProps> = ({ icon, ...props }) => {
                     </div>
                 )}
                 <input
-                    className={`w-full p-2 outline-none `}
+                    className={`w-full p-2 outline-none px-4`}
                     {...props}
                     onChange={onChange}
                     onBlur={onBlur}

@@ -5,7 +5,7 @@ import ToastProvider from "./contexts/Toast";
 import UserProvider from "./contexts/User";
 import { MainLayout, Private, Public, SettingsLayout, Toast } from "./layouts";
 import { ForgotPassword, Home, Profile, SignIn, SignUp } from "./pages";
-import { UserSettings } from "./pages/Settings";
+import { CategoriesSettings, UserSettings } from "./pages/Settings";
 
 function App() {
     const { pathname } = useLocation();
@@ -46,7 +46,7 @@ function App() {
                                     />
                                     <Route
                                         path="categories"
-                                        element={<UserSettings />}
+                                        element={<CategoriesSettings />}
                                     />
                                 </Route>
                                 <Route path="/:id" element={<Profile />} />

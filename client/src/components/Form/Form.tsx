@@ -8,6 +8,7 @@ interface FormProps extends PropsWithChildren {
     ) => void;
     initialValues: FormikValues;
     validationSchema?: any;
+    className?: string;
 }
 
 const Form: FC<FormProps> = ({
@@ -15,6 +16,7 @@ const Form: FC<FormProps> = ({
     onSubmit,
     initialValues,
     validationSchema,
+    className,
 }) => {
     return (
         <Formik
@@ -26,7 +28,7 @@ const Form: FC<FormProps> = ({
         >
             {({ handleSubmit }) => (
                 <form
-                    className="self-center w-96 flex flex-col gap-2"
+                    className={className ? className : "flex flex-col gap-2"}
                     onSubmit={handleSubmit}
                 >
                     {children}

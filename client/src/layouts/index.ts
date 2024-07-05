@@ -4,3 +4,4 @@ export { default as Private } from "./Private";
 export { default as Public } from "./Public";
 export { default as SettingsLayout } from "./SettingsLayout";
 export { default as Toast } from "./Toast";
+export { default as SettingsContentLayout } from "./SettingsContentLayout";
