@@ -1,10 +1,11 @@
 import { Route, Routes, useLocation } from "react-router-dom";
+import { CreateExpense } from "./components/Expense";
+import ModalProvider from "./contexts/Modal";
 import ToastProvider from "./contexts/Toast";
 import UserProvider from "./contexts/User";
-import { MainLayout, Private, Public, Toast } from "./layouts";
+import { MainLayout, Private, Public, SettingsLayout, Toast } from "./layouts";
 import { ForgotPassword, Home, Profile, SignIn, SignUp } from "./pages";
-import ModalProvider from "./contexts/Modal";
-import { CreateExpense } from "./components/Expense";
+import { UserSettings } from "./pages/Settings";
 
 function App() {
     const { pathname } = useLocation();
@@ -31,6 +32,23 @@ function App() {
                                     index
                                     element={<Home />}
                                 ></Route>
+                                <Route
+                                    path="/settings/"
+                                    element={<SettingsLayout />}
+                                >
+                                    <Route
+                                        path="user"
+                                        element={<UserSettings />}
+                                    />
+                                    <Route
+                                        path="privacy"
+                                        element={<UserSettings />}
+                                    />
+                                    <Route
+                                        path="categories"
+                                        element={<UserSettings />}
+                                    />
+                                </Route>
                                 <Route path="/:id" element={<Profile />} />
                             </Route>
                         </Routes>
