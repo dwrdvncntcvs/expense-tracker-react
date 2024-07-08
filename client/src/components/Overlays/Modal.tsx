@@ -1,7 +1,8 @@
 import { FC, PropsWithChildren } from "react";
 import Portal from "./Portal";
 import { HiX } from "react-icons/hi";
-import { useModal } from "../../contexts/Modal";
+import { useAppDispatch } from "../../hooks/storeHooks";
+import { hide, useModal } from "../../store/slices/modal";
 
 interface Option {
     closeCb: () => void;
@@ -14,6 +15,7 @@ interface ModalProps extends PropsWithChildren {
 }
 
 const Modal: FC<ModalProps> = ({ name, title, children, options }) => {
+    const dispatch = useAppDispatch();
     const _modal = useModal();
 
     const overlay = document.getElementById("overlay");
@@ -25,7 +27,7 @@ const Modal: FC<ModalProps> = ({ name, title, children, options }) => {
             return;
         }
 
-        _modal.hide();
+        dispatch(hide());
     };
 
     return (
