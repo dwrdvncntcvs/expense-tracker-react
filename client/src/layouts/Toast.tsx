@@ -1,5 +1,4 @@
-import { FC } from "react";
-import { useToast } from "../contexts/Toast";
+import { FC, useEffect } from "react";
 import {
     HiCheckCircle,
     HiExclamationCircle,
@@ -7,9 +6,30 @@ import {
     HiInformationCircle,
 } from "react-icons/hi2";
 import { HiX } from "react-icons/hi";
+import { useToast } from "../store/slices/toast";
+import { hide } from "../store/slices/toast";
+import { useAppDispatch } from "../hooks/storeHooks";
 
 const Toast: FC = () => {
-    const { toasts, hide } = useToast();
+    const { toasts } = useToast();
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        const timeouts: number[] = [];
+
+        toasts.forEach((toast) => {
+            const timeout = setTimeout(() => {
+                dispatch(hide(toast.id));
+                timeouts.push(timeout);
+            }, toast.timeout);
+        });
+
+        return () => {
+            if (timeouts.length) {
+                timeouts.forEach((timeout) => clearTimeout(timeout));
+            }
+        };
+    }, [toasts]);
 
     const toastTypeClass = {
         info: "bg-blue-900/30 border border-blue-900 text-blue-900",
@@ -40,7 +60,7 @@ const Toast: FC = () => {
                             <Icon /> {toast.message}
                             <button
                                 className="absolute top-2 right-2"
-                                onClick={() => hide(toast.id)}
+                                onClick={() => dispatch(hide(toast.id))}
                             >
                                 <HiX />
                             </button>

@@ -1,20 +1,21 @@
 import { useMutation } from "@tanstack/react-query";
 import { FC, useState } from "react";
+import { HiEye } from "react-icons/hi";
+import { HiAtSymbol, HiEyeSlash, HiLockClosed } from "react-icons/hi2";
+import { Link } from "react-router-dom";
 import { user } from "../common/api";
 import { Field, Form } from "../components/Form";
-import { useToast } from "../contexts/Toast";
 import { useUser } from "../contexts/User";
 import { AuthLayout } from "../layouts";
+import { error } from "../store/slices/toast";
 import { SignInData } from "../types/auth";
 import { signInSchema } from "../validation/user";
-import { HiAtSymbol, HiEyeSlash, HiLockClosed } from "react-icons/hi2";
-import { HiEye } from "react-icons/hi";
-import { Link } from "react-router-dom";
+import { useAppDispatch } from "../hooks/storeHooks";
 
 const SignIn: FC = () => {
     const { refetchAuth } = useUser();
-    const { error } = useToast();
     const [showPass, setShowPass] = useState(false);
+    const dispatch = useAppDispatch();
 
     const { mutateAsync } = useMutation<any, any, SignInData>({
         mutationKey: ["sign-in"],
@@ -30,7 +31,7 @@ const SignIn: FC = () => {
                     const res = await mutateAsync(val);
 
                     if (res.status >= 400) {
-                        error(res.data.message);
+                        dispatch(error({ message: res.data.message }));
                         resetForm();
                         return;
                     }

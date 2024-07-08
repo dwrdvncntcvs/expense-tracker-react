@@ -1,4 +1,4 @@
-import { Formik } from "formik";
+import { useMutation } from "@tanstack/react-query";
 import { FC, useState } from "react";
 import {
     HiAtSymbol,
@@ -7,19 +7,18 @@ import {
     HiLockClosed,
     HiUser,
 } from "react-icons/hi2";
-import { Input } from "../components/Fields";
-import { AuthLayout } from "../layouts";
-import { signUpSchema } from "../validation/user";
-import { useMutation } from "@tanstack/react-query";
-import { user } from "../common/api";
-import { SignUpData } from "../types/auth";
 import { useNavigate } from "react-router-dom";
+import { user } from "../common/api";
 import { Field, Form } from "../components/Form";
-import { useToast } from "../contexts/Toast";
+import { AuthLayout } from "../layouts";
+import { error, success } from "../store/slices/toast";
+import { SignUpData } from "../types/auth";
+import { signUpSchema } from "../validation/user";
+import { useAppDispatch } from "../hooks/storeHooks";
 
 const SignUp: FC = () => {
-    const { error, success } = useToast();
     const [showPass, setShowPass] = useState(false);
+    const dispatch = useAppDispatch();
 
     const { mutateAsync } = useMutation({
         mutationFn: (val: SignUpData) => user.signUpRequest(val),
@@ -42,11 +41,13 @@ const SignUp: FC = () => {
                     const res = await mutateAsync(val);
 
                     if (res.status >= 400) {
-                        error(res.data.message);
+                        dispatch(error({ message: res.data.message }));
                         return;
                     }
 
-                    success("Account created successfully");
+                    dispatch(
+                        success({ message: "Account created successfully" })
+                    );
                     navigate("/sign-in");
                 }}
             >

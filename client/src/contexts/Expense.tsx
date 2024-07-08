@@ -13,7 +13,7 @@ import {
 } from "../types/expense";
 import { useMutation } from "@tanstack/react-query";
 import { expense as _expense } from "../common/api";
-import { useToast } from "./Toast";
+import { success } from "../store/slices/toast";
 
 const ExpenseContext = createContext<IExpenseContext>({
     expenses: [],
@@ -34,7 +34,6 @@ const reducer = (state: ExpenseState, actions: ExpenseActions) => {
 
 const ExpenseProvider: FC<PropsWithChildren> = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, { expenses: [] });
-    const toast = useToast();
 
     const { mutateAsync } = useMutation({
         mutationKey: ["create-expense"],
@@ -47,7 +46,7 @@ const ExpenseProvider: FC<PropsWithChildren> = ({ children }) => {
 
         if (data.status < 400) {
             dispatch({ type: "add-expense", value: data });
-            toast.success("Expense added successfully");
+            success({ message: "Expense added successfully" });
         }
     };
 
