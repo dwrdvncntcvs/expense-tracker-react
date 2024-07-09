@@ -1,14 +1,18 @@
 import { CreateExpense } from "@components/Expense";
+import { useAppDispatch } from "@hooks/storeHooks";
 import { MainLayout, Private, Public, SettingsLayout, Toast } from "@layouts";
 import { ForgotPassword, Home, Profile, SignIn, SignUp } from "@pages";
 import { CategoriesSettings, UserSettings } from "@pages/Settings";
-import { useGetCategoriesQuery } from "@store/queries/categories";
-import { useIsAuthenticatedQuery } from "@store/queries/user";
+import { isAuthenticatedRequest } from "@store/thunk/user";
+import { useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 function App() {
-    const { isLoading } = useIsAuthenticatedQuery();
-    useGetCategoriesQuery();
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(isAuthenticatedRequest());
+    }, []);
 
     const { pathname } = useLocation();
 
@@ -17,7 +21,7 @@ function App() {
     return (
         <MainLayout>
             <Routes>
-                <Route element={<Public isLoading={isLoading} />}>
+                <Route element={<Public />}>
                     <Route path="/sign-in" element={<SignIn />} />
                     <Route path="/sign-up" element={<SignUp />} />
                     <Route
@@ -25,7 +29,7 @@ function App() {
                         element={<ForgotPassword />}
                     />
                 </Route>
-                <Route element={<Private isLoading={isLoading} />}>
+                <Route element={<Private />}>
                     <Route path="/" index element={<Home />}></Route>
                     <Route path="/settings/" element={<SettingsLayout />}>
                         <Route path="user" element={<UserSettings />} />

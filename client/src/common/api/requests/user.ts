@@ -4,7 +4,7 @@ import { SignInData, SignUpData } from "@_types/auth";
 const signInRequest = async (user: SignInData) => {
     const response = await axios.post("/users/sign-in", JSON.stringify(user));
 
-    const data = JSON.parse(response.data);
+    const data = response.data;
 
     return {
         data,
@@ -26,10 +26,17 @@ const signUpRequest = async (user: SignUpData) => {
 const isAuthenticatedRequest = async () => {
     const response = await axios.get("/users/is-authenticated");
 
-    const data = JSON.parse(response.data);
+    return {
+        data: response.data,
+        status: response.status,
+    };
+};
+
+const signOutRequest = async () => {
+    const response = await axios.get("/users/sign-out");
 
     return {
-        data,
+        data: response.data,
         status: response.status,
     };
 };
@@ -38,4 +45,5 @@ export default {
     signInRequest,
     signUpRequest,
     isAuthenticatedRequest,
+    signOutRequest,
 };

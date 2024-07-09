@@ -1,10 +1,8 @@
-import { SignUpData } from "@_types/auth";
 import { Field, Form } from "@components/Form";
 import { useAppDispatch } from "@hooks/storeHooks";
 import { AuthLayout } from "@layouts";
-import user from "@requests/user";
 import { error, success } from "@store/slices/toast";
-import { useMutation } from "@tanstack/react-query";
+import { signUpRequest } from "@store/thunk/user";
 import { FC, useState } from "react";
 import {
     HiAtSymbol,
@@ -20,10 +18,6 @@ const SignUp: FC = () => {
     const [showPass, setShowPass] = useState(false);
     const dispatch = useAppDispatch();
 
-    const { mutateAsync } = useMutation({
-        mutationFn: (val: SignUpData) => user.signUpRequest(val),
-    });
-
     const navigate = useNavigate();
 
     return (
@@ -38,10 +32,10 @@ const SignUp: FC = () => {
                 }}
                 validationSchema={signUpSchema}
                 onSubmit={async (val) => {
-                    const res = await mutateAsync(val);
+                    const res = await dispatch(signUpRequest(val));
 
-                    if (res.status >= 400) {
-                        dispatch(error({ message: res.data.message }));
+                    if (res.meta.requestStatus === "rejected") {
+                        dispatch(error({ message: res.payload }));
                         return;
                     }
 

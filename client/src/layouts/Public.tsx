@@ -2,10 +2,10 @@ import { useUser } from "@store/slices/user";
 import { FC } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
-const Public: FC<{ isLoading: boolean }> = ({ isLoading }) => {
-    const { isAuthenticated } = useUser();
+const Public: FC = () => {
+    const { isAuthenticated, loading } = useUser();
 
-    if (isLoading) return <p>Loading...</p>;
+    if (loading) return <p>Loading...</p>;
 
     return isAuthenticated ? <Navigate to="/" /> : <Outlet />;
 };
