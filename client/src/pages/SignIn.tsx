@@ -1,42 +1,30 @@
-import { SignInData } from "@_types/auth";
 import { Field, Form } from "@components/Form";
 import { useAppDispatch } from "@hooks/storeHooks";
 import { AuthLayout } from "@layouts";
-import user from "@requests/user";
+import { useSignInMutation } from "@store/queries/user";
 import { error } from "@store/slices/toast";
-import { useMutation } from "@tanstack/react-query";
 import { FC, useState } from "react";
 import { HiEye } from "react-icons/hi";
 import { HiAtSymbol, HiEyeSlash, HiLockClosed } from "react-icons/hi2";
 import { Link } from "react-router-dom";
-import { useUser } from "../contexts/User";
 import { signInSchema } from "../validation/user";
 
 const SignIn: FC = () => {
-    const { refetchAuth } = useUser();
     const [showPass, setShowPass] = useState(false);
     const dispatch = useAppDispatch();
 
-    const { mutateAsync } = useMutation<any, any, SignInData>({
-        mutationKey: ["sign-in"],
-        mutationFn: ({ email, password }) =>
-            user.signInRequest({ email, password }),
-    });
+    const [signInAction] = useSignInMutation();
 
     return (
         <AuthLayout>
             <Form
                 initialValues={{ email: "", password: "" }}
-                onSubmit={async (val, resetForm) => {
-                    const res = await mutateAsync(val);
+                onSubmit={async (val) => {
+                    const res = await signInAction(val);
 
-                    if (res.status >= 400) {
-                        dispatch(error({ message: res.data.message }));
-                        resetForm();
-                        return;
+                    if ("error" in res) {
+                        dispatch(error({ message: res.error.data.message }));
                     }
-
-                    refetchAuth();
                 }}
                 validationSchema={signInSchema}
             >

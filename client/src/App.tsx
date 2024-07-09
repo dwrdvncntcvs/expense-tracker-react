@@ -3,8 +3,11 @@ import { CreateExpense } from "@components/Expense";
 import { MainLayout, Private, Public, SettingsLayout, Toast } from "@layouts";
 import { ForgotPassword, Home, Profile, SignIn, SignUp } from "@pages";
 import { CategoriesSettings, UserSettings } from "@pages/Settings";
+import { useIsAuthenticatedQuery } from "@store/queries/user";
 
 function App() {
+    const { isLoading } = useIsAuthenticatedQuery();
+
     const { pathname } = useLocation();
 
     const shouldDisplayCreateExpense = ["/", "/user"];
@@ -12,7 +15,7 @@ function App() {
     return (
         <MainLayout>
             <Routes>
-                <Route element={<Public />}>
+                <Route element={<Public isLoading={isLoading} />}>
                     <Route path="/sign-in" element={<SignIn />} />
                     <Route path="/sign-up" element={<SignUp />} />
                     <Route
@@ -20,7 +23,7 @@ function App() {
                         element={<ForgotPassword />}
                     />
                 </Route>
-                <Route element={<Private />}>
+                <Route element={<Private isLoading={isLoading} />}>
                     <Route path="/" index element={<Home />}></Route>
                     <Route path="/settings/" element={<SettingsLayout />}>
                         <Route path="user" element={<UserSettings />} />

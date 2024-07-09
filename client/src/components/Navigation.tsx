@@ -1,13 +1,13 @@
+import { ILink } from "@_types/navigation";
+import { useSignOutMutation } from "@store/queries/user";
 import { FC } from "react";
 import { HiLogout } from "react-icons/hi";
 import { HiCog8Tooth, HiHome, HiUser } from "react-icons/hi2";
 import { NavLink } from "react-router-dom";
 import logo from "../assets/logo.svg";
-import { ILink } from "@_types/navigation";
-import { useUser } from "../contexts/User";
 
 const Navigation: FC = () => {
-    const { signOutAction } = useUser();
+    const [signOutAction] = useSignOutMutation();
 
     const links: ILink[] = [
         {
@@ -62,7 +62,7 @@ const Navigation: FC = () => {
                     <button
                         className="w-10 h-10 rounded-lg flex justify-center items-center  border-primary text-primary hover:border-failure hover:text-failure bg-plain"
                         type="button"
-                        onClick={signOutAction}
+                        onClick={() => signOutAction()}
                     >
                         <HiLogout size={22} />
                     </button>
