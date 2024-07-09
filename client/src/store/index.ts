@@ -1,18 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
-import toastReducer from "./slices/toast";
+import api from "./queries/api";
 import modalReducer from "./slices/modal";
+import settingsReducer from "./slices/settings";
+import toastReducer from "./slices/toast";
 import userReducer from "./slices/user";
-import { userApi } from "@store/queries/user";
 
 const store = configureStore({
     reducer: {
         toastReducer,
         modalReducer,
         userReducer,
-        [userApi.reducerPath]: userApi.reducer,
+        settingsReducer,
+        [api.reducerPath]: api.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(userApi.middleware),
+        getDefaultMiddleware().concat(api.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

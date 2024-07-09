@@ -2,20 +2,31 @@ import { FC } from "react";
 import { HiListBullet, HiTag, HiOutlineTrash } from "react-icons/hi2";
 import { Field, Form } from "@components/Form";
 import { SettingsContentLayout } from "@layouts";
-import { useSettings } from "../../contexts/Settings";
 import { useAppDispatch } from "@hooks/storeHooks";
 import { success } from "@store/slices/toast";
+import {
+    useCreateCategoryMutation,
+    useDeleteCategoryMutation,
+    useGetCategoriesQuery,
+} from "@store/queries/categories";
+import { ICategory } from "@_types/Settings/category";
 
 const CategoriesSettings: FC = () => {
     const dispatch = useAppDispatch();
-    const { categories, categoryActions } = useSettings();
+
+    const { data, isLoading } = useGetCategoriesQuery();
+
+    const [createCategory] = useCreateCategoryMutation();
+    const [deleteCategory] = useDeleteCategoryMutation();
+
+    if (isLoading) return <p>Loading...</p>;
 
     return (
         <SettingsContentLayout title="Category">
             <Form
                 initialValues={{ name: "" }}
                 onSubmit={async (val, resetForm) => {
-                    await categoryActions.createCategory(val);
+                    await createCategory(val);
                     dispatch(
                         success({ message: `${val.name} successfully created` })
                     );
@@ -39,7 +50,7 @@ const CategoriesSettings: FC = () => {
                     <h2 className="text-lg">Category List</h2>
                 </div>
                 <ul className="space-y-2">
-                    {categories.map((category) => (
+                    {(data.data as ICategory[]).map((category) => (
                         <li
                             key={category.id}
                             className="py-2 flex justify-between items-center"
@@ -48,9 +59,7 @@ const CategoriesSettings: FC = () => {
                             <button
                                 className="hover:bg-failure text-failure p-2 rounded-full hover:text-white transition-all duration-75"
                                 onClick={async () => {
-                                    await categoryActions.deleteCategory(
-                                        category.id
-                                    );
+                                    await deleteCategory(category.id);
                                     dispatch(
                                         success({
                                             message: `Successfully deleted ${category.name}`,

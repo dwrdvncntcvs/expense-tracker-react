@@ -1,12 +1,9 @@
 import { SignInData, SignUpData } from "@_types/auth";
-import { axiosBaseQuery } from "@api/index";
-import { createApi } from "@reduxjs/toolkit/query/react";
 import { isAuthenticatedAction, userAction } from "@store/slices/user";
+import api from "./api";
 
-export const userApi = createApi({
-    reducerPath: "user",
-    baseQuery: axiosBaseQuery(),
-    tagTypes: ["auth"],
+export const userApi = api.injectEndpoints({
+    overrideExisting: false,
     endpoints: (build) => ({
         isAuthenticated: build.query({
             query: () => ({ url: "/users/is-authenticated", method: "get" }),
@@ -25,7 +22,7 @@ export const userApi = createApi({
             },
         }),
         signIn: build.mutation({
-            invalidatesTags: ["auth"],
+            invalidatesTags: ["auth", "categories"],
             query: (user: SignInData) => ({
                 url: "/users/sign-in",
                 method: "post",

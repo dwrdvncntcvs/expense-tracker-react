@@ -4,9 +4,13 @@ import { MainLayout, Private, Public, SettingsLayout, Toast } from "@layouts";
 import { ForgotPassword, Home, Profile, SignIn, SignUp } from "@pages";
 import { CategoriesSettings, UserSettings } from "@pages/Settings";
 import { useIsAuthenticatedQuery } from "@store/queries/user";
+import { useSettings } from "@store/slices/settings";
 
 function App() {
     const { isLoading } = useIsAuthenticatedQuery();
+    const { categories } = useSettings();
+
+    console.log("Categories: ", categories);
 
     const { pathname } = useLocation();
 
