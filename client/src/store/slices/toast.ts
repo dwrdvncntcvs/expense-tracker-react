@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "..";
-import { useAppSelector } from "../../hooks/storeHooks";
+import { useAppSelector } from "@hooks/storeHooks";
 
 type ToastType = "error" | "info" | "success" | "warning";
 

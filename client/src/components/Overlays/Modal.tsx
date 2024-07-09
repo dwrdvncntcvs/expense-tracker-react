@@ -1,8 +1,8 @@
 import { FC, PropsWithChildren } from "react";
 import Portal from "./Portal";
 import { HiX } from "react-icons/hi";
-import { useAppDispatch } from "../../hooks/storeHooks";
-import { hide, useModal } from "../../store/slices/modal";
+import { useAppDispatch } from "@hooks/storeHooks";
+import { hide, useModal } from "@store/slices/modal";
 
 interface Option {
     closeCb: () => void;

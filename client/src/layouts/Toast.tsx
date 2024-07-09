@@ -6,16 +6,16 @@ import {
     HiInformationCircle,
 } from "react-icons/hi2";
 import { HiX } from "react-icons/hi";
-import { useToast } from "../store/slices/toast";
-import { hide } from "../store/slices/toast";
-import { useAppDispatch } from "../hooks/storeHooks";
+import { useToast } from "@store/slices/toast";
+import { hide } from "@store/slices/toast";
+import { useAppDispatch } from "@hooks/storeHooks";
 
 const Toast: FC = () => {
     const { toasts } = useToast();
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        const timeouts: number[] = [];
+        const timeouts: (number)[] = [];
 
         toasts.forEach((toast) => {
             const timeout = setTimeout(() => {

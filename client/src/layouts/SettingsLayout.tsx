@@ -1,7 +1,7 @@
 import { FC, useEffect } from "react";
 import { HiLockClosed, HiOutlineTrash, HiTag, HiUser } from "react-icons/hi2";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { ILink } from "../types/navigation";
+import { ILink } from "@_types/navigation";
 
 const SettingsLayout: FC = () => {
     const location = useLocation();

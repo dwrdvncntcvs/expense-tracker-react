@@ -1,16 +1,16 @@
+import { SignInData } from "@_types/auth";
+import { Field, Form } from "@components/Form";
+import { useAppDispatch } from "@hooks/storeHooks";
+import { AuthLayout } from "@layouts";
+import user from "@requests/user";
+import { error } from "@store/slices/toast";
 import { useMutation } from "@tanstack/react-query";
 import { FC, useState } from "react";
 import { HiEye } from "react-icons/hi";
 import { HiAtSymbol, HiEyeSlash, HiLockClosed } from "react-icons/hi2";
 import { Link } from "react-router-dom";
-import { user } from "../common/api";
-import { Field, Form } from "../components/Form";
 import { useUser } from "../contexts/User";
-import { AuthLayout } from "../layouts";
-import { error } from "../store/slices/toast";
-import { SignInData } from "../types/auth";
 import { signInSchema } from "../validation/user";
-import { useAppDispatch } from "../hooks/storeHooks";
 
 const SignIn: FC = () => {
     const { refetchAuth } = useUser();

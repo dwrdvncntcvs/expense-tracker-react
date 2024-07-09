@@ -1,10 +1,10 @@
 import { FC } from "react";
 import { HiListBullet, HiTag, HiOutlineTrash } from "react-icons/hi2";
-import { Field, Form } from "../../components/Form";
-import { SettingsContentLayout } from "../../layouts";
+import { Field, Form } from "@components/Form";
+import { SettingsContentLayout } from "@layouts";
 import { useSettings } from "../../contexts/Settings";
-import { useAppDispatch } from "../../hooks/storeHooks";
-import { success } from "../../store/slices/toast";
+import { useAppDispatch } from "@hooks/storeHooks";
+import { success } from "@store/slices/toast";
 
 const CategoriesSettings: FC = () => {
     const dispatch = useAppDispatch();

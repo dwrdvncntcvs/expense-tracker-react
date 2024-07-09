@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { useAppSelector } from "../../hooks/storeHooks";
+import { useAppSelector } from "@hooks/storeHooks";
 
 export interface ModalState {
     name: string | null;

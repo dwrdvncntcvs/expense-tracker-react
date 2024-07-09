@@ -1,5 +1,5 @@
 import axios from "..";
-import { SignInData, SignUpData } from "../../../types/auth";
+import { SignInData, SignUpData } from "@_types/auth";
 
 const signInRequest = async (user: SignInData) => {
     const response = await axios.post("/users/sign-in", JSON.stringify(user));
@@ -23,7 +23,19 @@ const signUpRequest = async (user: SignUpData) => {
     };
 };
 
+const isAuthenticatedRequest = async () => {
+    const response = await axios.get("/users/is-authenticated");
+
+    const data = JSON.parse(response.data);
+
+    return {
+        data,
+        status: response.status,
+    };
+};
+
 export default {
     signInRequest,
     signUpRequest,
+    isAuthenticatedRequest,
 };

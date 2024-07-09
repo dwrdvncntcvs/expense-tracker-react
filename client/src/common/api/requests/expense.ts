@@ -1,5 +1,5 @@
 import axios from "..";
-import { ICreateExpense } from "../../../types/expense";
+import { ICreateExpense } from "@_types/expense";
 
 const createExpense = async (expense: ICreateExpense) => {
     const response = await axios.post("/expenses", JSON.stringify(expense));

@@ -1,5 +1,5 @@
 import axios from "..";
-import { ICategory, ICreateCategory } from "../../../types/Settings/category";
+import { ICategory, ICreateCategory } from "@_types/Settings/category";
 
 const getCategories = async () => {
     const response = await axios.get("/categories");

@@ -1,3 +1,9 @@
+import { SignUpData } from "@_types/auth";
+import { Field, Form } from "@components/Form";
+import { useAppDispatch } from "@hooks/storeHooks";
+import { AuthLayout } from "@layouts";
+import user from "@requests/user";
+import { error, success } from "@store/slices/toast";
 import { useMutation } from "@tanstack/react-query";
 import { FC, useState } from "react";
 import {
@@ -8,13 +14,7 @@ import {
     HiUser,
 } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
-import { user } from "../common/api";
-import { Field, Form } from "../components/Form";
-import { AuthLayout } from "../layouts";
-import { error, success } from "../store/slices/toast";
-import { SignUpData } from "../types/auth";
 import { signUpSchema } from "../validation/user";
-import { useAppDispatch } from "../hooks/storeHooks";
 
 const SignUp: FC = () => {
     const [showPass, setShowPass] = useState(false);

@@ -1,11 +1,15 @@
 import { FC, PropsWithChildren } from "react";
-import Navigation from "../components/Navigation";
+import Navigation from "@components/Navigation";
 import { useLocation } from "react-router-dom";
 
 const MainLayout: FC<PropsWithChildren> = ({ children }) => {
     const location = useLocation();
 
-    const excludeNavigationFromPath = ["/sign-in", "/sign-up", "/forgot-password"];
+    const excludeNavigationFromPath = [
+        "/sign-in",
+        "/sign-up",
+        "/forgot-password",
+    ];
     const shouldExclude = excludeNavigationFromPath.includes(location.pathname);
 
     const contentAndHeaderClassName = "w-full lg:w-1/2 mx-auto h-full";

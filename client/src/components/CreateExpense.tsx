@@ -1,8 +1,8 @@
 import { FC } from "react";
-import { Modal } from "./Overlays";
+import { Modal } from "@components/Overlays";
 import { HiPlus } from "react-icons/hi2";
-import { useAppDispatch } from "../hooks/storeHooks";
-import { show } from "../store/slices/modal";
+import { useAppDispatch } from "@hooks/storeHooks";
+import { show } from "@store/slices/modal";
 
 const CreateExpense: FC = () => {
     const dispatch = useAppDispatch();

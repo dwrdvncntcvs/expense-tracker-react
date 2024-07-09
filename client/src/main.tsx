@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App.tsx";
-import ModalProvider from "./contexts/Modal.tsx";
 import SettingsProvider from "./contexts/Settings.tsx";
 import UserProvider from "./contexts/User.tsx";
 import "./index.css";
@@ -15,13 +14,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <Provider store={store}>
         <QueryClientProvider client={client}>
             <BrowserRouter>
-                <ModalProvider>
-                    <UserProvider>
-                        <SettingsProvider>
-                            <App />
-                        </SettingsProvider>
-                    </UserProvider>
-                </ModalProvider>
+                <UserProvider>
+                    <SettingsProvider>
+                        <App />
+                    </SettingsProvider>
+                </UserProvider>
             </BrowserRouter>
         </QueryClientProvider>
     </Provider>

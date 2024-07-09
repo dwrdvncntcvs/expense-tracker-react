@@ -3,7 +3,7 @@ import { HiLogout } from "react-icons/hi";
 import { HiCog8Tooth, HiHome, HiUser } from "react-icons/hi2";
 import { NavLink } from "react-router-dom";
 import logo from "../assets/logo.svg";
-import { ILink } from "../types/navigation";
+import { ILink } from "@_types/navigation";
 import { useUser } from "../contexts/User";
 
 const Navigation: FC = () => {
