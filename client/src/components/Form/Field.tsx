@@ -4,7 +4,7 @@ import type { IconType } from "react-icons";
 
 interface InputIcon {
     position: "start" | "end";
-    val: IconType;
+    val: IconType | string;
 }
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -26,7 +26,10 @@ const Field: FC<InputProps> = ({ icon, ...props }) => {
             >
                 {icon && (
                     <div className="px-4 text-primary">
-                        {icon && <icon.val size={18} />}
+                        {icon && typeof icon.val !== "string" && (
+                            <icon.val size={18} />
+                        )}
+                        {icon && typeof icon.val === "string" && icon.val}
                     </div>
                 )}
                 <input

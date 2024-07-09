@@ -13,11 +13,13 @@ const categoriesApi = api.injectEndpoints({
             providesTags: ["categories"],
             onCacheEntryAdded: async (
                 _: void,
-                { cacheDataLoaded, dispatch }
+                { cacheDataLoaded, cacheEntryRemoved, dispatch }
             ) => {
                 const data = await cacheDataLoaded;
 
                 dispatch(setCategories(data.data.data));
+
+                await cacheEntryRemoved;
             },
         }),
         createCategory: build.mutation({
@@ -40,8 +42,6 @@ const categoriesApi = api.injectEndpoints({
             invalidatesTags: ["categories"],
             onCacheEntryAdded: async (_, { cacheDataLoaded, dispatch }) => {
                 const data = await cacheDataLoaded;
-
-                console.log("Data: ", data);
 
                 dispatch(removeCategory(data.data.data.id));
             },

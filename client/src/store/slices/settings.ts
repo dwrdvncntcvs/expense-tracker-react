@@ -25,10 +25,13 @@ const settingsSlice = createSlice({
                 (category) => category.id !== actions.payload
             );
         },
+        resetSettings: (state) => {
+            state.categories = [];
+        },
     },
 });
 
-export const { createCategory, removeCategory, setCategories } =
+export const { createCategory, removeCategory, setCategories, resetSettings } =
     settingsSlice.actions;
 
 export const useSettings = () =>
