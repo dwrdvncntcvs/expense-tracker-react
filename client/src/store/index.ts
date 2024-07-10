@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import api from "./queries/api";
 import modalReducer from "./slices/modal";
 import settingsReducer from "./slices/settings";
 import toastReducer from "./slices/toast";
@@ -12,7 +13,10 @@ const store = configureStore({
         userReducer,
         settingsReducer,
         categoriesReducer,
+        [api.reducerPath]: api.reducer,
     },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(api.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

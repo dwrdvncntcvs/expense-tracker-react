@@ -1,28 +1,14 @@
 import { CreateExpense } from "@components/Expense";
-import { useAppDispatch } from "@hooks/storeHooks";
 import { MainLayout, Private, Public, SettingsLayout, Toast } from "@layouts";
 import { ForgotPassword, Home, Profile, SignIn, SignUp } from "@pages";
 import { CategoriesSettings, UserSettings } from "@pages/Settings";
-import { useUser } from "@store/slices/user";
-import { getCategoryRequest } from "@store/thunk/categories";
-import { isAuthenticatedRequest } from "@store/thunk/user";
-import { useEffect } from "react";
+import { useGetCategoriesQuery } from "@store/queries/categories";
+import { useIsAuthenticatedQuery } from "@store/queries/user";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 function App() {
-    const dispatch = useAppDispatch();
-    const { accessToken } = useUser();
-
-    useEffect(() => {
-        const initializeData = async () => {
-            await Promise.all([
-                !accessToken ? dispatch(isAuthenticatedRequest()) : null,
-                accessToken ? dispatch(getCategoryRequest()) : null,
-            ]);
-        };
-
-        initializeData();
-    }, [accessToken]);
+    const { isLoading } = useIsAuthenticatedQuery();
+    useGetCategoriesQuery();
 
     const { pathname } = useLocation();
 
@@ -31,7 +17,7 @@ function App() {
     return (
         <MainLayout>
             <Routes>
-                <Route element={<Public />}>
+                <Route element={<Public loading={isLoading} />}>
                     <Route path="/sign-in" element={<SignIn />} />
                     <Route path="/sign-up" element={<SignUp />} />
                     <Route
@@ -39,7 +25,7 @@ function App() {
                         element={<ForgotPassword />}
                     />
                 </Route>
-                <Route element={<Private />}>
+                <Route element={<Private loading={isLoading} />}>
                     <Route path="/" index element={<Home />}></Route>
                     <Route path="/settings/" element={<SettingsLayout />}>
                         <Route path="user" element={<UserSettings />} />

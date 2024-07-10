@@ -8,8 +8,6 @@ export interface UserState {
     isAuthenticated: boolean;
     loading: boolean;
     error?: string;
-    accessToken?: string;
-    refreshToken?: string;
 }
 
 const initialState: UserState = {
