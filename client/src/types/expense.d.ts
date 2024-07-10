@@ -11,6 +11,10 @@ export interface IExpense {
     description: string;
 }
 
+export interface IExpenseList {
+    [key: string]: string[];
+}
+
 export type OmitExpenseMeta = "id" | "createdAt" | "updatedAt";
 
 export interface ICreateExpense extends Omit<IExpense, OmitExpenseMeta> {}

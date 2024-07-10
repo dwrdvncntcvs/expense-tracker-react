@@ -1,13 +1,13 @@
-import { IExpense } from "@_types/expense";
+import { IExpense, IExpenseList } from "@_types/expense";
 import { createSlice } from "@reduxjs/toolkit";
 import expenseApi from "@store/queries/expense";
 
 interface ExpenseState {
-    expenses: IExpense[];
+    expenses: IExpenseList;
 }
 
 const initialState: ExpenseState = {
-    expenses: [],
+    expenses: {},
 };
 
 const expenseSlice = createSlice({
@@ -16,12 +16,12 @@ const expenseSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addMatcher(
-            expenseApi.endpoints.createExpense.matchFulfilled,
+            expenseApi.endpoints.getExpenses.matchFulfilled,
             (state, actions) => {
-                state.expenses = [...state.expenses, actions.payload.data];
+                state.expenses = actions.payload.months;
             }
         );
     },
 });
 
-export default expenseSlice;
+export default expenseSlice.reducer;
