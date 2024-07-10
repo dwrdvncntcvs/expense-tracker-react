@@ -49,7 +49,7 @@ const CreateExpense: FC = () => {
                         <Select
                             name="categoryId"
                             id="categoryId"
-                            options={categories.map((val) => {
+                            options={categories?.map((val) => {
                                 return {
                                     label: val.name,
                                     value: val.id,

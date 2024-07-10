@@ -1,12 +1,7 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { User } from "@_types/auth";
 import { useAppSelector } from "@hooks/storeHooks";
-import {
-    isAuthenticatedRequest,
-    signInRequest,
-    signOutRequest,
-    signUpRequest,
-} from "@store/thunk/user";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { userApi } from "@store/queries/user";
 
 export interface UserState {
     user: User | null;
@@ -35,46 +30,26 @@ const userSlice = createSlice({
             state.user = actions.payload;
         },
     },
-    extraReducers(builder) {
+    extraReducers: (builder) => {
         builder
-            .addCase(isAuthenticatedRequest.pending, (state) => {
-                state.loading = true;
-            })
-            .addCase(isAuthenticatedRequest.fulfilled, (state, actions) => {
-                const { accessToken, refreshToken, user } =
-                    actions.payload.data;
-
-                state.accessToken = accessToken;
-                state.refreshToken = refreshToken;
-                state.user = user;
-                state.isAuthenticated = !!accessToken;
-                state.loading = false;
-            })
-            .addCase(isAuthenticatedRequest.rejected, (state, actions) => {
-                console.log(actions.payload);
-                state.error = "Error";
-                state.loading = false;
+            .addMatcher(
+                userApi.endpoints.isAuthenticated.matchFulfilled,
+                (state, actions) => {
+                    const data = actions.payload;
+                    state.isAuthenticated = !!data.accessToken;
+                    state.user = data.user;
+                }
+            )
+            .addMatcher(
+                userApi.endpoints.signIn.matchFulfilled,
+                (state, actions) => {
+                    state.user = actions.payload.user;
+                    state.isAuthenticated = !!actions.payload.accessToken;
+                }
+            )
+            .addMatcher(userApi.endpoints.signOut.matchFulfilled, (state) => {
+                (state.isAuthenticated = false), (state.user = null);
             });
-        builder
-            .addCase(signInRequest.pending, () => {})
-            .addCase(signInRequest.fulfilled, () => {})
-            .addCase(signInRequest.rejected, () => {});
-
-        builder
-            .addCase(signUpRequest.pending, () => {})
-            .addCase(signUpRequest.fulfilled, () => {})
-            .addCase(signUpRequest.rejected, () => {});
-
-        builder
-            .addCase(signOutRequest.pending, () => {})
-            .addCase(signOutRequest.fulfilled, (state) => {
-                state.accessToken = undefined;
-                state.refreshToken = undefined;
-                state.user = null;
-                state.isAuthenticated = false;
-                state.loading = false;
-            })
-            .addCase(signOutRequest.rejected, () => {});
     },
 });
 

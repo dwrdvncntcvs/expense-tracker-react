@@ -1,6 +1,7 @@
 import { ICategory } from "@_types/Settings/category";
 import { useAppSelector } from "@hooks/storeHooks";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import categoriesApi from "@store/queries/categories";
 
 export interface SettingsState {
     categories: ICategory[];
@@ -28,6 +29,21 @@ const settingsSlice = createSlice({
         resetSettings: (state) => {
             state.categories = [];
         },
+    },
+    extraReducers: (builder) => {
+        builder
+            .addMatcher(
+                categoriesApi.endpoints.getCategories.matchFulfilled,
+                (state, actions) => {
+                    state.categories = actions.payload.data;
+                }
+            )
+            .addMatcher(
+                categoriesApi.endpoints.createCategory.matchFulfilled,
+                (state, actions) => {
+                    state.categories = [...state.categories, actions.payload];
+                }
+            );
     },
 });
 
