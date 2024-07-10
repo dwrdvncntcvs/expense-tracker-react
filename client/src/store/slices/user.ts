@@ -1,6 +1,7 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { User } from "@_types/auth";
 import { useAppSelector } from "@hooks/storeHooks";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { userApi } from "@store/queries/user";
 
 export interface UserState {
     user: User | null;
@@ -22,6 +23,27 @@ const userSlice = createSlice({
         userAction: (state, actions: PayloadAction<User | null>) => {
             state.user = actions.payload;
         },
+    },
+    extraReducers: (builder) => {
+        builder
+            .addMatcher(
+                userApi.endpoints.isAuthenticated.matchFulfilled,
+                (state, actions) => {
+                    const data = actions.payload;
+                    state.isAuthenticated = !!data.accessToken;
+                    state.user = data.user;
+                }
+            )
+            .addMatcher(
+                userApi.endpoints.signIn.matchFulfilled,
+                (state, actions) => {
+                    state.user = actions.payload.user;
+                    state.isAuthenticated = !!actions.payload.accessToken;
+                }
+            )
+            .addMatcher(userApi.endpoints.signOut.matchFulfilled, (state) => {
+                (state.isAuthenticated = false), (state.user = null);
+            });
     },
 });
 
