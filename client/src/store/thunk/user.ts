@@ -13,7 +13,6 @@ export const isAuthenticatedRequest = createAsyncThunk<
 
         return fulfillWithValue(data);
     } catch (err) {
-        console.log(err);
         return rejectWithValue(err.response.data.message);
     }
 });
