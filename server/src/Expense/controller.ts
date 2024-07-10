@@ -5,21 +5,32 @@ import ErrorService from "../utils/error";
 import ExpenseService from "./service";
 
 class ExpenseController implements IExpenseController {
-    constructor(private service: ExpenseService) { }
+    constructor(private service: ExpenseService) {}
 
     expenses: RequestHandler = async (req, res, next) => {
         const { id: userId } = req.user;
         const { month, year } = req.params;
-        req.query.page = req?.query?.page || "1"
-        req.query.limit = req?.query?.limit || "10"
+        req.query.page = req?.query?.page || "1";
+        req.query.limit = req?.query?.limit || "10";
 
         try {
-            const data = await this.service.getExpenses(userId, +month, +year, req.query);
+            const data = await this.service.getExpenses(
+                userId,
+                +month,
+                +year,
+                req.query
+            );
+
+            console.log("Data: ", data);
 
             return res.status(200).send({ data });
         } catch (e) {
             if ((e as any).name === "CastError") {
-                next(ErrorService.BAD_REQUEST("Months parameter must be a month number"))
+                next(
+                    ErrorService.BAD_REQUEST(
+                        "Months parameter must be a month number"
+                    )
+                );
             }
 
             next(ErrorService.BAD_REQUEST(e as any));
@@ -40,7 +51,8 @@ class ExpenseController implements IExpenseController {
 
     addExpense: RequestHandler = async (req, res, next) => {
         const { id: userId } = req.user;
-        const { categoryId, amount, label, month, purchaseDate, description } = req.body;
+        const { categoryId, amount, label, month, purchaseDate, description } =
+            req.body;
 
         const expense: CreateExpense = {
             amount,
@@ -49,7 +61,7 @@ class ExpenseController implements IExpenseController {
             label,
             month,
             purchaseDate,
-            description
+            description,
         };
 
         try {

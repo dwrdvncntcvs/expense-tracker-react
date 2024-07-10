@@ -1,6 +1,13 @@
 import { CreateExpense } from "@components/Expense/";
 import { MainLayout, Private, Public, SettingsLayout, Toast } from "@layouts";
-import { ForgotPassword, Home, Profile, SignIn, SignUp } from "@pages";
+import {
+    ExpenseMonth,
+    ForgotPassword,
+    Home,
+    Profile,
+    SignIn,
+    SignUp,
+} from "@pages";
 import { CategoriesSettings, UserSettings } from "@pages/Settings";
 import { useGetCategoriesQuery } from "@store/queries/categories";
 import { useIsAuthenticatedQuery } from "@store/queries/user";
@@ -12,7 +19,13 @@ function App() {
 
     const { pathname } = useLocation();
 
-    const shouldDisplayCreateExpense = ["/", "/user"];
+    const shouldNotDisplayCreateExpense = [
+        "/settings/user",
+        "/settings/privacy",
+        "/settings/categories",
+        "/sign-in",
+        "/sign-up",
+    ];
 
     return (
         <MainLayout>
@@ -35,10 +48,13 @@ function App() {
                             element={<CategoriesSettings />}
                         />
                     </Route>
+                    <Route path="/:month/:year" element={<ExpenseMonth />} />
                     <Route path="/:id" element={<Profile />} />
                 </Route>
             </Routes>
-            {shouldDisplayCreateExpense.includes(pathname) && <CreateExpense />}
+            {!shouldNotDisplayCreateExpense.includes(pathname) && (
+                <CreateExpense />
+            )}
             <Toast />
         </MainLayout>
     );

@@ -1,3 +1,5 @@
+import { PaginationData } from "./pagination";
+
 export interface IExpense {
     id: string;
     userId: string;
@@ -39,4 +41,9 @@ export interface ExpenseActions {
 
 export interface IExpenseContext extends ExpenseState {
     addExpense: (expense: ICreateExpense) => void;
+}
+
+export interface ExpenseMonthDetails extends PaginationData {
+    totalAmount: number;
+    data: IExpense[];
 }

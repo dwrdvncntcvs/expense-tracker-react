@@ -3,7 +3,13 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 
 const api = createApi({
     baseQuery: axiosBaseQuery(),
-    tagTypes: ["auth", "settings", "categories", "expense-months"],
+    tagTypes: [
+        "auth",
+        "settings",
+        "categories",
+        "expense-months",
+        "expense-months-details",
+    ],
     endpoints: () => ({}),
 });
 

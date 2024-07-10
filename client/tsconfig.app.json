@@ -35,7 +35,8 @@
             "@pages": ["./pages/index.ts"],
             "@store/*": ["./store/*"],
             "@store": ["./store/index.ts"],
-            "@_types/*": ["./types/*"]
+            "@_types/*": ["./types/*"],
+            "@common/*": ["./common/*"]
         }
     },
     "include": ["src"]

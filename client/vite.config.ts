@@ -17,6 +17,7 @@ export default defineConfig({
             "@pages": resolve(root, "pages"),
             "@store": resolve(root, "store"),
             "@_types": resolve(root, "types"),
+            "@common": resolve(root, "common"),
         },
     },
 });
