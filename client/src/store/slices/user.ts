@@ -20,7 +20,7 @@ export interface UserState {
 const initialState: UserState = {
     user: null,
     isAuthenticated: false,
-    loading: false,
+    loading: true,
     error: undefined,
 };
 
