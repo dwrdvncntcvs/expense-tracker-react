@@ -14,3 +14,8 @@ export const MONTHS = {
     NOVEMBER: "11",
     DECEMBER: "12",
 };
+
+export const appConfig = {
+    analytics: false,
+    imports: false,
+};
