@@ -6,15 +6,13 @@ import { userApi } from "@store/queries/user";
 export interface UserState {
     user: User | null;
     isAuthenticated: boolean;
-    loading: boolean;
-    error?: string;
+    accessToken?: string;
 }
 
 const initialState: UserState = {
     user: null,
     isAuthenticated: false,
-    loading: true,
-    error: undefined,
+    accessToken: undefined,
 };
 
 const userSlice = createSlice({
@@ -35,6 +33,7 @@ const userSlice = createSlice({
                 (state, actions) => {
                     const data = actions.payload;
                     state.isAuthenticated = !!data.accessToken;
+                    state.accessToken = data.accessToken;
                     state.user = data.user;
                 }
             )
@@ -43,6 +42,7 @@ const userSlice = createSlice({
                 (state, actions) => {
                     state.user = actions.payload.user;
                     state.isAuthenticated = !!actions.payload.accessToken;
+                    state.accessToken = actions.payload.accessToken;
                 }
             )
             .addMatcher(userApi.endpoints.signOut.matchFulfilled, (state) => {

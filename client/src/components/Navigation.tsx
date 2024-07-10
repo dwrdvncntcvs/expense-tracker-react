@@ -1,15 +1,13 @@
 import { ILink } from "@_types/navigation";
-import { useAppDispatch } from "@hooks/storeHooks";
-import { isAuthenticatedRequest, signOutRequest } from "@store/thunk/user";
+import { useSignOutMutation } from "@store/queries/user";
 import { FC } from "react";
 import { HiLogout } from "react-icons/hi";
 import { HiCog8Tooth, HiHome, HiUser } from "react-icons/hi2";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import logo from "../assets/logo.svg";
 
 const Navigation: FC = () => {
-    const dispatch = useAppDispatch();
-    const navigate = useNavigate();
+    const [signOutRequest] = useSignOutMutation();
 
     const links: ILink[] = [
         {
@@ -65,11 +63,7 @@ const Navigation: FC = () => {
                         className="w-10 h-10 rounded-lg flex justify-center items-center  border-primary text-primary hover:border-failure hover:text-failure bg-plain"
                         type="button"
                         onClick={async () => {
-                            const res = await dispatch(signOutRequest());
-
-                            
-                            await dispatch(isAuthenticatedRequest());
-                            navigate("/sign-in");
+                            await signOutRequest();
                         }}
                     >
                         <HiLogout size={22} />

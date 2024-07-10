@@ -1,8 +1,8 @@
 import { Field, Form } from "@components/Form";
 import { useAppDispatch } from "@hooks/storeHooks";
 import { AuthLayout } from "@layouts";
-import { error } from "@store/slices/toast";
-import { isAuthenticatedRequest, signInRequest } from "@store/thunk/user";
+import { useSignInMutation } from "@store/queries/user";
+import { isAuthenticatedRequest } from "@store/thunk/user";
 import { FC, useState } from "react";
 import { HiEye } from "react-icons/hi";
 import { HiAtSymbol, HiEyeSlash, HiLockClosed } from "react-icons/hi2";
@@ -12,19 +12,14 @@ import { signInSchema } from "../validation/user";
 const SignIn: FC = () => {
     const [showPass, setShowPass] = useState(false);
     const dispatch = useAppDispatch();
+    const [signInRequest] = useSignInMutation();
 
     return (
         <AuthLayout>
             <Form
                 initialValues={{ email: "", password: "" }}
                 onSubmit={async (val, resetForm) => {
-                    const res = await dispatch(signInRequest(val));
-
-                    if (res.meta.requestStatus === "rejected") {
-                        dispatch(error({ message: res.payload }));
-                        resetForm();
-                        return;
-                    }
+                    const res = await signInRequest(val);
 
                     dispatch(isAuthenticatedRequest());
                     resetForm();

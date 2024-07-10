@@ -8,18 +8,6 @@ export const userApi = api.injectEndpoints({
         isAuthenticated: build.query({
             query: () => ({ url: "/users/is-authenticated", method: "get" }),
             providesTags: ["auth"],
-            onCacheEntryAdded: async (
-                _args: void,
-                { dispatch, cacheDataLoaded }
-            ) => {
-                const data = await cacheDataLoaded;
-
-                const accessToken = data.data?.accessToken;
-                const user = data.data?.user;
-
-                dispatch(isAuthenticatedAction(!!accessToken));
-                dispatch(userAction(user));
-            },
         }),
         signIn: build.mutation({
             invalidatesTags: ["auth", "categories"],
@@ -28,15 +16,6 @@ export const userApi = api.injectEndpoints({
                 method: "post",
                 data: user,
             }),
-            onCacheEntryAdded: async (_arg, { cacheDataLoaded, dispatch }) => {
-                const data = await cacheDataLoaded;
-
-                const accessToken = data.data?.accessToken;
-                const user = data.data?.user;
-
-                dispatch(isAuthenticatedAction(!!accessToken));
-                dispatch(userAction(user));
-            },
         }),
         signUp: build.mutation({
             query: (user: SignUpData) => ({
@@ -48,12 +27,6 @@ export const userApi = api.injectEndpoints({
         signOut: build.mutation({
             query: (_arg: void) => ({ url: "/users/sign-out", method: "get" }),
             invalidatesTags: ["auth"],
-            onCacheEntryAdded: async (_, { cacheDataLoaded, dispatch }) => {
-                await cacheDataLoaded;
-
-                dispatch(isAuthenticatedAction(false));
-                dispatch(userAction(null));
-            },
         }),
     }),
 });

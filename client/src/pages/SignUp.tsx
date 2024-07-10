@@ -1,8 +1,8 @@
 import { Field, Form } from "@components/Form";
 import { useAppDispatch } from "@hooks/storeHooks";
 import { AuthLayout } from "@layouts";
-import { error, success } from "@store/slices/toast";
-import { signUpRequest } from "@store/thunk/user";
+import { useSignUpMutation } from "@store/queries/user";
+import { success } from "@store/slices/toast";
 import { FC, useState } from "react";
 import {
     HiAtSymbol,
@@ -18,6 +18,8 @@ const SignUp: FC = () => {
     const [showPass, setShowPass] = useState(false);
     const dispatch = useAppDispatch();
 
+    const [signUpRequest] = useSignUpMutation();
+
     const navigate = useNavigate();
 
     return (
@@ -32,12 +34,7 @@ const SignUp: FC = () => {
                 }}
                 validationSchema={signUpSchema}
                 onSubmit={async (val) => {
-                    const res = await dispatch(signUpRequest(val));
-
-                    if (res.meta.requestStatus === "rejected") {
-                        dispatch(error({ message: res.payload }));
-                        return;
-                    }
+                    const res = await signUpRequest(val);
 
                     dispatch(
                         success({ message: "Account created successfully" })
