@@ -26,9 +26,6 @@ const settingsSlice = createSlice({
                 (category) => category.id !== actions.payload
             );
         },
-        resetSettings: (state) => {
-            state.categories = [];
-        },
     },
     extraReducers: (builder) => {
         builder
@@ -47,7 +44,7 @@ const settingsSlice = createSlice({
     },
 });
 
-export const { createCategory, removeCategory, setCategories, resetSettings } =
+export const { createCategory, removeCategory, setCategories } =
     settingsSlice.actions;
 
 export const useSettings = () =>

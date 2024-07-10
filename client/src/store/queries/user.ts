@@ -1,7 +1,6 @@
 import { SignInData, SignUpData } from "@_types/auth";
 import { isAuthenticatedAction, userAction } from "@store/slices/user";
 import api from "./api";
-import { resetSettings } from "@store/slices/settings";
 
 export const userApi = api.injectEndpoints({
     overrideExisting: false,
@@ -54,7 +53,6 @@ export const userApi = api.injectEndpoints({
 
                 dispatch(isAuthenticatedAction(false));
                 dispatch(userAction(null));
-                dispatch(resetSettings());
             },
         }),
     }),

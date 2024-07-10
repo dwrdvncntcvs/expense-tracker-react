@@ -2,13 +2,11 @@ import { CreateExpense } from "@components/Expense";
 import { MainLayout, Private, Public, SettingsLayout, Toast } from "@layouts";
 import { ForgotPassword, Home, Profile, SignIn, SignUp } from "@pages";
 import { CategoriesSettings, UserSettings } from "@pages/Settings";
-import { useGetCategoriesQuery } from "@store/queries/categories";
 import { useIsAuthenticatedQuery } from "@store/queries/user";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 function App() {
     const { isLoading } = useIsAuthenticatedQuery();
-    useGetCategoriesQuery();
 
     const { pathname } = useLocation();
 
