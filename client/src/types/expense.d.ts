@@ -1,16 +1,18 @@
 import { PaginationData } from "./pagination";
+import { IExpenseCategory } from "./Settings/category";
 
 export interface IExpense {
     id: string;
     userId: string;
     categoryId: string;
     label: string;
-    purchaseDate: Date;
+    purchaseDate: string;
     month: number;
     amount: number;
     createdAt: string;
     updatedAt: string;
     description: string;
+    category: IExpenseCategory;
 }
 
 export interface IExpenseList {

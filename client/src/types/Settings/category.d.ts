@@ -8,4 +8,11 @@ type ICreateCategory = Omit<ICategory, "id">;
 
 type ICreateCategoryWithoutUser = Omit<ICreateCategory, "userId">;
 
-export { ICategory, ICreateCategory, ICreateCategoryWithoutUser };
+type IExpenseCategory = Omit<ICategory, "userId">;
+
+export {
+    ICategory,
+    ICreateCategory,
+    ICreateCategoryWithoutUser,
+    IExpenseCategory,
+};
