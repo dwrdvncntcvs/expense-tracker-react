@@ -28,19 +28,13 @@ const settingsSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder
-            .addMatcher(
-                categoriesApi.endpoints.getCategories.matchFulfilled,
-                (state, actions) => {
-                    state.categories = actions.payload.data;
-                }
-            )
-            .addMatcher(
-                categoriesApi.endpoints.createCategory.matchFulfilled,
-                (state, actions) => {
-                    state.categories = [...state.categories, actions.payload];
-                }
-            );
+        builder.addMatcher(
+            categoriesApi.endpoints.getCategories.matchFulfilled,
+            (state, actions) => {
+                console.log("state: ", state);
+                state.categories = actions.payload.data;
+            }
+        );
     },
 });
 

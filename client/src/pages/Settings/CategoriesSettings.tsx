@@ -2,23 +2,25 @@ import { ICategory } from "@_types/Settings/category";
 import { Field, Form } from "@components/Form";
 import { useAppDispatch } from "@hooks/storeHooks";
 import { SettingsContentLayout } from "@layouts";
-import { useCategory } from "@store/slices/categories";
-import { error, success } from "@store/slices/toast";
+import {
+    useCreateCategoryMutation,
+    useDeleteCategoryMutation,
+} from "@store/queries/categories";
+import { useSettings } from "@store/slices/settings";
+import { success } from "@store/slices/toast";
 import { FC, useCallback } from "react";
 import { HiListBullet, HiOutlineTrash, HiTag } from "react-icons/hi2";
 
 const CategoriesSettings: FC = () => {
     const dispatch = useAppDispatch();
-    const {
-        categories,
-        loading,
-        createCategoryRequest,
-        deleteCategoryRequest,
-    } = useCategory();
+    const { categories } = useSettings();
+
+    const [createCategoryRequest] = useCreateCategoryMutation();
+    const [deleteCategoryRequest] = useDeleteCategoryMutation();
 
     const handleDeleteCategory = useCallback(
         async (id: string, name: string) => {
-            await dispatch(deleteCategoryRequest(id));
+            await deleteCategoryRequest(id);
             dispatch(
                 success({
                     message: `Successfully deleted ${name}`,
@@ -28,21 +30,12 @@ const CategoriesSettings: FC = () => {
         []
     );
 
-    if (loading) return <p>Loading...</p>;
-
     return (
         <SettingsContentLayout title="Category">
             <Form
                 initialValues={{ name: "" }}
                 onSubmit={async (val, resetForm) => {
-                    const { meta, payload } = await dispatch(
-                        createCategoryRequest(val)
-                    );
-
-                    if (meta.requestStatus === "rejected") {
-                        dispatch(error({ message: payload }));
-                        return;
-                    }
+                    await createCategoryRequest(val);
 
                     dispatch(
                         success({ message: `${val.name} successfully created` })

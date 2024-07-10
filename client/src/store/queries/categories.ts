@@ -3,7 +3,7 @@ import api from "./api";
 
 const categoriesApi = api.injectEndpoints({
     endpoints: (build) => ({
-        getCategories: build.query({
+        getCategories: build.query<any, void>({
             query: (_: void) => ({ url: "/categories", method: "get" }),
             providesTags: ["categories"],
         }),
