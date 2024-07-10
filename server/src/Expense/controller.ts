@@ -88,12 +88,17 @@ class ExpenseController implements IExpenseController {
 
     putExpense: RequestHandler = async (req, res, next) => {
         const { expenseId } = req.params;
-        const { amount, label } = req.body;
+        const { amount, label, description, categoryId } = req.body;
 
         const updatedBody: UpdateExpense = {
             amount,
             label,
+            description,
+            categoryId,
         };
+
+        console.log("Expense ID: ", expenseId);
+        console.log("Updated Body: ", updatedBody);
 
         try {
             const data = await this.service.updateExpense(

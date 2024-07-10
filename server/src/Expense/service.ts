@@ -211,7 +211,7 @@ class ExpenseService {
 
     updateExpense = async (expenseId: string, data: UpdateExpense) => {
         try {
-            await this.model.updateOne({ id: expenseId }, data, {
+            await this.model.updateOne({ _id: expenseId }, data, {
                 runValidators: true,
             });
 
@@ -223,7 +223,7 @@ class ExpenseService {
     };
 
     removeExpense = async (expenseId: string) => {
-        return await this.model.deleteOne({ id: expenseId });
+        return await this.model.deleteOne({ _id: expenseId });
     };
 
     getDataByUserId = async (userId: string) => {

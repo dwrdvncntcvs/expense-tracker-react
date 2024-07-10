@@ -13,10 +13,10 @@ export interface Expense {
 
 export type OmitExpenseMeta = "id" | "createdAt" | "updatedAt";
 
-export interface CreateExpense extends Omit<Expense, OmitExpenseMeta> { }
+export interface CreateExpense extends Omit<Expense, OmitExpenseMeta> {}
 
 export interface UpdateExpense
     extends Omit<
         Expense,
-        OmitExpenseMeta | "month" | "categoryId" | "userId", "purchaseDate"
-    > { }
+        OmitExpenseMeta | "month" | "userId" | "purchaseDate"
+    > {}

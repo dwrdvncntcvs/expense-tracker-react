@@ -1,4 +1,4 @@
-import { ICreateExpense } from "@_types/expense";
+import { ICreateExpense, IExpense } from "@_types/expense";
 import api from "./api";
 
 export interface ExpenseByMonthParams {
@@ -23,6 +23,14 @@ const expenseApi = api.injectEndpoints({
             query: (val) => ({ url: "/expenses", method: "POST", data: val }),
             invalidatesTags: ["expense-months", "expense-months-details"],
         }),
+        updateExpense: build.mutation<any, IExpense>({
+            query: (val) => ({
+                url: `/expenses/${val.id}`,
+                method: "PUT",
+                data: val,
+            }),
+            invalidatesTags: ["expense-months-details"],
+        }),
     }),
 });
 
@@ -30,6 +38,7 @@ export const {
     useCreateExpenseMutation,
     useGetExpensesQuery,
     useGetExpensesByMonthQuery,
+    useUpdateExpenseMutation,
 } = expenseApi;
 
 export default expenseApi;
