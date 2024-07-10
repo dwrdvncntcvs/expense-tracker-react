@@ -1,4 +1,4 @@
-import { CreateExpense } from "@components/Expense";
+import { CreateExpense } from "@components/Expense/";
 import { MainLayout, Private, Public, SettingsLayout, Toast } from "@layouts";
 import { ForgotPassword, Home, Profile, SignIn, SignUp } from "@pages";
 import { CategoriesSettings, UserSettings } from "@pages/Settings";

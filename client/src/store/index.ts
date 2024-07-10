@@ -4,7 +4,6 @@ import modalReducer from "./slices/modal";
 import settingsReducer from "./slices/settings";
 import toastReducer from "./slices/toast";
 import userReducer from "./slices/user";
-import categoriesReducer from "./slices/categories";
 
 const store = configureStore({
     reducer: {
@@ -12,7 +11,6 @@ const store = configureStore({
         modalReducer,
         userReducer,
         settingsReducer,
-        categoriesReducer,
         [api.reducerPath]: api.reducer,
     },
     middleware: (getDefaultMiddleware) =>

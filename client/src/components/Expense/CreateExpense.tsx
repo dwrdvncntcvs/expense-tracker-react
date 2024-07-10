@@ -1,16 +1,16 @@
-import { FC } from "react";
-import { Modal } from "@components/Overlays";
-import { HiPlus } from "react-icons/hi2";
-import { useAppDispatch } from "@hooks/storeHooks";
-import { useCategory } from "@store/slices/categories";
-import { show } from "@store/slices/modal";
 import { Field, Form } from "@components/Form";
-import Textarea from "@components/Form/Textarea";
 import Select from "@components/Form/Select";
+import Textarea from "@components/Form/Textarea";
+import { Modal } from "@components/Overlays";
+import { useAppDispatch } from "@hooks/storeHooks";
+import { show } from "@store/slices/modal";
+import { useSettings } from "@store/slices/settings";
+import { FC } from "react";
+import { HiPlus } from "react-icons/hi2";
 
 const CreateExpense: FC = () => {
     const dispatch = useAppDispatch();
-    const { categories } = useCategory();
+    const { categories } = useSettings();
 
     return (
         <>
@@ -49,7 +49,7 @@ const CreateExpense: FC = () => {
                         <Select
                             name="categoryId"
                             id="categoryId"
-                            options={categories?.map((val) => {
+                            options={categories.map((val) => {
                                 return {
                                     label: val.name,
                                     value: val.id,

@@ -1,8 +1,6 @@
 import { Field, Form } from "@components/Form";
-import { useAppDispatch } from "@hooks/storeHooks";
 import { AuthLayout } from "@layouts";
 import { useSignInMutation } from "@store/queries/user";
-import { isAuthenticatedRequest } from "@store/thunk/user";
 import { FC, useState } from "react";
 import { HiEye } from "react-icons/hi";
 import { HiAtSymbol, HiEyeSlash, HiLockClosed } from "react-icons/hi2";
@@ -11,7 +9,6 @@ import { signInSchema } from "../validation/user";
 
 const SignIn: FC = () => {
     const [showPass, setShowPass] = useState(false);
-    const dispatch = useAppDispatch();
     const [signInRequest] = useSignInMutation();
 
     return (
@@ -21,7 +18,6 @@ const SignIn: FC = () => {
                 onSubmit={async (val, resetForm) => {
                     const res = await signInRequest(val);
 
-                    dispatch(isAuthenticatedRequest());
                     resetForm();
                 }}
                 validationSchema={signInSchema}
