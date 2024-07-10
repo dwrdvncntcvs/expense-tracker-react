@@ -40,7 +40,15 @@ class CategoryController {
 
             return res.status(200).send({ data });
         } catch (err) {
-            next(ErrorService.BAD_REQUEST(err as any));
+            const error = JSON.parse(JSON.stringify(err));
+
+            if (error.code === 11000)
+                next(
+                    ErrorService.BAD_REQUEST(
+                        `${error.keyValue.name} already exists`
+                    )
+                );
+            else next(ErrorService.BAD_REQUEST(error));
         }
     };
 }

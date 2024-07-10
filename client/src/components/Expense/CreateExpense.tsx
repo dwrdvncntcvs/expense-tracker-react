@@ -3,14 +3,14 @@ import Select from "@components/Form/Select";
 import Textarea from "@components/Form/Textarea";
 import { Modal } from "@components/Overlays";
 import { useAppDispatch } from "@hooks/storeHooks";
+import { useCategory } from "@store/slices/categories";
 import { show } from "@store/slices/modal";
-import { useSettings } from "@store/slices/settings";
 import { FC } from "react";
 import { HiPlus } from "react-icons/hi2";
 
 const CreateExpense: FC = () => {
     const dispatch = useAppDispatch();
-    const { categories } = useSettings();
+    const { categories } = useCategory();
 
     return (
         <>

@@ -1,10 +1,13 @@
+import {
+    ICategory,
+    ICreateCategoryWithoutUser,
+} from "@_types/Settings/category";
 import axios from "..";
-import { ICategory, ICreateCategory } from "@_types/Settings/category";
 
 const getCategories = async () => {
     const response = await axios.get("/categories");
 
-    const data = JSON.parse(response.data).data as ICategory[];
+    const data = response.data.data as ICategory[];
 
     return {
         data,
@@ -12,10 +15,10 @@ const getCategories = async () => {
     };
 };
 
-const createCategories = async (category: ICreateCategory) => {
+const createCategories = async (category: ICreateCategoryWithoutUser) => {
     const response = await axios.post("/categories", JSON.stringify(category));
 
-    const data = JSON.parse(response.data).data as ICategory;
+    const data = response.data.data as ICategory;
 
     return {
         data,
@@ -26,7 +29,7 @@ const createCategories = async (category: ICreateCategory) => {
 const deleteCategory = async (id: string) => {
     const response = await axios.delete(`/categories/${id}`);
 
-    const data = JSON.parse(response.data).data;
+    const data = response.data.data;
 
     return {
         data,

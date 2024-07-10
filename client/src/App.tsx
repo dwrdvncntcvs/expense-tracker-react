@@ -3,16 +3,26 @@ import { useAppDispatch } from "@hooks/storeHooks";
 import { MainLayout, Private, Public, SettingsLayout, Toast } from "@layouts";
 import { ForgotPassword, Home, Profile, SignIn, SignUp } from "@pages";
 import { CategoriesSettings, UserSettings } from "@pages/Settings";
+import { useUser } from "@store/slices/user";
+import { getCategoryRequest } from "@store/thunk/categories";
 import { isAuthenticatedRequest } from "@store/thunk/user";
 import { useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 function App() {
     const dispatch = useAppDispatch();
+    const { accessToken } = useUser();
 
     useEffect(() => {
-        dispatch(isAuthenticatedRequest());
-    }, []);
+        const initializeData = async () => {
+            await Promise.all([
+                !accessToken ? dispatch(isAuthenticatedRequest()) : null,
+                accessToken ? dispatch(getCategoryRequest()) : null,
+            ]);
+        };
+
+        initializeData();
+    }, [accessToken]);
 
     const { pathname } = useLocation();
 
