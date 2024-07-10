@@ -1,23 +1,27 @@
 import { IExpense } from "@_types/expense";
 import { createSlice } from "@reduxjs/toolkit";
+import expenseApi from "@store/queries/expense";
 
 interface ExpenseState {
     expenses: IExpense[];
-    loading: boolean;
-    error: null | string;
 }
 
 const initialState: ExpenseState = {
     expenses: [],
-    loading: false,
-    error: null,
 };
 
 const expenseSlice = createSlice({
     name: "expense",
     initialState,
     reducers: {},
-    extraReducers: (builder) => {},
+    extraReducers: (builder) => {
+        builder.addMatcher(
+            expenseApi.endpoints.createExpense.matchFulfilled,
+            (state, actions) => {
+                state.expenses = [...state.expenses, actions.payload.data];
+            }
+        );
+    },
 });
 
 export default expenseSlice;

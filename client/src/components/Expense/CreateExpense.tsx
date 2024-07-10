@@ -3,7 +3,9 @@ import Select from "@components/Form/Select";
 import Textarea from "@components/Form/Textarea";
 import { Modal } from "@components/Overlays";
 import { useAppDispatch } from "@hooks/storeHooks";
-import { show } from "@store/slices/modal";
+import { useCreateExpenseMutation } from "@store/queries/expense";
+import { hide, show } from "@store/slices/modal";
+import { success } from "@store/slices/toast";
 import { useSettings } from "@store/slices/settings";
 import { FC } from "react";
 import { HiPlus } from "react-icons/hi2";
@@ -11,6 +13,8 @@ import { HiPlus } from "react-icons/hi2";
 const CreateExpense: FC = () => {
     const dispatch = useAppDispatch();
     const { categories } = useSettings();
+
+    const [createExpenseRequest, { isLoading }] = useCreateExpenseMutation();
 
     return (
         <>
@@ -30,10 +34,18 @@ const CreateExpense: FC = () => {
                         amount: "",
                         description: "",
                     }}
-                    onSubmit={(val, resetForm) => {
-                        console.log("value: ", val);
+                    onSubmit={async (val, resetForm) => {
+                        const month = new Date(val.purchaseDate);
+
+                        val["month"] = month.getMonth() + 1;
+
+                        await createExpenseRequest(val);
 
                         resetForm();
+                        dispatch(
+                            success({ message: "Expense successfully added" })
+                        );
+                        dispatch(hide());
                     }}
                 >
                     <div className="flex flex-col gap-2 w-full">
@@ -75,8 +87,9 @@ const CreateExpense: FC = () => {
                     </div>
                     <div className="flex w-full items-center justify-end">
                         <button
+                            disabled={isLoading}
                             type="submit"
-                            className="bg-secondary text-white px-5 py-2 rounded-xl hover:bg-secondary/80"
+                            className="bg-secondary text-white px-5 py-2 rounded-xl hover:bg-secondary/80 disabled:opacity-0 disabled:cursor-not-allowed"
                         >
                             Create Expense
                         </button>
