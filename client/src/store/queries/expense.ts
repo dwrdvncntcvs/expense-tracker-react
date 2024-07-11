@@ -34,6 +34,10 @@ const expenseApi = api.injectEndpoints({
             }),
             invalidatesTags: ["expense-months-details"],
         }),
+        deleteExpense: build.mutation<any, string>({
+            query: (val) => ({ url: `/expenses/${val}`, method: "DELETE" }),
+            invalidatesTags: ["expense-months-details"],
+        }),
     }),
 });
 
@@ -42,6 +46,7 @@ export const {
     useGetExpensesQuery,
     useGetExpensesByMonthQuery,
     useUpdateExpenseMutation,
+    useDeleteExpenseMutation,
 } = expenseApi;
 
 export default expenseApi;

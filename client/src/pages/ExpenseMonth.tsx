@@ -7,16 +7,24 @@ import { ExpenseFilterModal } from "@components/Modal";
 import { Modal } from "@components/Overlays";
 import { useAppDispatch } from "@hooks/storeHooks";
 import {
+    useDeleteExpenseMutation,
     useGetExpensesByMonthQuery,
     useUpdateExpenseMutation,
 } from "@store/queries/expense";
 import { hide, show } from "@store/slices/modal";
 import { success } from "@store/slices/toast";
-import { FC, Fragment } from "react";
-import { HiArrowLeft, HiFunnel } from "react-icons/hi2";
+import { FC, Fragment, useState } from "react";
+import {
+    HiArrowLeft,
+    HiFunnel,
+    HiOutlinePencil,
+    HiOutlineTrash,
+} from "react-icons/hi2";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 const ExpenseMonth: FC = () => {
+    const [hoveredId, setHoveredId] = useState("");
+
     const dispatch = useAppDispatch();
     const params = useParams();
     const navigate = useNavigate();
@@ -29,6 +37,8 @@ const ExpenseMonth: FC = () => {
         year: params?.year || "",
         query: searchParams.toString(),
     });
+
+    const [deleteExpenseRequest] = useDeleteExpenseMutation();
 
     const [updateExpenseRequest, { isLoading: isUpdateLoading }] =
         useUpdateExpenseMutation();
@@ -82,21 +92,51 @@ const ExpenseMonth: FC = () => {
                     return (
                         <Fragment key={expense.id}>
                             <div className="w-full xs:w-1/2 sm:w-1/2 md:w-1/2 lg:w-1/4 p-2">
-                                <div className="h-full shadow-md rounded-lg border flex flex-col justify-between border-primary">
-                                    <div className="p-4 flex flex-col gap-3">
-                                        <div>
+                                <div
+                                    className="h-full shadow-md rounded-lg flex flex-col justify-between border-primary border-2 relative overflow-auto"
+                                    onMouseOver={() => {
+                                        if (hoveredId !== expense.id) {
+                                            setHoveredId(expense.id);
+                                        }
+                                    }}
+                                    onMouseLeave={() => {
+                                        if (hoveredId === expense.id)
+                                            setHoveredId("");
+                                    }}
+                                >
+                                    {hoveredId === expense.id && (
+                                        <div className="w-full absolute bottom-0 flex flex-col">
                                             <button
+                                                className="bg-warning w-full p-2 py-3 text-white flex items-center justify-center"
                                                 onClick={() => {
                                                     dispatch(
                                                         show(
-                                                            `expense-${expense.id}`
+                                                            `update-expense-${expense.id}`
                                                         )
                                                     );
                                                 }}
-                                                className="text-2xl font-semibold text-primary text-start hover:underline"
                                             >
-                                                {expense.label}
+                                                <HiOutlinePencil size={20} />
                                             </button>
+                                            <button
+                                                className="bg-failure w-full p-2 py-3 text-white flex items-center justify-center"
+                                                onClick={() => {
+                                                    dispatch(
+                                                        show(
+                                                            `delete-expense-${expense.id}`
+                                                        )
+                                                    );
+                                                }}
+                                            >
+                                                <HiOutlineTrash size={20} />
+                                            </button>
+                                        </div>
+                                    )}
+                                    <div className="p-4 flex flex-col gap-3">
+                                        <div>
+                                            <h3 className="text-2xl font-semibold text-primary text-start">
+                                                {expense.label}
+                                            </h3>
                                         </div>
                                         <p className="line-clamp-4 text-xs">
                                             {expense.description}
@@ -124,7 +164,43 @@ const ExpenseMonth: FC = () => {
                                 </div>
                             </div>
                             <Modal
-                                name={`expense-${expense.id}`}
+                                name={`delete-expense-${expense.id}`}
+                                title={`Delete ${expense.label}`}
+                            >
+                                <p className="text-sm">
+                                    Are you sure you want to delete{" "}
+                                    <span className="text-primary font-bold">
+                                        {expense.label}
+                                    </span>
+                                    ? You won't be able to undo this.
+                                </p>
+                                <div className="flex flex-row-reverse">
+                                    <ActionButtons
+                                        className="p-2 px-4"
+                                        options={[
+                                            {
+                                                type: "button",
+                                                bgColor: "primary",
+                                                color: "plain",
+                                                label: "Delete",
+                                                onClick: async () => {
+                                                    await deleteExpenseRequest(
+                                                        expense.id
+                                                    );
+
+                                                    dispatch(
+                                                        success({
+                                                            message: `${expense.label} successfully deleted.`,
+                                                        })
+                                                    );
+                                                },
+                                            },
+                                        ]}
+                                    />
+                                </div>
+                            </Modal>
+                            <Modal
+                                name={`update-expense-${expense.id}`}
                                 title={`Edit ${expense.label}`}
                             >
                                 <ExpenseForm
