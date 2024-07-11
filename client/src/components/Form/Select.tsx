@@ -2,7 +2,7 @@ import { useField } from "formik";
 import { FC, InputHTMLAttributes } from "react";
 
 interface SelectProps extends InputHTMLAttributes<HTMLSelectElement> {
-    options: { label: string; value: string }[];
+    options: { label: string; value: string; selected?: boolean | undefined }[];
 }
 
 const Select: FC<SelectProps> = ({ options, ...props }) => {

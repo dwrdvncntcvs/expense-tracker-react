@@ -14,18 +14,20 @@ import { hide, show } from "@store/slices/modal";
 import { success } from "@store/slices/toast";
 import { FC, Fragment } from "react";
 import { HiArrowLeft, HiFunnel } from "react-icons/hi2";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 const ExpenseMonth: FC = () => {
     const dispatch = useAppDispatch();
     const params = useParams();
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
 
     const { data, isLoading } = useGetExpensesByMonthQuery({
         month: params?.month
             ? MONTHS[params?.month.toUpperCase() as keyof typeof MONTHS]
             : "",
         year: params?.year || "",
+        query: searchParams.toString(),
     });
 
     const [updateExpenseRequest, { isLoading: isUpdateLoading }] =
@@ -42,7 +44,7 @@ const ExpenseMonth: FC = () => {
             <div className="flex items-center justify-between h-10">
                 <div className="flex gap-2 items-center">
                     <button
-                        onClick={() => navigate(-1)}
+                        onClick={() => navigate("/", { replace: true })}
                         className="text-primary rounded-full h-10 w-10 flex justify-center items-center hover:border-2 hover:border-primary"
                     >
                         <HiArrowLeft size={20} />
@@ -50,28 +52,29 @@ const ExpenseMonth: FC = () => {
                     {params?.month && (
                         <h2 className="font-bold text-3xl text-primary">
                             {capitalize(params?.month)}{" "}
-                            <span className="text-sm ml-2 text-gray-600 font-normal">
-                                {formatCurrency(totalAmount, "PHP")} (Total
-                                Expenses)
-                            </span>
                         </h2>
                     )}
                 </div>
-                <ActionButtons
-                    rounded="full"
-                    className="h-10 w-10 flex justify-center items-center"
-                    options={[
-                        {
-                            type: "button",
-                            bgColor: "secondary",
-                            color: "plain",
-                            icon: HiFunnel,
-                            onClick: () => {
-                                dispatch(show("expense-filter"));
+                <div className="flex gap-4 items-center">
+                    <span className="text-sm ml-2 text-gray-600 font-normal">
+                        Total: {formatCurrency(totalAmount, "PHP")}
+                    </span>
+                    <ActionButtons
+                        rounded="full"
+                        className="h-10 w-10 flex justify-center items-center"
+                        options={[
+                            {
+                                type: "button",
+                                bgColor: "secondary",
+                                color: "plain",
+                                icon: HiFunnel,
+                                onClick: () => {
+                                    dispatch(show("expense-filter"));
+                                },
                             },
-                        },
-                    ]}
-                />
+                        ]}
+                    />
+                </div>
             </div>
             <div className="flex flex-wrap ">
                 {expenses.map((expense) => {

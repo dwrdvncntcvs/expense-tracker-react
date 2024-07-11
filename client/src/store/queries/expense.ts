@@ -4,6 +4,7 @@ import api from "./api";
 export interface ExpenseByMonthParams {
     month: string;
     year: string;
+    query?: string;
 }
 
 const expenseApi = api.injectEndpoints({
@@ -14,7 +15,9 @@ const expenseApi = api.injectEndpoints({
         }),
         getExpensesByMonth: build.query<any, ExpenseByMonthParams>({
             query: (params) => ({
-                url: `/expenses/${params.month}/${params.year}`,
+                url: `/expenses/${params.month}/${params.year}${
+                    params.query ? `?${params.query}` : ""
+                }`,
                 method: "get",
             }),
             providesTags: ["expense-months-details"],

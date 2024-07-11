@@ -6,17 +6,30 @@ import { useAppDispatch } from "@hooks/storeHooks";
 import { hide } from "@store/slices/modal";
 import { useSettings } from "@store/slices/settings";
 import { FC } from "react";
+import { HiArrowPath } from "react-icons/hi2";
+import { useSearchParams } from "react-router-dom";
 
 const ExpenseFilterModal: FC = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const dispatch = useAppDispatch();
     const { categories } = useSettings();
 
     return (
         <Modal name="expense-filter" title="Expense Filter...">
             <Form
-                initialValues={{ categoryId: "" }}
-                onSubmit={(val) => {
-                    console.log("Val: ", val);
+                initialValues={{
+                    categoryId: searchParams.get("categoryId") || "",
+                }}
+                onSubmit={async (val) => {
+                    setSearchParams((prev) => {
+                        if (val.categoryId)
+                            prev.set("categoryId", val.categoryId);
+                        else prev.delete("categoryId");
+
+                        return prev;
+                    });
+                    dispatch(hide());
                 }}
             >
                 <Select
@@ -30,7 +43,7 @@ const ExpenseFilterModal: FC = () => {
                 <div className="flex flex-row-reverse">
                     <ActionButtons
                         rounded="xl"
-                        className="px-4 py-2"
+                        className="px-4 py-2 h-10"
                         options={[
                             {
                                 type: "button",
@@ -38,6 +51,22 @@ const ExpenseFilterModal: FC = () => {
                                 color: "primary",
                                 label: "Cancel",
                                 onClick: () => {
+                                    dispatch(hide());
+                                },
+                            },
+                            {
+                                type: "button",
+                                bgColor: "plain",
+                                color: "primary",
+                                icon: HiArrowPath,
+                                onClick: () => {
+                                    setSearchParams((prev) => {
+                                        prev.forEach((_, key) => {
+                                            prev.delete(key);
+                                        });
+
+                                        return prev;
+                                    });
                                     dispatch(hide());
                                 },
                             },
