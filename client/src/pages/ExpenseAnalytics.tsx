@@ -56,11 +56,11 @@ export const ExpenseAnalytics: FC = () => {
                         data: data.data.categoriesExpenseAnalytics.map(
                             (analytic) => ({
                                 id: analytic.id,
-                                value: analytic.percentage * 100,
+                                value: analytic.percentage,
                                 label: `${analytic.name} `,
                             })
                         ),
-                        valueFormatter: (val) => `${Math.round(val.value)}%`,
+                        valueFormatter: (val) => `${val.value}%`,
                         innerRadius: 60,
                         outerRadius: 120,
                         paddingAngle: 2,
@@ -78,7 +78,7 @@ export const ExpenseAnalytics: FC = () => {
                             <p className="text-lg font-bold text-secondary">
                                 {analytic.name}{" "}
                                 <span className="text-gray-500 font-normal text-xs">
-                                    - {Math.round(analytic.percentage * 100)}%
+                                    - {analytic.percentage}%
                                 </span>
                             </p>
                             <p>{formatCurrency(analytic.totalAmount, "PHP")}</p>
