@@ -18,10 +18,9 @@ class ExpenseController implements IExpenseController {
                 userId,
                 +month,
                 +year,
+                req?.query?.categoryId as string,
                 req.query
             );
-
-            console.log("Data: ", data);
 
             return res.status(200).send({ data });
         } catch (e) {
@@ -96,9 +95,6 @@ class ExpenseController implements IExpenseController {
             description,
             categoryId,
         };
-
-        console.log("Expense ID: ", expenseId);
-        console.log("Updated Body: ", updatedBody);
 
         try {
             const data = await this.service.updateExpense(

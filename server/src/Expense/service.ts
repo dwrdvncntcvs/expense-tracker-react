@@ -5,6 +5,7 @@ import { CreateExpense, UpdateExpense } from "../types/Expense/model";
 import { Pagination } from "../types/Pagination/pagination";
 import { handleValidationError } from "../utils/error/mongo";
 import { monthLookUp } from "../utils/helpers/lookup";
+import { Types } from "mongoose";
 import ExpenseModel from "./model";
 
 class ExpenseService {
@@ -68,10 +69,11 @@ class ExpenseService {
         userId: string,
         month: number,
         year: number,
+        categoryId?: string,
         pagination?: Pagination
     ) => {
-        const filters = {
-            userId: userId,
+        const filters: any = {
+            userId: userId, // Convert userId to ObjectId
             month: month,
             purchaseDate: {
                 $gte: new Date(year, 0, 1), // Start of the year
@@ -79,7 +81,9 @@ class ExpenseService {
             },
         };
 
-        console.log("Pagination ", pagination?.limit! * pagination?.page!);
+        if (typeof categoryId !== "undefined") {
+            filters["categoryId"] = new Types.ObjectId(categoryId);
+        }
 
         if (pagination?.page && pagination?.limit) {
             pagination.page = +pagination.page;

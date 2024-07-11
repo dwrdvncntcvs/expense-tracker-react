@@ -1,7 +1,9 @@
 import { IExpense } from "@_types/expense";
 import { MONTHS } from "@common/constants";
 import { capitalize, formatCurrency, formatDate } from "@common/utils/str";
+import ActionButtons from "@components/ActionButtons";
 import { ExpenseForm } from "@components/Expense";
+import { ExpenseFilterModal } from "@components/Modal";
 import { Modal } from "@components/Overlays";
 import { useAppDispatch } from "@hooks/storeHooks";
 import {
@@ -10,16 +12,14 @@ import {
 } from "@store/queries/expense";
 import { hide, show } from "@store/slices/modal";
 import { success } from "@store/slices/toast";
-import { FC, Fragment, useCallback, useState } from "react";
-import { HiArrowLeft } from "react-icons/hi2";
+import { FC, Fragment } from "react";
+import { HiArrowLeft, HiFunnel } from "react-icons/hi2";
 import { useNavigate, useParams } from "react-router-dom";
 
 const ExpenseMonth: FC = () => {
     const dispatch = useAppDispatch();
     const params = useParams();
     const navigate = useNavigate();
-
-    const [expenseData, setExpenseData] = useState<IExpense | null>(null);
 
     const { data, isLoading } = useGetExpensesByMonthQuery({
         month: params?.month
@@ -57,6 +57,21 @@ const ExpenseMonth: FC = () => {
                         </h2>
                     )}
                 </div>
+                <ActionButtons
+                    rounded="full"
+                    className="h-10 w-10 flex justify-center items-center"
+                    options={[
+                        {
+                            type: "button",
+                            bgColor: "secondary",
+                            color: "plain",
+                            icon: HiFunnel,
+                            onClick: () => {
+                                dispatch(show("expense-filter"));
+                            },
+                        },
+                    ]}
+                />
             </div>
             <div className="flex flex-wrap ">
                 {expenses.map((expense) => {
@@ -69,7 +84,6 @@ const ExpenseMonth: FC = () => {
                                         <div>
                                             <button
                                                 onClick={() => {
-                                                    setExpenseData(expense);
                                                     dispatch(
                                                         show(
                                                             `expense-${expense.id}`
@@ -136,6 +150,7 @@ const ExpenseMonth: FC = () => {
                     );
                 })}
             </div>
+            <ExpenseFilterModal />
         </div>
     );
 };
