@@ -116,6 +116,19 @@ class ExpenseController implements IExpenseController {
             .status(200)
             .send({ message: "Expense successfully deleted" });
     };
+
+    getExpenseMonthAnalytics: RequestHandler = async (req, res, next) => {
+        const user = req.user;
+        const { month, year } = req.params;
+
+        const data = await this.service.getAnalyticsByMonth(
+            +month,
+            +year,
+            user.id
+        );
+
+        return res.status(200).send({ data });
+    };
 }
 
 export default ExpenseController;

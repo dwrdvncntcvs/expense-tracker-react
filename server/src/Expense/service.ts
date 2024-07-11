@@ -24,6 +24,99 @@ class ExpenseService {
         }
     };
 
+    getAnalyticsByMonth = async (
+        month: number,
+        year: number,
+        userId: string
+    ) => {
+        const categoryData = await this.model.aggregate([
+            {
+                $match: {
+                    userId: userId,
+                    month: month,
+                    purchaseDate: {
+                        $gte: new Date(year, month - 1, 1), // Start of the selected month
+                        $lt: new Date(year, month, 1), // Start of the next month
+                    },
+                },
+            },
+            {
+                $lookup: {
+                    from: "categories",
+                    localField: "categoryId",
+                    foreignField: "_id",
+                    as: "categoryInfo",
+                },
+            },
+            {
+                $unwind: "$categoryInfo",
+            },
+            {
+                $group: {
+                    _id: "$categoryId",
+                    id: { $first: "$categoryId" },
+                    name: { $first: "$categoryInfo.name" },
+                    totalAmount: { $sum: "$amount" },
+                    count: { $sum: 1 },
+                },
+            },
+            {
+                $project: {
+                    _id: 0,
+                    id: 1,
+                    name: 1,
+                    totalAmount: 1,
+                    count: 1,
+                },
+            },
+        ]);
+        const total = await this.model.aggregate([
+            {
+                $match: {
+                    userId: userId,
+                    month: month,
+                    purchaseDate: {
+                        $gte: new Date(year, month - 1, 1), // Start of the selected month
+                        $lt: new Date(year, month, 1), // Start of the next month
+                    },
+                },
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalAmount: { $sum: "$amount" },
+                    count: { $sum: 1 },
+                },
+            },
+            {
+                $project: {
+                    _id: 0,
+                    name: 1,
+                    totalAmount: 1,
+                    count: 1,
+                },
+            },
+        ]);
+
+        const totalData = total[0];
+
+        const categoryDataWithPercentage = categoryData.map((category) => {
+            return {
+                ...category,
+                percentage: totalData.totalAmount
+                    ? Math.round(
+                          (category.totalAmount / totalData.totalAmount) * 100
+                      ) / 100
+                    : 0,
+            };
+        });
+
+        return {
+            expenseAnalytics: totalData,
+            categoriesExpenseAnalytics: categoryDataWithPercentage,
+        };
+    };
+
     getAllMonths = async (userId: string) => {
         const data = await this.model.find({ userId });
         const formattedData = data.map((expense) => formatData(expense));
