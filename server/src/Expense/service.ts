@@ -105,7 +105,7 @@ class ExpenseService {
                 ...category,
                 percentage: totalData.totalAmount
                     ? Math.round(
-                          (category.totalAmount / totalData.totalAmount) * 100
+                          (category.totalAmount / totalData.totalAmount) * 10000
                       ) / 100
                     : 0,
             };
