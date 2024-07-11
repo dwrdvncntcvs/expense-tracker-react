@@ -6,6 +6,7 @@ import { ExpenseForm } from "@components/Expense";
 import { ExpenseFilterModal } from "@components/Modal";
 import { Modal } from "@components/Overlays";
 import { useAppDispatch } from "@hooks/storeHooks";
+import api from "@store/queries/api";
 import {
     useDeleteExpenseMutation,
     useGetExpensesByMonthQuery,
@@ -13,7 +14,7 @@ import {
 } from "@store/queries/expense";
 import { hide, show } from "@store/slices/modal";
 import { success } from "@store/slices/toast";
-import { FC, Fragment, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import { HiTrendingUp } from "react-icons/hi";
 import {
     HiArrowLeft,
@@ -49,6 +50,17 @@ const ExpenseMonth: FC = () => {
 
     const [updateExpenseRequest, { isLoading: isUpdateLoading }] =
         useUpdateExpenseMutation();
+
+    useEffect(() => {
+        if (
+            !searchParams.get("categoryId") &&
+            !data?.data?.expenses?.data &&
+            !isLoading
+        ) {
+            dispatch(api.util.invalidateTags(["expense-months"]));
+            navigate("/");
+        }
+    }, [searchParams, data?.data?.expenses?.data, isLoading]);
 
     if (isLoading) return <div>Loading ...</div>;
 
