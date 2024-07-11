@@ -14,9 +14,11 @@ import {
 import { hide, show } from "@store/slices/modal";
 import { success } from "@store/slices/toast";
 import { FC, Fragment, useState } from "react";
+import { FaFilter } from "react-icons/fa";
 import {
     HiArrowLeft,
     HiFunnel,
+    HiOutlineFunnel,
     HiOutlinePencil,
     HiOutlineTrash,
 } from "react-icons/hi2";
@@ -50,7 +52,7 @@ const ExpenseMonth: FC = () => {
     const expenses = data.data.expenses.data as IExpense[];
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 h-full">
             <div className="flex items-center justify-between h-10">
                 <div className="flex gap-2 items-center">
                     <button
@@ -88,10 +90,27 @@ const ExpenseMonth: FC = () => {
                     />
                 </div>
             </div>
-            <div className="flex flex-wrap ">
-                {!expenses ? (
-                    <div>No Expenses</div>
-                ) : (
+
+            {!expenses && searchParams.get("categoryId") && (
+                <div className="flex flex-col h-full w-full justify-center items-center gap-4">
+                    <HiOutlineFunnel size={50} className="text-primary" />
+                    <h2 className="text-5xl font-bold text-primary">
+                        No Expenses Found!
+                    </h2>
+                    <div className="flex flex-col justify-center items-center text-gray-600">
+                        <p>It looks like you haven't added any expenses yet.</p>
+                        <p>
+                            Start by clicking the
+                            <span className="font-bold text-primary">
+                                "Add Expense"
+                            </span>{" "}
+                            button to keep track of your spending.
+                        </p>
+                    </div>
+                </div>
+            )}
+            <div className="flex flex-wrap">
+                {expenses &&
                     expenses?.map((expense) => {
                         const date = new Date(expense.purchaseDate);
                         return (
@@ -234,8 +253,7 @@ const ExpenseMonth: FC = () => {
                                 </Modal>
                             </Fragment>
                         );
-                    })
-                )}
+                    })}
             </div>
             <ExpenseFilterModal />
         </div>
