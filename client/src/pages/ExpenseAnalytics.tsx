@@ -37,7 +37,15 @@ export const ExpenseAnalytics: FC = () => {
                 },
             }}
         >
-            <h1>{data.data.total}</h1>
+            <h1 className="text-sm text-gray-500 text-end">
+                Total:{" "}
+                <span className="text-lg text-primary font-semibold">
+                    {formatCurrency(
+                        data.data.expenseAnalytics.totalAmount,
+                        "PHP"
+                    )}
+                </span>
+            </h1>
             <PieChart
                 colors={["#427D9D"]}
                 height={300}
