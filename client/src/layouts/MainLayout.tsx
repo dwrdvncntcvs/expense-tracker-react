@@ -12,7 +12,8 @@ const MainLayout: FC<PropsWithChildren> = ({ children }) => {
     ];
     const shouldExclude = excludeNavigationFromPath.includes(location.pathname);
 
-    const contentAndHeaderClassName = "w-full px-4 xl:w-[1200px] mx-auto h-full";
+    const contentAndHeaderClassName =
+        "w-full px-4 xl:w-[1200px] mx-auto h-full";
 
     return (
         <div className="w-screen h-screen relative">

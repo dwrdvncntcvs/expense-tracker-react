@@ -38,8 +38,8 @@ const ExpenseMonthHeader: FC<ExpenseMonthHeaderProps> = ({ year }) => {
         : [];
 
     return (
-        <div className="h-10 flex justify-between items-center text-2xl px-6 font-bold text-primary">
-            <h2>{year}</h2>
+        <div className="h-14 flex justify-between items-center text-2xl px-6 font-bold text-primary">
+            <h2 className="text-3xl">{year}</h2>
             <ActionButtons
                 className="p-2"
                 rounded="full"
