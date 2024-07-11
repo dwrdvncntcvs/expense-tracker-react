@@ -7,6 +7,7 @@ import { hide, show } from "@store/slices/modal";
 import { FC, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { PieChart } from "@mui/x-charts/PieChart";
+import { generateAccents } from "@common/utils/color";
 
 export const ExpenseAnalytics: FC = () => {
     const params = useParams();
@@ -47,7 +48,11 @@ export const ExpenseAnalytics: FC = () => {
                 </span>
             </h1>
             <PieChart
-                colors={["#427D9D"]}
+                colors={generateAccents(
+                    "#427D9D",
+                    data.data.categoriesExpenseAnalytics.length,
+                    true
+                )}
                 height={300}
                 width={470}
                 slotProps={{ legend: { hidden: true } }}
