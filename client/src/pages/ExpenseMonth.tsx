@@ -105,9 +105,9 @@ const ExpenseMonth: FC = () => {
                                     }}
                                 >
                                     {hoveredId === expense.id && (
-                                        <div className="w-full absolute bottom-0 flex flex-col">
+                                        <div className="w-full absolute bottom-0 flex flex-col bg-white">
                                             <button
-                                                className="bg-warning w-full p-2 py-3 text-white flex items-center justify-center"
+                                                className="bg-warning w-full p-2 py-3 text-white flex items-center justify-center hover:bg-warning/80"
                                                 onClick={() => {
                                                     dispatch(
                                                         show(
@@ -119,7 +119,7 @@ const ExpenseMonth: FC = () => {
                                                 <HiOutlinePencil size={20} />
                                             </button>
                                             <button
-                                                className="bg-failure w-full p-2 py-3 text-white flex items-center justify-center"
+                                                className="bg-failure w-full p-2 py-3 text-white flex items-center justify-center hover:bg-failure/80"
                                                 onClick={() => {
                                                     dispatch(
                                                         show(
