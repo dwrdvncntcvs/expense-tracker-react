@@ -14,7 +14,7 @@ import {
 import { hide, show } from "@store/slices/modal";
 import { success } from "@store/slices/toast";
 import { FC, Fragment, useState } from "react";
-import { FaFilter } from "react-icons/fa";
+import { HiTrendingUp } from "react-icons/hi";
 import {
     HiArrowLeft,
     HiFunnel,
@@ -22,7 +22,12 @@ import {
     HiOutlinePencil,
     HiOutlineTrash,
 } from "react-icons/hi2";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+    Outlet,
+    useNavigate,
+    useParams,
+    useSearchParams,
+} from "react-router-dom";
 
 const ExpenseMonth: FC = () => {
     const [hoveredId, setHoveredId] = useState("");
@@ -84,6 +89,15 @@ const ExpenseMonth: FC = () => {
                                 icon: HiFunnel,
                                 onClick: () => {
                                     dispatch(show("expense-filter"));
+                                },
+                            },
+                            {
+                                type: "button",
+                                bgColor: "secondary",
+                                color: "plain",
+                                icon: HiTrendingUp,
+                                onClick: () => {
+                                    navigate("analytics");
                                 },
                             },
                         ]}
@@ -256,6 +270,7 @@ const ExpenseMonth: FC = () => {
                     })}
             </div>
             <ExpenseFilterModal />
+            <Outlet />
         </div>
     );
 };

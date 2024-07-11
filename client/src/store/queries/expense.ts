@@ -24,7 +24,11 @@ const expenseApi = api.injectEndpoints({
         }),
         createExpense: build.mutation<any, ICreateExpense>({
             query: (val) => ({ url: "/expenses", method: "POST", data: val }),
-            invalidatesTags: ["expense-months", "expense-months-details"],
+            invalidatesTags: [
+                "expense-months",
+                "expense-months-details",
+                "expense-months-details-analytics",
+            ],
         }),
         updateExpense: build.mutation<any, IExpense>({
             query: (val) => ({
@@ -32,11 +36,24 @@ const expenseApi = api.injectEndpoints({
                 method: "PUT",
                 data: val,
             }),
-            invalidatesTags: ["expense-months-details"],
+            invalidatesTags: [
+                "expense-months-details",
+                "expense-months-details-analytics",
+            ],
         }),
         deleteExpense: build.mutation<any, string>({
             query: (val) => ({ url: `/expenses/${val}`, method: "DELETE" }),
-            invalidatesTags: ["expense-months-details"],
+            invalidatesTags: [
+                "expense-months-details",
+                "expense-months-details-analytics",
+            ],
+        }),
+        getExpensesByMonthAnalytics: build.query<any, ExpenseByMonthParams>({
+            query: (val) => ({
+                url: `/expenses/${val.month}/${val.year}/analytics`,
+                method: "GET",
+            }),
+            providesTags: ["expense-months-details-analytics"],
         }),
     }),
 });
@@ -47,6 +64,7 @@ export const {
     useGetExpensesByMonthQuery,
     useUpdateExpenseMutation,
     useDeleteExpenseMutation,
+    useGetExpensesByMonthAnalyticsQuery,
 } = expenseApi;
 
 export default expenseApi;

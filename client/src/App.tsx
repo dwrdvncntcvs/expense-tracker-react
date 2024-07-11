@@ -1,6 +1,7 @@
 import { CreateExpense } from "@components/Expense/";
 import { MainLayout, Private, Public, SettingsLayout, Toast } from "@layouts";
 import {
+    ExpenseAnalytics,
     ExpenseMonth,
     ForgotPassword,
     Home,
@@ -48,7 +49,12 @@ function App() {
                             element={<CategoriesSettings />}
                         />
                     </Route>
-                    <Route path="/:month/:year" element={<ExpenseMonth />} />
+                    <Route path="/:month/:year/" element={<ExpenseMonth />}>
+                        <Route
+                            path="analytics"
+                            element={<ExpenseAnalytics />}
+                        />
+                    </Route>
                     <Route path="/:id" element={<Profile />} />
                 </Route>
             </Routes>

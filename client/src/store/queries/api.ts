@@ -9,6 +9,7 @@ const api = createApi({
         "categories",
         "expense-months",
         "expense-months-details",
+        "expense-months-details-analytics",
     ],
     endpoints: () => ({}),
 });
