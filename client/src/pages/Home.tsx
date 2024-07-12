@@ -1,6 +1,7 @@
 import { ExpenseMonthHeader, ExpenseMonthList } from "@components/Expense";
 import { useGetExpensesQuery } from "@store/queries/expense";
 import { FC } from "react";
+import { Outlet } from "react-router-dom";
 
 const Home: FC = () => {
     const { data, isLoading } = useGetExpensesQuery();
@@ -36,6 +37,7 @@ const Home: FC = () => {
                     </div>
                 </div>
             ))}
+            <Outlet />
         </div>
     );
 };

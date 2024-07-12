@@ -3,6 +3,7 @@ import { MainLayout, Private, Public, SettingsLayout, Toast } from "@layouts";
 import {
     ExpenseAnalytics,
     ExpenseMonth,
+    ExpenseYearlyAnalytics,
     ForgotPassword,
     Home,
     Profile,
@@ -44,7 +45,12 @@ function App() {
                     />
                 </Route>
                 <Route element={<Private loading={isLoading} />}>
-                    <Route path="/" index element={<Home />}></Route>
+                    <Route path="/" element={<Home />}>
+                        <Route
+                            path=":year/analytics"
+                            element={<ExpenseYearlyAnalytics />}
+                        />
+                    </Route>
                     <Route path="/settings/" element={<SettingsLayout />}>
                         <Route path="user" element={<UserSettings />} />
                         <Route path="privacy" element={<PrivacySettings />} />

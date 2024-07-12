@@ -7,6 +7,7 @@ import { handleValidationError } from "../utils/error/mongo";
 import { monthLookUp } from "../utils/helpers/lookup";
 import { Types } from "mongoose";
 import ExpenseModel from "./model";
+import { MONTHS, MONTHS_OBJ } from "../variables";
 
 class ExpenseService {
     private model: typeof ExpenseModel;
@@ -325,6 +326,104 @@ class ExpenseService {
 
     getDataByUserId = async (userId: string) => {
         return await this.model.findOne({ userId });
+    };
+
+    getYearlyExpenseAnalytics = async ({
+        year,
+        userId,
+    }: {
+        year: number;
+        userId: string;
+    }) => {
+        const startDate = new Date(`${year}-01-01T00:00:00.000Z`);
+        const endDate = new Date(`${year + 1}-01-01T00:00:00.000Z`);
+
+        const mappedSwitchCaseMonth = Object.keys(MONTHS_OBJ).map((key) => {
+            const label = key.toLowerCase();
+            const monthValue = MONTHS_OBJ[key as keyof typeof MONTHS_OBJ];
+            return {
+                case: { $eq: ["$_id.month", +monthValue] },
+                then: `${label.charAt(0).toUpperCase()}${label.slice(1)}`,
+            };
+        });
+
+        const data = await this.model.aggregate([
+            {
+                $match: {
+                    userId: userId,
+                    purchaseDate: {
+                        $gte: startDate,
+                        $lt: endDate,
+                    },
+                },
+            },
+            {
+                $facet: {
+                    totalAmount: [
+                        {
+                            $group: {
+                                _id: null,
+                                totalAmount: { $sum: "$amount" },
+                                year: { $first: year },
+                            },
+                        },
+                        {
+                            $project: {
+                                _id: 0,
+                                totalAmount: 1,
+                                year: 1,
+                            },
+                        },
+                    ],
+                    monthlyTotalExpenses: [
+                        {
+                            $group: {
+                                _id: { month: { $month: "$purchaseDate" } },
+                                id: { $first: "$month" },
+                                totalAmount: { $sum: "$amount" },
+                            },
+                        },
+                        {
+                            $project: {
+                                _id: 0,
+                                id: 1,
+                                totalAmount: 1,
+                                label: {
+                                    $switch: {
+                                        branches: mappedSwitchCaseMonth,
+                                        default: "Unknown",
+                                    },
+                                },
+                            },
+                        },
+                    ],
+                },
+            },
+        ]);
+
+        const totalYearlyObject = data[0].totalAmount[0];
+        const monthlyTotalExpenseArr = data[0].monthlyTotalExpenses;
+
+        const monthlyTotalExpensesWithPercentage = monthlyTotalExpenseArr.map(
+            (val: { id: number; totalAmount: number; label: string }) => ({
+                ...val,
+                percentage:
+                    Math.round(
+                        (val.totalAmount / totalYearlyObject.totalAmount) *
+                            10000
+                    ) / 100,
+            })
+        ) as {
+            id: number;
+            totalAmount: number;
+            label: string;
+            percentage: number;
+        };
+
+        return {
+            meta: totalYearlyObject,
+            data: monthlyTotalExpensesWithPercentage,
+        };
     };
 }
 

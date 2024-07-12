@@ -7,6 +7,10 @@ export interface ExpenseByMonthParams {
     query?: string;
 }
 
+export interface YearlyExpensesParams {
+    year: number;
+}
+
 const expenseApi = api.injectEndpoints({
     endpoints: (build) => ({
         getExpenses: build.query<any, void>({
@@ -27,7 +31,8 @@ const expenseApi = api.injectEndpoints({
             invalidatesTags: [
                 "expense-months",
                 "expense-months-details",
-                "expense-months-details-analytics",
+                "expense-month-analytics",
+                "expense-year-analytics",
             ],
         }),
         updateExpense: build.mutation<any, IExpense>({
@@ -38,14 +43,16 @@ const expenseApi = api.injectEndpoints({
             }),
             invalidatesTags: [
                 "expense-months-details",
-                "expense-months-details-analytics",
+                "expense-month-analytics",
+                "expense-year-analytics",
             ],
         }),
         deleteExpense: build.mutation<any, string>({
             query: (val) => ({ url: `/expenses/${val}`, method: "DELETE" }),
             invalidatesTags: [
                 "expense-months-details",
-                "expense-months-details-analytics",
+                "expense-month-analytics",
+                "expense-year-analytics",
             ],
         }),
         getExpensesByMonthAnalytics: build.query<any, ExpenseByMonthParams>({
@@ -53,7 +60,13 @@ const expenseApi = api.injectEndpoints({
                 url: `/expenses/${val.month}/${val.year}/analytics`,
                 method: "GET",
             }),
-            providesTags: ["expense-months-details-analytics"],
+            providesTags: ["expense-month-analytics"],
+        }),
+        getExpensesYearlyAnalytics: build.query<any, YearlyExpensesParams>({
+            query: (val) => ({
+                url: `/expenses/all/year/${val.year}/analytics`,
+                provideTags: ["expense-year-analytics"],
+            }),
         }),
     }),
 });
@@ -65,6 +78,7 @@ export const {
     useUpdateExpenseMutation,
     useDeleteExpenseMutation,
     useGetExpensesByMonthAnalyticsQuery,
+    useGetExpensesYearlyAnalyticsQuery,
 } = expenseApi;
 
 export default expenseApi;

@@ -9,10 +9,10 @@ export const generateAccents = (
     for (let i = 1; i <= steps; i++) {
         const accent = lighten
             ? tinycolor(color)
-                  .lighten(i * 10)
+                  .lighten(i * 4)
                   .toString()
             : tinycolor(color)
-                  .darken(i * 10)
+                  .darken(i * 4)
                   .toString();
         accents.push(accent);
     }

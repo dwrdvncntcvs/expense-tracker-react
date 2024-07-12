@@ -5,3 +5,4 @@ export { default as Profile } from "./Profile";
 export { default as ForgotPassword } from "./ForgotPassword";
 export { default as ExpenseMonth } from "./ExpenseMonth";
 export { default as ExpenseAnalytics } from "./ExpenseAnalytics";
+export { default as ExpenseYearlyAnalytics } from "./ExpenseYearlyAnalytics";

@@ -129,6 +129,18 @@ class ExpenseController implements IExpenseController {
 
         return res.status(200).send({ data });
     };
+
+    getExpenseYearlyAnalytics: RequestHandler = async (req, res, next) => {
+        const user = req.user;
+        const { year } = req.params;
+
+        const data = await this.service.getYearlyExpenseAnalytics({
+            year: +year,
+            userId: user.id,
+        });
+
+        return res.status(200).send({ data });
+    };
 }
 
 export default ExpenseController;

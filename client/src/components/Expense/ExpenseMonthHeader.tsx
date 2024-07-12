@@ -3,12 +3,15 @@ import { appConfig } from "@common/constants";
 import ActionButtons from "@components/ActionButtons";
 import { FC } from "react";
 import { HiArrowDownTray, HiArrowTrendingUp } from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
 
 interface ExpenseMonthHeaderProps {
     year: string;
 }
 
 const ExpenseMonthHeader: FC<ExpenseMonthHeaderProps> = ({ year }) => {
+    const navigate = useNavigate();
+
     const analyticOptions: ActionButtonOptions[] = appConfig.analytics
         ? [
               {
@@ -17,12 +20,12 @@ const ExpenseMonthHeader: FC<ExpenseMonthHeaderProps> = ({ year }) => {
                   color: "plain",
                   icon: HiArrowTrendingUp,
                   onClick: () => {
-                      console.log("Analytics");
+                      navigate(`/${year}/analytics`);
                   },
               },
           ]
         : [];
-        
+
     const importOptions: ActionButtonOptions[] = appConfig.imports
         ? [
               {
@@ -41,7 +44,7 @@ const ExpenseMonthHeader: FC<ExpenseMonthHeaderProps> = ({ year }) => {
         <div className="h-14 flex justify-between items-center text-2xl px-6 font-bold text-primary">
             <h2 className="text-3xl">{year}</h2>
             <ActionButtons
-                className="p-2"
+                className="p-2 h-10 w-10 flex justify-center items-center"
                 rounded="full"
                 options={[...analyticOptions, ...importOptions]}
             />

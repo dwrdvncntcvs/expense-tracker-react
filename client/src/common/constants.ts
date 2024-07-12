@@ -16,6 +16,6 @@ export const MONTHS = {
 };
 
 export const appConfig = {
-    analytics: false,
+    analytics: true,
     imports: false,
 };
