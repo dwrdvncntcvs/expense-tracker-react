@@ -39,7 +39,7 @@ const ExpenseMonth: FC = () => {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
 
-    searchParams.set("limit", "12");
+    searchParams.set("limit", "16");
 
     const { data, isLoading } = useGetExpensesByMonthQuery({
         month: params?.month
@@ -119,6 +119,50 @@ const ExpenseMonth: FC = () => {
                             },
                         ]}
                     />
+                    {(metaData.hasNext || metaData.hasPrev) && (
+                        <ActionButtons
+                            className="h-10 w-10 flex justify-center items-center"
+                            rounded="full"
+                            options={[
+                                {
+                                    type: "button",
+                                    bgColor: "primary",
+                                    color: "plain",
+                                    icon: HiArrowLeft,
+                                    disabled: !metaData.hasPrev,
+                                    onClick: () => {
+                                        if (metaData.hasPrev)
+                                            setSearchParams((val) => {
+                                                val.set(
+                                                    "page",
+                                                    (
+                                                        metaData.page - 1
+                                                    ).toString()
+                                                );
+                                                return val;
+                                            });
+                                    },
+                                },
+                                {
+                                    type: "button",
+                                    bgColor: "primary",
+                                    color: "plain",
+                                    icon: HiArrowRight,
+                                    disabled: !metaData.hasNext,
+                                    onClick: () => {
+                                        if (metaData.hasNext)
+                                            setSearchParams((val) => {
+                                                val.set(
+                                                    "page",
+                                                    metaData.page + 1
+                                                );
+                                                return val;
+                                            });
+                                    },
+                                },
+                            ]}
+                        />
+                    )}
                 </div>
             </div>
 
@@ -285,45 +329,6 @@ const ExpenseMonth: FC = () => {
                             </Fragment>
                         );
                     })}
-            </div>
-            <div className="flex gap-4 absolute bottom-28 left-1/2 -translate-x-1/2">
-                <ActionButtons
-                    className="w-14 h-14 flex items-center justify-center"
-                    rounded="full"
-                    options={[
-                        {
-                            type: "button",
-                            bgColor: "primary",
-                            color: "plain",
-                            icon: HiArrowLeft,
-                            disabled: !metaData.hasPrev,
-                            onClick: () => {
-                                if (metaData.hasPrev)
-                                    setSearchParams((val) => {
-                                        val.set(
-                                            "page",
-                                            (metaData.page - 1).toString()
-                                        );
-                                        return val;
-                                    });
-                            },
-                        },
-                        {
-                            type: "button",
-                            bgColor: "primary",
-                            color: "plain",
-                            icon: HiArrowRight,
-                            disabled: !metaData.hasNext,
-                            onClick: () => {
-                                if (metaData.hasNext)
-                                    setSearchParams((val) => {
-                                        val.set("page", metaData.page + 1);
-                                        return val;
-                                    });
-                            },
-                        },
-                    ]}
-                />
             </div>
             <ExpenseFilterModal />
             <Outlet />

@@ -274,6 +274,24 @@ class ExpenseService {
             },
             {
                 $addFields: {
+                    "metadata.hasPrev": {
+                        $cond: [
+                            {
+                                $and: [
+                                    {
+                                        $lt: [
+                                            "$metadata.total",
+                                            (pagination?.limit || 10) *
+                                                (pagination?.page || 1),
+                                        ],
+                                    },
+                                    { $gt: ["$metadata.page", 1] },
+                                ],
+                            },
+                            true,
+                            false,
+                        ],
+                    },
                     "metadata.hasNext": {
                         $cond: [
                             {
