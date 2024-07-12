@@ -22,7 +22,7 @@ const BarChart: FC<BarChartProps> = ({ data }) => {
             width={470}
             dataset={data.map((val) => ({
                 totalAmount: val.totalAmount,
-                label: `${val.label.slice(0, 3)}`,
+                label: val.label,
             }))}
             yAxis={[{ scaleType: "band", dataKey: "label" }]}
             xAxis={[

@@ -1,8 +1,9 @@
 import { MONTHS } from "@common/constants";
 import { capitalize, formatCurrency } from "@common/utils/str";
-import { PieChart } from "@components/Chart";
+import { BarChart, PieChart } from "@components/Chart";
 import { Modal } from "@components/Overlays";
 import { useAppDispatch } from "@hooks/storeHooks";
+import ChartLayout from "@layouts/ChartLayout";
 import { useGetExpensesByMonthAnalyticsQuery } from "@store/queries/expense";
 import { hide, show } from "@store/slices/modal";
 import { FC, useEffect } from "react";
@@ -37,24 +38,38 @@ export const ExpenseAnalytics: FC = () => {
                 },
             }}
         >
-            <h1 className="text-sm text-gray-500 text-end">
-                Total:{" "}
-                <span className="text-lg text-primary font-semibold">
-                    {formatCurrency(
-                        data.data.expenseAnalytics.totalAmount,
-                        "PHP"
+            <>
+                <ChartLayout amount={data.data.expenseAnalytics.totalAmount}>
+                    {(chart) => (
+                        <>
+                            {chart === "pie" && (
+                                <PieChart
+                                    data={data.data.categoriesExpenseAnalytics.map(
+                                        (analytic) => ({
+                                            id: analytic.id,
+                                            value: analytic.percentage,
+                                            label: `${analytic.name} `,
+                                            totalAmount: analytic.totalAmount,
+                                            percentage: analytic.percentage,
+                                        })
+                                    )}
+                                />
+                            )}
+                            {chart === "bar" && (
+                                <BarChart
+                                    data={data.data.categoriesExpenseAnalytics.map(
+                                        (val) => ({
+                                            ...val,
+                                            id: val.id,
+                                            label: val.name,
+                                        })
+                                    )}
+                                />
+                            )}
+                        </>
                     )}
-                </span>
-            </h1>
-            <PieChart
-                data={data.data.categoriesExpenseAnalytics.map((analytic) => ({
-                    id: analytic.id,
-                    value: analytic.percentage,
-                    label: `${analytic.name} `,
-                    totalAmount: analytic.totalAmount,
-                    percentage: analytic.percentage,
-                }))}
-            />
+                </ChartLayout>
+            </>
         </Modal>
     );
 };

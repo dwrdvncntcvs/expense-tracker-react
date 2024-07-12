@@ -5,3 +5,4 @@ export { default as Public } from "@layouts/Public";
 export { default as SettingsLayout } from "@layouts/SettingsLayout";
 export { default as Toast } from "@layouts/Toast";
 export { default as SettingsContentLayout } from "@layouts/SettingsContentLayout";
+export { default as ChartLayout } from "@layouts/ChartLayout";

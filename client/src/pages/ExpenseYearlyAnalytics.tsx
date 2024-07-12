@@ -3,6 +3,7 @@ import Button from "@components/Button";
 import { BarChart, PieChart } from "@components/Chart";
 import { Modal } from "@components/Overlays";
 import { useAppDispatch } from "@hooks/storeHooks";
+import ChartLayout from "@layouts/ChartLayout";
 import { useGetExpensesYearlyAnalyticsQuery } from "@store/queries/expense";
 import { hide, show } from "@store/slices/modal";
 import { FC, useEffect, useState } from "react";
@@ -45,61 +46,29 @@ const ExpenseYearlyAnalytics: FC = () => {
                 <div>Loading ...</div>
             ) : (
                 <>
-                    <div className="flex items-center justify-between">
-                        <div className="flex">
-                            <Button
-                                className={`w-10 h-10 flex justify-center items-center ${
-                                    chartType === "bar"
-                                        ? "pointer-events-none"
-                                        : ""
-                                }`}
-                                rounded="xl"
-                                onClick={() => setChartType("bar")}
-                                bgColor={
-                                    chartType === "bar" ? "primary" : "plain"
-                                }
-                                color={
-                                    chartType === "bar" ? "plain" : "primary"
-                                }
-                            >
-                                <HiChartBar size={20} />
-                            </Button>
-                            <Button
-                                className="w-10 h-10 flex justify-center items-center"
-                                rounded="xl"
-                                onClick={() => setChartType("pie")}
-                                bgColor={
-                                    chartType === "pie" ? "primary" : "plain"
-                                }
-                                color={
-                                    chartType === "pie" ? "plain" : "primary"
-                                }
-                            >
-                                <HiChartPie size={20} />
-                            </Button>
-                        </div>
-                        <h1 className="text-sm text-gray-500 text-end">
-                            Total:{" "}
-                            <span className="text-lg text-primary font-semibold">
-                                {formatCurrency(metaData.totalAmount, "PHP")}
-                            </span>
-                        </h1>
-                    </div>
-                    {chartType === "pie" && (
-                        <PieChart
-                            data={analyticsData?.map((val) => {
-                                console.log("Val: ", val);
-                                return {
-                                    id: val.id,
-                                    value: val.percentage,
-                                    label: val.label,
-                                    totalAmount: val.totalAmount,
-                                    percentage: val.percentage,
-                                };
-                            })}
-                        />
-                    )}
-                    {chartType === "bar" && <BarChart data={analyticsData} />}
+                    <ChartLayout amount={metaData.totalAmount}>
+                        {(chart) => (
+                            <>
+                                {chart === "pie" && (
+                                    <PieChart
+                                        data={analyticsData?.map((val) => {
+                                            console.log("Val: ", val);
+                                            return {
+                                                id: val.id,
+                                                value: val.percentage,
+                                                label: val.label,
+                                                totalAmount: val.totalAmount,
+                                                percentage: val.percentage,
+                                            };
+                                        })}
+                                    />
+                                )}
+                                {chart === "bar" && (
+                                    <BarChart data={analyticsData} />
+                                )}
+                            </>
+                        )}
+                    </ChartLayout>
                 </>
             )}
         </Modal>

@@ -3,7 +3,7 @@ import { useAppSelector } from "@hooks/storeHooks";
 import { createSlice } from "@reduxjs/toolkit";
 import expenseApi from "@store/queries/expense";
 
-interface ExpenseState {
+export interface ExpenseState {
     expenses: IExpenseList;
     expenseMonths: ExpenseMonthDetails;
 }
