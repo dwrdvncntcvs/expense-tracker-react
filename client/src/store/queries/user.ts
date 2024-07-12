@@ -1,4 +1,4 @@
-import { SignInData, SignUpData } from "@_types/auth";
+import { SignInData, SignUpData, UpdateUserData } from "@_types/auth";
 import api from "./api";
 
 export const userApi = api.injectEndpoints({
@@ -27,6 +27,14 @@ export const userApi = api.injectEndpoints({
             query: () => ({ url: "/users/sign-out", method: "get" }),
             invalidatesTags: ["auth"],
         }),
+        updateUser: build.mutation<any, { id: string; user: UpdateUserData }>({
+            query: ({ id, user }) => ({
+                url: `/users/${id}`,
+                method: "put",
+                data: user,
+            }),
+            invalidatesTags: ["auth"],
+        }),
     }),
 });
 
@@ -35,4 +43,5 @@ export const {
     useSignInMutation,
     useSignUpMutation,
     useSignOutMutation,
+    useUpdateUserMutation,
 } = userApi;

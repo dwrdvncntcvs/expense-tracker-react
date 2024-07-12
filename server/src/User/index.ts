@@ -35,4 +35,17 @@ router.createRoutes("get", "/:username", userController.account, [], {
     middlewares: [userMiddleware.canAccess],
 });
 
+router.createRoutes("put", "/:id", userController.updateUser, [], {
+    isAuthenticated: true,
+    middlewares: [userMiddleware.canAccess],
+});
+
+router.createRoutes(
+    "put",
+    "/change-password",
+    userController.updatePassword,
+    [],
+    { isAuthenticated: true }
+);
+
 export default router.routerDetails();

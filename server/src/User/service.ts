@@ -1,10 +1,10 @@
-import UserModel from "./model";
+import UserModel, { encryptPassword } from "./model";
 import { compare } from "bcrypt";
 import jwt from "jsonwebtoken";
 import { SECRET_KEY } from "../variables";
 import { handleValidationError } from "../utils/error/mongo";
 import { Error } from "mongoose";
-import { CreateUser, User } from "../types/User/model";
+import { CreateUser, UpdateUser, User } from "../types/User/model";
 import { formatData } from "../database/mongoDb";
 
 class UserService {
@@ -33,8 +33,11 @@ class UserService {
         return formatData(data);
     }
 
-    async validatePassword(userPassword: string, password: string) {
-        return await compare(password, userPassword);
+    async validatePassword(userId: string, userPassword: string) {
+        const data = await this.model.findOne({ _id: userId });
+        if (data?.password) {
+            return await compare(userPassword, data.password);
+        } else return false;
     }
 
     generateAccessToken(userData: User) {
@@ -53,11 +56,42 @@ class UserService {
     }
 
     async saveRefreshToken(userId: string, token: string) {
-        await this.model.updateOne({ _id: userId }, { refreshToken: token })
+        await this.model.updateOne({ _id: userId }, { refreshToken: token });
     }
 
     async removeRefreshToken(userId: string) {
-        await this.model.updateOne({ _id: userId }, { refreshToken: null })
+        await this.model.updateOne({ _id: userId }, { refreshToken: null });
+    }
+
+    async updateUser(id: string, user: UpdateUser) {
+        const data = await this.model.findByIdAndUpdate(id, {
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+            username: user.username,
+        });
+
+        return formatData(data);
+    }
+
+    async updateUserPassword(
+        userId: string,
+        newPassword: string,
+        password: string
+    ) {
+        const encryptedPassword = await encryptPassword(password);
+
+        const isPasswordValid = await this.validatePassword(
+            userId,
+            encryptedPassword
+        );
+        if (!isPasswordValid) throw new Error("Invalid Password");
+
+        const data = await this.model.findByIdAndUpdate(userId, {
+            password: newPassword,
+        });
+
+        return data;
     }
 }
 

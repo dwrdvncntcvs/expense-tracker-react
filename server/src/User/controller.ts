@@ -72,6 +72,43 @@ class UserController implements IUserController {
             return ErrorService.BAD_REQUEST(errData.message);
         }
     };
+
+    updateUser: RequestHandler = async (req, res, next) => {
+        const { id } = req.params;
+        const { first_name, last_name, username, email } = req.body;
+
+        try {
+            const data = await this.service.updateUser(id, {
+                first_name,
+                last_name,
+                username,
+                email,
+            });
+
+            return res.status(200).send({ data });
+        } catch (err) {
+            const errData = err as Error;
+            next(ErrorService.BAD_REQUEST(errData.message));
+        }
+    };
+
+    updatePassword: RequestHandler = async (req, res, next) => {
+        const user = req.user;
+        const { password, newPassword } = req.body;
+
+        try {
+            const data = await this.service.updateUserPassword(
+                user.id,
+                newPassword,
+                password
+            );
+
+            return res.status(200).send({ data });
+        } catch (err) {
+            const errData = err as Error;
+            next(ErrorService.BAD_REQUEST(errData.message));
+        }
+    };
 }
 
 export default UserController;

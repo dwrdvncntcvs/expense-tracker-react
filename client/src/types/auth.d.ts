@@ -19,3 +19,7 @@ export interface UserResponse {
     accessToken: string;
     refreshToken: string;
 }
+export type UpdateUserData = Omit<
+    User,
+    "id" | "password" | "refreshToken" | "createdAt" | "updatedAt"
+>;

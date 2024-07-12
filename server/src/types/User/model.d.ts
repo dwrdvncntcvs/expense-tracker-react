@@ -5,7 +5,7 @@ export interface User {
     email: string;
     username: string;
     password: string;
-    refreshToken?: string | null
+    refreshToken?: string | null;
     createdAt: string;
     updatedAt: string;
 }
@@ -13,3 +13,8 @@ export interface User {
 export type UserOmittedValues = "id" | "createdAt" | "updatedAt";
 
 export type CreateUser = Omit<User, UserOmittedValues>;
+
+export type UpdateUser = Omit<
+    User,
+    "id" | "password" | "refreshToken" | "createdAt" | "updatedAt"
+>;

@@ -29,15 +29,15 @@ const UserSchema = new Schema(
         },
         refreshToken: {
             type: String,
-            default: null
-        }
+            default: null,
+        },
     },
     {
         timestamps: true,
     }
 );
 
-const encryptPassword = async (password: string) => {
+export const encryptPassword = async (password: string) => {
     const salt = await genSalt(10, "a");
     const hashPassword = await hash(password, salt);
     return hashPassword;

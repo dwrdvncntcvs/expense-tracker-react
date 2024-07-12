@@ -31,6 +31,9 @@ const formatData = <T>(
         },
     });
     delete transformedData._id;
+    if ("password" in transformedData) {
+        delete transformedData.password;
+    }
     return transformedData as T;
 };
 

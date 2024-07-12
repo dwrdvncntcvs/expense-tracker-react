@@ -1,11 +1,14 @@
 import ActionButtons from "@components/ActionButtons";
 import { Field, Form } from "@components/Form";
 import SettingsContentLayout from "@layouts/SettingsContentLayout";
+import { useUpdateUserMutation } from "@store/queries/user";
 import { useUser } from "@store/slices/user";
 import { FC } from "react";
 
 const UserSettings: FC = () => {
     const { user } = useUser();
+
+    const [updateUserRequest] = useUpdateUserMutation();
 
     return (
         <SettingsContentLayout title="User Information">
@@ -17,8 +20,9 @@ const UserSettings: FC = () => {
                     username: user?.username,
                     email: user?.email,
                 }}
-                onSubmit={(val) => {
-                    console.log("Value: ", val);
+                onSubmit={async (val) => {
+                    if (user?.id)
+                        await updateUserRequest({ id: user.id, user: val });
                 }}
             >
                 <div className="flex-1 w-1/2">

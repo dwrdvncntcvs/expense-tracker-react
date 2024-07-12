@@ -29,7 +29,7 @@ class UserMiddleware
         const { password } = req.body;
         const user = req.user;
         const isPasswordValid = await this.service.validatePassword(
-            user.password,
+            user.id,
             password
         );
 

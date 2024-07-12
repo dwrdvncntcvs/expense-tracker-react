@@ -8,26 +8,27 @@ class AuthenticationMiddleware {
     constructor(
         private service = new UserService(),
         private jwtService = new JwtService()
-    ) { }
+    ) {}
 
     authenticate: RequestHandler = async (req, _res, next) => {
         try {
-
-            const cookies = req.cookies
-            const accessToken = cookies['accessToken']
+            const cookies = req.cookies;
+            const accessToken = cookies["accessToken"];
 
             if (!accessToken) {
                 return next(ErrorService.UNAUTHORIZED("Sign in first"));
             }
-            const data = await this.jwtService.verifyToken<JwtUser>(accessToken);
+            const data = await this.jwtService.verifyToken<JwtUser>(
+                accessToken
+            );
 
             const user = await this.service.findById(data.id);
             if (user) req.user = user;
             next();
         } catch (err) {
-            let errData = err as Error
-            if ((errData.message).includes('jwt expired')) {
-                return next(ErrorService.UNAUTHORIZED("jwt expired"))
+            let errData = err as Error;
+            if (errData.message.includes("jwt expired")) {
+                return next(ErrorService.UNAUTHORIZED("jwt expired"));
             }
             return next(ErrorService.UNAUTHORIZED("Sign in first"));
         }
