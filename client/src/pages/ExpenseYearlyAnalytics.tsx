@@ -1,9 +1,8 @@
-import { generateAccents } from "@common/utils/color";
 import { formatCurrency } from "@common/utils/str";
 import Button from "@components/Button";
+import { BarChart, PieChart } from "@components/Chart";
 import { Modal } from "@components/Overlays";
 import { useAppDispatch } from "@hooks/storeHooks";
-import { BarChart, PieChart } from "@mui/x-charts";
 import { useGetExpensesYearlyAnalyticsQuery } from "@store/queries/expense";
 import { hide, show } from "@store/slices/modal";
 import { FC, useEffect, useState } from "react";
@@ -45,7 +44,7 @@ const ExpenseYearlyAnalytics: FC = () => {
             {isLoading ? (
                 <div>Loading ...</div>
             ) : (
-                <div>
+                <>
                     <div className="flex items-center justify-between">
                         <div className="flex">
                             <Button
@@ -87,93 +86,21 @@ const ExpenseYearlyAnalytics: FC = () => {
                         </h1>
                     </div>
                     {chartType === "pie" && (
-                        <>
-                            <PieChart
-                                colors={generateAccents(
-                                    "#427D9D",
-                                    analyticsData.length,
-                                    true
-                                )}
-                                height={300}
-                                width={470}
-                                slotProps={{ legend: { hidden: true } }}
-                                series={[
-                                    {
-                                        data: analyticsData.map((val) => ({
-                                            id: val.id,
-                                            value: val.percentage,
-                                            label: val.label,
-                                        })),
-                                        valueFormatter: (val) =>
-                                            `${val.value}%`,
-                                        innerRadius: 60,
-                                        outerRadius: 120,
-                                        paddingAngle: 2,
-                                        cornerRadius: 4,
-                                        startAngle: -180,
-                                        endAngle: 180,
-                                        cx: 470 / 2.13,
-                                    },
-                                ]}
-                            />
-                            <div className="flex flex-wrap">
-                                {analyticsData.map((analytic) => (
-                                    <div className="w-1/2" key={analytic.id}>
-                                        <div className="m-1  p-2">
-                                            <p className="text-lg font-bold text-secondary">
-                                                {analytic.label}{" "}
-                                                <span className="text-gray-500 font-normal text-xs">
-                                                    - {analytic.percentage}%
-                                                </span>
-                                            </p>
-                                            <p>
-                                                {formatCurrency(
-                                                    analytic.totalAmount,
-                                                    "PHP"
-                                                )}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </>
-                    )}
-                    {chartType === "bar" && (
-                        <BarChart
-                            slotProps={{ legend: { hidden: true } }}
-                            height={400}
-                            width={470}
-                            dataset={analyticsData.map((val) => ({
-                                totalAmount: val.totalAmount,
-                                month: `${val.label.slice(0, 3)}`,
-                            }))}
-                            yAxis={[{ scaleType: "band", dataKey: "month" }]}
-                            xAxis={[
-                                {
-                                    valueFormatter: (val) => {
-                                        return formatCurrency(`${val}`, "PHP");
-                                    },
-                                },
-                            ]}
-                            series={[
-                                {
-                                    dataKey: "totalAmount",
-                                    label: "Total Amount",
-                                    valueFormatter: (val) => {
-                                        return formatCurrency(`${val}`, "PHP");
-                                    },
-                                },
-                            ]}
-                            colors={generateAccents(
-                                "#427D9D",
-                                analyticsData.length,
-                                true
-                            )}
-                            layout="horizontal"
-                            className="w-full"
+                        <PieChart
+                            data={analyticsData?.map((val) => {
+                                console.log("Val: ", val);
+                                return {
+                                    id: val.id,
+                                    value: val.percentage,
+                                    label: val.label,
+                                    totalAmount: val.totalAmount,
+                                    percentage: val.percentage,
+                                };
+                            })}
                         />
                     )}
-                </div>
+                    {chartType === "bar" && <BarChart data={analyticsData} />}
+                </>
             )}
         </Modal>
     );
