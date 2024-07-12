@@ -79,16 +79,12 @@ class UserService {
         newPassword: string,
         password: string
     ) {
-        const encryptedPassword = await encryptPassword(password);
+        const isPasswordValid = await this.validatePassword(userId, password);
 
-        const isPasswordValid = await this.validatePassword(
-            userId,
-            encryptedPassword
-        );
         if (!isPasswordValid) throw new Error("Invalid Password");
 
         const data = await this.model.findByIdAndUpdate(userId, {
-            password: newPassword,
+            password: await encryptPassword(newPassword),
         });
 
         return data;

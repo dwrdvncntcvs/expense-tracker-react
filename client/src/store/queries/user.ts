@@ -18,7 +18,7 @@ export const userApi = api.injectEndpoints({
         }),
         signUp: build.mutation<any, SignUpData>({
             query: (user) => ({
-                url: "/users/sign-in",
+                url: "/users/sign-up",
                 method: "post",
                 data: user,
             }),
@@ -35,6 +35,17 @@ export const userApi = api.injectEndpoints({
             }),
             invalidatesTags: ["auth"],
         }),
+        updatePassword: build.mutation<
+            any,
+            { password: string; newPassword: string }
+        >({
+            query: (val) => ({
+                url: "/users/change/pass",
+                method: "put",
+                data: val,
+            }),
+            invalidatesTags: ["auth"],
+        }),
     }),
 });
 
@@ -44,4 +55,5 @@ export const {
     useSignUpMutation,
     useSignOutMutation,
     useUpdateUserMutation,
+    useUpdatePasswordMutation,
 } = userApi;

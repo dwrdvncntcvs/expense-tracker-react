@@ -93,17 +93,17 @@ class UserController implements IUserController {
     };
 
     updatePassword: RequestHandler = async (req, res, next) => {
-        const user = req.user;
+        const { id } = req.user;
         const { password, newPassword } = req.body;
 
         try {
             const data = await this.service.updateUserPassword(
-                user.id,
+                id,
                 newPassword,
                 password
             );
 
-            return res.status(200).send({ data });
+            return res.status(200).send({ data: data });
         } catch (err) {
             const errData = err as Error;
             next(ErrorService.BAD_REQUEST(errData.message));

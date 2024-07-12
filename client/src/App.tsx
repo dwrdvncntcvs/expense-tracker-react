@@ -9,7 +9,11 @@ import {
     SignIn,
     SignUp,
 } from "@pages";
-import { CategoriesSettings, UserSettings } from "@pages/Settings";
+import {
+    CategoriesSettings,
+    PrivacySettings,
+    UserSettings,
+} from "@pages/Settings";
 import { useGetCategoriesQuery } from "@store/queries/categories";
 import { useIsAuthenticatedQuery } from "@store/queries/user";
 import { Route, Routes, useLocation } from "react-router-dom";
@@ -43,7 +47,7 @@ function App() {
                     <Route path="/" index element={<Home />}></Route>
                     <Route path="/settings/" element={<SettingsLayout />}>
                         <Route path="user" element={<UserSettings />} />
-                        <Route path="privacy" element={<UserSettings />} />
+                        <Route path="privacy" element={<PrivacySettings />} />
                         <Route
                             path="categories"
                             element={<CategoriesSettings />}

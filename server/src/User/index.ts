@@ -42,7 +42,7 @@ router.createRoutes("put", "/:id", userController.updateUser, [], {
 
 router.createRoutes(
     "put",
-    "/change-password",
+    "/change/pass",
     userController.updatePassword,
     [],
     { isAuthenticated: true }

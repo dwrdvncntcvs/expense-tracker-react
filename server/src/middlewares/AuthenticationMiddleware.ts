@@ -16,6 +16,7 @@ class AuthenticationMiddleware {
             const accessToken = cookies["accessToken"];
 
             if (!accessToken) {
+                console.log("error");
                 return next(ErrorService.UNAUTHORIZED("Sign in first"));
             }
             const data = await this.jwtService.verifyToken<JwtUser>(
@@ -24,6 +25,7 @@ class AuthenticationMiddleware {
 
             const user = await this.service.findById(data.id);
             if (user) req.user = user;
+            else next(ErrorService.UNAUTHORIZED("Invalid Token"));
             next();
         } catch (err) {
             let errData = err as Error;

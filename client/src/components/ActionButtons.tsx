@@ -23,10 +23,10 @@ const ActionButtons: FC<ActionButtonsProps> = ({
                         onClick={onClick}
                         color={color}
                         bgColor={bgColor}
-                        className={className}
+                        className={`flex gap-2 items-center ${className}`}
                         rounded={rounded}
                     >
-                        {Icon && <Icon />}
+                        {Icon && <Icon size={20}/>}
                         {label && label}
                     </Button>
                 )
