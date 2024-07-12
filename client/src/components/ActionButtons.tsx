@@ -16,7 +16,18 @@ const ActionButtons: FC<ActionButtonsProps> = ({
     return (
         <div className="flex gap-2 items-center">
             {options.map(
-                ({ label, type, bgColor, color, onClick, icon: Icon }, i) => (
+                (
+                    {
+                        label,
+                        type,
+                        bgColor,
+                        color,
+                        onClick,
+                        icon: Icon,
+                        disabled = false,
+                    },
+                    i
+                ) => (
                     <Button
                         key={i}
                         type={type}
@@ -25,8 +36,9 @@ const ActionButtons: FC<ActionButtonsProps> = ({
                         bgColor={bgColor}
                         className={`flex gap-2 items-center ${className}`}
                         rounded={rounded}
+                        disabled={disabled}
                     >
-                        {Icon && <Icon size={20}/>}
+                        {Icon && <Icon size={20} />}
                         {label && label}
                     </Button>
                 )

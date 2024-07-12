@@ -18,6 +18,7 @@ import { FC, Fragment, useEffect, useState } from "react";
 import { HiTrendingUp } from "react-icons/hi";
 import {
     HiArrowLeft,
+    HiArrowRight,
     HiFunnel,
     HiOutlineFunnel,
     HiOutlinePencil,
@@ -36,7 +37,9 @@ const ExpenseMonth: FC = () => {
     const dispatch = useAppDispatch();
     const params = useParams();
     const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    searchParams.set("limit", "12");
 
     const { data, isLoading } = useGetExpensesByMonthQuery({
         month: params?.month
@@ -64,7 +67,7 @@ const ExpenseMonth: FC = () => {
 
     if (isLoading) return <div>Loading ...</div>;
 
-    // const metaData = data.data.expenses.metadata;
+    const metaData = data.data.expenses.metadata;
     const totalAmount = data.data.expenses.totalAmount;
     const expenses = data.data.expenses.data as IExpense[];
 
@@ -109,7 +112,9 @@ const ExpenseMonth: FC = () => {
                                 color: "plain",
                                 icon: HiTrendingUp,
                                 onClick: () => {
-                                    navigate("analytics");
+                                    navigate(
+                                        `analytics?${searchParams.toString()}`
+                                    );
                                 },
                             },
                         ]}
@@ -280,6 +285,45 @@ const ExpenseMonth: FC = () => {
                             </Fragment>
                         );
                     })}
+            </div>
+            <div className="flex gap-4 absolute bottom-28 left-1/2 -translate-x-1/2">
+                <ActionButtons
+                    className="w-14 h-14 flex items-center justify-center"
+                    rounded="full"
+                    options={[
+                        {
+                            type: "button",
+                            bgColor: "primary",
+                            color: "plain",
+                            icon: HiArrowLeft,
+                            disabled: !metaData.hasPrev,
+                            onClick: () => {
+                                if (metaData.hasPrev)
+                                    setSearchParams((val) => {
+                                        val.set(
+                                            "page",
+                                            (metaData.page - 1).toString()
+                                        );
+                                        return val;
+                                    });
+                            },
+                        },
+                        {
+                            type: "button",
+                            bgColor: "primary",
+                            color: "plain",
+                            icon: HiArrowRight,
+                            disabled: !metaData.hasNext,
+                            onClick: () => {
+                                if (metaData.hasNext)
+                                    setSearchParams((val) => {
+                                        val.set("page", metaData.page + 1);
+                                        return val;
+                                    });
+                            },
+                        },
+                    ]}
+                />
             </div>
             <ExpenseFilterModal />
             <Outlet />

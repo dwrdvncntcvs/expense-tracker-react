@@ -52,4 +52,5 @@ export interface ActionButtonOptions {
     onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
     label?: string;
     icon?: IconType;
+    disabled?: boolean;
 }

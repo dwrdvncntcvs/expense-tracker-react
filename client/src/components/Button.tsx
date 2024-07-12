@@ -61,7 +61,7 @@ const Button: FC<ButtonProp> = ({
                 ${colorClass[color]} 
                 ${bgColorClass[bgColor]} 
                 ${roundedClass[rounded]} 
-                ${className}`}
+                ${className} disabled:opacity-60 disabled:pointer-events-none`}
             {...props}
         >
             {children}
