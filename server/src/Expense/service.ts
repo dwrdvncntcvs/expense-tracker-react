@@ -418,11 +418,13 @@ class ExpenseService {
             totalAmount: number;
             label: string;
             percentage: number;
-        };
+        }[];
 
         return {
             meta: totalYearlyObject,
-            data: monthlyTotalExpensesWithPercentage,
+            data: monthlyTotalExpensesWithPercentage.sort(
+                (a, b) => a.id - b.id
+            ),
         };
     };
 }

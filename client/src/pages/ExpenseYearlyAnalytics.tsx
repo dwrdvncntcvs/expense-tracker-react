@@ -5,13 +5,14 @@ import { Modal } from "@components/Overlays";
 import { useAppDispatch } from "@hooks/storeHooks";
 import { BarChart, PieChart } from "@mui/x-charts";
 import { useGetExpensesYearlyAnalyticsQuery } from "@store/queries/expense";
-import { show } from "@store/slices/modal";
+import { hide, show } from "@store/slices/modal";
 import { FC, useEffect, useState } from "react";
 import { HiChartBar, HiChartPie } from "react-icons/hi2";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ExpenseYearlyAnalytics: FC = () => {
     const params = useParams();
+    const navigate = useNavigate();
 
     const [chartType, setChartType] = useState<"bar" | "pie">("bar");
 
@@ -34,6 +35,12 @@ const ExpenseYearlyAnalytics: FC = () => {
         <Modal
             name="yearly-expense-analytics"
             title={`${params?.year}'s Expenses Analytics`}
+            options={{
+                closeCb: () => {
+                    navigate("/", { replace: true });
+                    dispatch(hide());
+                },
+            }}
         >
             {isLoading ? (
                 <div>Loading ...</div>

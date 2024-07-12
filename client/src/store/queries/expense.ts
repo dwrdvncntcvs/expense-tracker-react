@@ -29,10 +29,10 @@ const expenseApi = api.injectEndpoints({
         createExpense: build.mutation<any, ICreateExpense>({
             query: (val) => ({ url: "/expenses", method: "POST", data: val }),
             invalidatesTags: [
+                "expense-year-analytics",
+                "expense-month-analytics",
                 "expense-months",
                 "expense-months-details",
-                "expense-month-analytics",
-                "expense-year-analytics",
             ],
         }),
         updateExpense: build.mutation<any, IExpense>({
@@ -65,8 +65,9 @@ const expenseApi = api.injectEndpoints({
         getExpensesYearlyAnalytics: build.query<any, YearlyExpensesParams>({
             query: (val) => ({
                 url: `/expenses/all/year/${val.year}/analytics`,
-                provideTags: ["expense-year-analytics"],
+                method: "GET",
             }),
+            providesTags: ["expense-year-analytics"],
         }),
     }),
 });
