@@ -1,19 +1,17 @@
-import { RequestHandler } from "express"
+import { RequestHandler } from "express";
 
 class PaginationMiddleware {
     isPaginated: RequestHandler = async (req, res, next) => {
-        const { page, limit } = req.query
-
-        console.log("Query: ", req.query)
+        const { page, limit } = req.query;
 
         if (page && limit) {
-            req.pagination.page = page ? +page : 1
-            req.pagination.offset = page ? (+page - 1) * +limit : 0
-            req.pagination.limit = limit ? +page : 10
+            req.pagination.page = page ? +page : 1;
+            req.pagination.offset = page ? (+page - 1) * +limit : 0;
+            req.pagination.limit = limit ? +page : 10;
         }
 
-        return next()
-    }
+        return next();
+    };
 }
 
-export default PaginationMiddleware
+export default PaginationMiddleware;

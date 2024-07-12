@@ -16,7 +16,6 @@ class AuthenticationMiddleware {
             const accessToken = cookies["accessToken"];
 
             if (!accessToken) {
-                console.log("error");
                 return next(ErrorService.UNAUTHORIZED("Sign in first"));
             }
             const data = await this.jwtService.verifyToken<JwtUser>(

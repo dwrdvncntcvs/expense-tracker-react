@@ -149,7 +149,6 @@ class ExpenseService {
 
         return Object.keys(reducedData).reduce<{ [key: string]: string[] }>(
             (acc, curr) => {
-                console.log("Reduced Data: ", reducedData[curr]);
                 acc[curr] = reducedData[curr]
                     .sort((a, b) => a - b)
                     .map((val) => monthLookUp(val).toLowerCase());

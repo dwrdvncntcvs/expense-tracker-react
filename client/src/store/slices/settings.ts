@@ -31,7 +31,6 @@ const settingsSlice = createSlice({
         builder.addMatcher(
             categoriesApi.endpoints.getCategories.matchFulfilled,
             (state, actions) => {
-                console.log("state: ", state);
                 state.categories = actions.payload.data;
             }
         );
