@@ -52,7 +52,6 @@ const ExpenseYearlyAnalytics: FC = () => {
                                 {chart === "pie" && (
                                     <PieChart
                                         data={analyticsData?.map((val) => {
-                                            console.log("Val: ", val);
                                             return {
                                                 id: val.id,
                                                 value: val.percentage,
