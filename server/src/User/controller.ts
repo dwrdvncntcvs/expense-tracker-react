@@ -130,6 +130,18 @@ class UserController implements IUserController {
             return next(ErrorService.BAD_REQUEST(err as string));
         }
     };
+
+    deactivateUser: RequestHandler = async (req, res, next) => {
+        const { id } = req.user;
+
+        try {
+            const data = await this.service.deleteUser(id);
+
+            return res.status(200).send({ data });
+        } catch (err) {
+            next(ErrorService.BAD_REQUEST(err as any));
+        }
+    };
 }
 
 export default UserController;

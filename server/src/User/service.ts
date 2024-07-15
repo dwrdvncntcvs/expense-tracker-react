@@ -97,6 +97,12 @@ class UserService {
 
         return formatData(data);
     }
+
+    async deleteUser(userId: string) {
+        await this.model.deleteOne({ _id: userId });
+
+        return { message: "User deleted successfully" };
+    }
 }
 
 export default UserService;

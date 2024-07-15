@@ -54,4 +54,12 @@ router.createRoutes(
     { isAuthenticated: true }
 );
 
+router.createRoutes(
+    "delete",
+    "/delete-user",
+    userController.deactivateUser,
+    [],
+    { isAuthenticated: true }
+);
+
 export default router.routerDetails();
