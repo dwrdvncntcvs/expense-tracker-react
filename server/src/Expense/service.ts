@@ -431,8 +431,6 @@ class ExpenseService {
         const totalYearlyObject = data[0].totalAmount[0];
         const monthlyTotalExpenseArr = data[0].monthlyTotalExpenses;
 
-        console.log(monthlyTotalExpenseArr);
-
         const monthlyTotalExpensesWithPercentage = monthlyTotalExpenseArr.map(
             (val: { id: number; totalAmount: number; label: string }) => ({
                 ...val,
