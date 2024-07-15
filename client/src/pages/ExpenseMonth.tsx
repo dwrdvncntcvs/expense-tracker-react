@@ -22,6 +22,7 @@ import {
     HiFunnel,
     HiOutlineFunnel,
     HiOutlinePencil,
+    HiOutlinePhoto,
     HiOutlineTrash,
 } from "react-icons/hi2";
 import {
@@ -205,6 +206,22 @@ const ExpenseMonth: FC = () => {
                                     >
                                         {hoveredId === expense.id && (
                                             <div className="w-full absolute bottom-0 flex flex-col bg-white">
+                                                {expense.imageUrl && (
+                                                    <button
+                                                        className="bg-secondary w-full p-2 py-3 text-white flex items-center justify-center hover:bg-secondary/80"
+                                                        onClick={() => {
+                                                            dispatch(
+                                                                show(
+                                                                    `expense-image-${expense.id}`
+                                                                )
+                                                            );
+                                                        }}
+                                                    >
+                                                        <HiOutlinePhoto
+                                                            size={20}
+                                                        />
+                                                    </button>
+                                                )}
                                                 <button
                                                     className="bg-warning w-full p-2 py-3 text-white flex items-center justify-center hover:bg-warning/80"
                                                     onClick={() => {
@@ -325,6 +342,18 @@ const ExpenseMonth: FC = () => {
                                         }}
                                         isLoading={isUpdateLoading}
                                     />
+                                </Modal>
+                                <Modal
+                                    name={`expense-image-${expense.id}`}
+                                    title={`${expense.label} Image`}
+                                >
+                                    <div className="flex w-full items-center justify-center">
+                                        <img
+                                            src={expense.imageUrl}
+                                            className="object-contain"
+                                            alt=""
+                                        />
+                                    </div>
                                 </Modal>
                             </Fragment>
                         );

@@ -25,6 +25,11 @@ class ExpenseService {
         }
     };
 
+    getExpense = async (expenseId: string) => {
+        const data = await this.model.findById(expenseId);
+        return formatData(data);
+    };
+
     getAnalyticsByMonth = async (
         month: number,
         year: number,
@@ -327,11 +332,14 @@ class ExpenseService {
 
     updateExpense = async (expenseId: string, data: UpdateExpense) => {
         try {
-            await this.model.updateOne({ _id: expenseId }, data, {
-                runValidators: true,
-            });
+            const updatedData = await this.model.findOneAndUpdate(
+                { _id: expenseId },
+                data,
+                {
+                    runValidators: true,
+                }
+            );
 
-            const updatedData = await this.model.findOne({ id: expenseId });
             return formatData(updatedData);
         } catch (err) {
             throw handleValidationError(err as Error.ValidationError);
