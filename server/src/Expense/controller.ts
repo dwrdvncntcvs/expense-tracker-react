@@ -3,8 +3,13 @@ import { IExpenseController } from "../types/Expense/controller";
 import { CreateExpense, UpdateExpense } from "../types/Expense/model";
 import ErrorService from "../utils/error";
 import ExpenseService from "./service";
+import FirebaseStorage from "../services/firebaseStorage";
 
 class ExpenseController implements IExpenseController {
+    private firebaseStorage: FirebaseStorage = new FirebaseStorage(
+        "expenses/images"
+    );
+
     constructor(private service: ExpenseService) {}
 
     expenses: RequestHandler = async (req, res, next) => {
@@ -52,6 +57,7 @@ class ExpenseController implements IExpenseController {
         const { id: userId } = req.user;
         const { categoryId, amount, label, month, purchaseDate, description } =
             req.body;
+        const file = req.file;
 
         const expense: CreateExpense = {
             amount,
@@ -64,6 +70,13 @@ class ExpenseController implements IExpenseController {
         };
 
         try {
+            if (file) {
+                const imageUrl = await this.firebaseStorage.uploadSingleFile(
+                    file
+                );
+                expense["imageUrl"] = imageUrl;
+            }
+
             const data = await this.service.createExpense(expense);
 
             return res.status(200).send({ data });

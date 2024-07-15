@@ -3,6 +3,7 @@ export interface Expense {
     userId: string;
     categoryId: string;
     label: string;
+    imageUrl?: string;
     purchaseDate: Date;
     month: number;
     amount: number;

@@ -8,16 +8,16 @@ const ExpenseSchema = new Schema(
         userId: {
             type: Schema.Types.ObjectId,
             required: [true, required("User")],
-            ref: "User"
+            ref: "User",
         },
         description: {
             type: String,
-            required: false
+            required: false,
         },
         categoryId: {
             type: Schema.Types.ObjectId,
             required: [true, required("Category")],
-            ref: "Category"
+            ref: "Category",
         },
         amount: {
             type: Number,
@@ -29,12 +29,15 @@ const ExpenseSchema = new Schema(
         },
         purchaseDate: {
             type: Date,
-            required: [true, required("Date of Purchase")]
+            required: [true, required("Date of Purchase")],
         },
         month: {
             type: Number,
             enum: MONTHS,
             required: [true, required("Month")],
+        },
+        imageUrl: {
+            type: String,
         },
     },
     {
