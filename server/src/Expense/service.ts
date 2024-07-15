@@ -250,6 +250,7 @@ class ExpenseService {
                                                 name: "$$expense.category.name",
                                             },
                                             amount: "$$expense.amount",
+                                            imageUrl: "$$expense.imageUrl",
                                             purchaseDate:
                                                 "$$expense.purchaseDate",
                                             month: "$$expense.month",
