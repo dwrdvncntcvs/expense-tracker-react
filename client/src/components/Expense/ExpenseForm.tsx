@@ -1,5 +1,5 @@
 import { ICreateExpense } from "@_types/expense";
-import { Field, Form } from "@components/Form";
+import { Field, Form, ImageField } from "@components/Form";
 import Select from "@components/Form/Select";
 import Textarea from "@components/Form/Textarea";
 import { useSettings } from "@store/slices/settings";
@@ -40,6 +40,7 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
             }
             onSubmit={onSubmit}
         >
+            <ImageField name="expense-image" />
             <div className="flex flex-col gap-2 w-full">
                 <label htmlFor="label">Label</label>
                 <Field name="label" id="label" />

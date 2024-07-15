@@ -12,6 +12,7 @@ export interface IExpense {
     createdAt: string;
     updatedAt: string;
     description: string;
+    imageUrl?:string;
     category: IExpenseCategory;
 }
 

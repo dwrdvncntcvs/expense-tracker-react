@@ -27,7 +27,19 @@ const expenseApi = api.injectEndpoints({
             providesTags: ["expense-months-details"],
         }),
         createExpense: build.mutation<any, ICreateExpense>({
-            query: (val) => ({ url: "/expenses", method: "POST", data: val }),
+            query: (val) => {
+                return {
+                    url: "/expenses",
+                    method: "POST",
+                    data: val,
+                    headers: {
+                        "Content-Type":
+                            "expense-image" in val
+                                ? "multipart/form-data"
+                                : "application/json",
+                    },
+                };
+            },
             invalidatesTags: [
                 "expense-year-analytics",
                 "expense-month-analytics",
