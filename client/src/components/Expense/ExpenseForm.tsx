@@ -16,6 +16,7 @@ interface ExpenseFormProps {
     initialValues?: ICreateExpense;
     isLoading: boolean;
     editMode?: boolean;
+    imageUrl?: string;
 }
 
 const ExpenseForm: FC<ExpenseFormProps> = ({
@@ -23,6 +24,7 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
     initialValues,
     isLoading,
     editMode = false,
+    imageUrl,
 }) => {
     const { categories } = useSettings();
 
@@ -40,7 +42,11 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
             }
             onSubmit={onSubmit}
         >
-            <ImageField name="expense-image" />
+            <ImageField
+                name="expense-image"
+                imageUrl={imageUrl}
+                enableRemoveImage={!editMode}
+            />
             <div className="flex flex-col gap-2 w-full">
                 <label htmlFor="label">Label</label>
                 <Field name="label" id="label" />

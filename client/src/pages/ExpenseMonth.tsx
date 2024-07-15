@@ -341,6 +341,7 @@ const ExpenseMonth: FC = () => {
                                                 .join("-"),
                                         }}
                                         isLoading={isUpdateLoading}
+                                        imageUrl={expense.imageUrl}
                                     />
                                 </Modal>
                                 <Modal

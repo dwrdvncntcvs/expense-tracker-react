@@ -3,13 +3,20 @@ import { useField } from "formik";
 import { FC, InputHTMLAttributes, LegacyRef, useRef, useState } from "react";
 import { HiOutlineTrash, HiPhoto } from "react-icons/hi2";
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {}
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+    imageUrl?: string;
+    enableRemoveImage?: boolean;
+}
 
-const ImageField: FC<InputProps> = ({ ...props }) => {
+const ImageField: FC<InputProps> = ({
+    imageUrl: _imageUrl,
+    enableRemoveImage = true,
+    ...props
+}) => {
     const inputRef = useRef<LegacyRef<HTMLInputElement | undefined>>(null);
     const [imageUrl, setImageUrl] = useState<
         string | null | ArrayBuffer | undefined
-    >("");
+    >(_imageUrl);
 
     const [p1, p2, p3] = useField(props?.name || "");
 
@@ -76,23 +83,29 @@ const ImageField: FC<InputProps> = ({ ...props }) => {
                             Select an image to add
                         </p>
                     </div>
-                    {error && <p className="text-failure text-xs text-end mt-2">{error}</p>}
+                    {error && (
+                        <p className="text-failure text-xs text-end mt-2">
+                            {error}
+                        </p>
+                    )}
                 </div>
             ) : (
                 <div className="relative h-60 object-center w-full border-gray-200 border rounded-lg overflow-auto">
-                    <Button
-                        className="p-2 rounded-full absolute bottom-2 right-2 "
-                        bgColor="failure"
-                        rounded="full"
-                        type="button"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            setValue(null);
-                            setImageUrl(null);
-                        }}
-                    >
-                        <HiOutlineTrash />
-                    </Button>
+                    {enableRemoveImage && (
+                        <Button
+                            className="p-2 rounded-full absolute bottom-2 right-2 "
+                            bgColor="failure"
+                            rounded="full"
+                            type="button"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setValue(null);
+                                setImageUrl(null);
+                            }}
+                        >
+                            <HiOutlineTrash />
+                        </Button>
+                    )}
                     <img
                         src={imageUrl as string}
                         className=" w-full object-cover h-full"

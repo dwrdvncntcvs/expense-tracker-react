@@ -104,7 +104,6 @@ class ExpenseController implements IExpenseController {
     putExpense: RequestHandler = async (req, res, next) => {
         const { expenseId } = req.params;
         const { amount, label, description, categoryId } = req.body;
-        const file = req.file;
 
         const updatedBody: UpdateExpense = {
             amount,
@@ -114,35 +113,6 @@ class ExpenseController implements IExpenseController {
         };
 
         try {
-            const foundExpenseData = await this.service.getExpense(expenseId);
-
-            if (foundExpenseData?.imageUrl) {
-                const newRefFullPath = this.firebaseStorage.createStorage(
-                    this.firebaseStorage.createFileName(file, label)
-                ).fullPath;
-
-                const oldRefFullPath =
-                    this.firebaseStorage.createStorageFromURL(
-                        foundExpenseData.imageUrl
-                    ).fullPath;
-
-                if (oldRefFullPath !== newRefFullPath) {
-                    console.log("Deleting old");
-                    await this.firebaseStorage.deleteFile(
-                        foundExpenseData.imageUrl
-                    );
-                }
-
-                const imageUrl = await this.firebaseStorage.uploadSingleFile(
-                    file,
-                    {
-                        customFilename: label,
-                    }
-                );
-
-                updatedBody["imageUrl"] = imageUrl;
-            }
-
             const data = await this.service.updateExpense(
                 expenseId,
                 updatedBody
