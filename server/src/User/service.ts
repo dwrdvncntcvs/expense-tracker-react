@@ -89,6 +89,14 @@ class UserService {
 
         return data;
     }
+
+    async updateUserProfileImage(userId: string, profileImageUrl: string) {
+        const data = await this.model.findByIdAndUpdate(userId, {
+            profileImage: profileImageUrl,
+        });
+
+        return formatData(data);
+    }
 }
 
 export default UserService;

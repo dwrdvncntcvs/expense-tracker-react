@@ -4,9 +4,12 @@ import ErrorService from "../utils/error";
 import UserService from "./service";
 import JwtService from "../services/jwt";
 import { RequestHandler } from "express";
+import FirebaseStorage from "../services/firebaseStorage";
 
 const jwtService = new JwtService();
 class UserController implements IUserController {
+    firebaseStorage: FirebaseStorage = new FirebaseStorage("user/images");
+
     constructor(private service: UserService) {}
 
     signUp: RequestHandler = async (req, res, next) => {
@@ -107,6 +110,24 @@ class UserController implements IUserController {
         } catch (err) {
             const errData = err as Error;
             next(ErrorService.BAD_REQUEST(errData.message));
+        }
+    };
+
+    uploadUserProfileImage: RequestHandler = async (req, res, next) => {
+        const { id } = req.user;
+        const file = req.file;
+
+        try {
+            const imageUrl = await this.firebaseStorage.uploadSingleFile(file);
+
+            const data = await this.service.updateUserProfileImage(
+                id,
+                imageUrl
+            );
+
+            return res.status(200).send({ data });
+        } catch (err) {
+            return next(ErrorService.BAD_REQUEST(err as string));
         }
     };
 }

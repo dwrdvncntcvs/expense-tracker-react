@@ -2,11 +2,13 @@ import UserController from "./controller";
 import UserMiddleware from "./middleware";
 import UserService from "./service";
 import Router from "../utils/routes";
+import ImageUploadMiddleware from "../middlewares/imageUpload";
 
 const router = new Router("/users");
 
 const userController = new UserController(new UserService());
 const userMiddleware = new UserMiddleware(new UserService());
+const imageMiddleware = new ImageUploadMiddleware("memory", "user-image");
 
 router.createRoutes("post", "/sign-up", userController.signUp, [
     userMiddleware.checkAccountExistence,
@@ -40,11 +42,15 @@ router.createRoutes("put", "/:id", userController.updateUser, [], {
     middlewares: [userMiddleware.canAccess],
 });
 
+router.createRoutes("put", "/change/pass", userController.updatePassword, [], {
+    isAuthenticated: true,
+});
+
 router.createRoutes(
-    "put",
-    "/change/pass",
-    userController.updatePassword,
-    [],
+    "post",
+    "/add-profile-image",
+    userController.uploadUserProfileImage,
+    [imageMiddleware.upload("single")],
     { isAuthenticated: true }
 );
 

@@ -46,6 +46,22 @@ export const userApi = api.injectEndpoints({
             }),
             invalidatesTags: ["auth"],
         }),
+        uploadProfileImage: build.mutation<any, { imageData: File }>({
+            query: (val) => {
+                const formData = new FormData();
+                formData.append("user-image", val.imageData);
+
+                return {
+                    url: "/users/add-profile-image",
+                    data: formData,
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                };
+            },
+            invalidatesTags: ["auth"],
+        }),
     }),
 });
 
@@ -56,4 +72,5 @@ export const {
     useSignOutMutation,
     useUpdateUserMutation,
     useUpdatePasswordMutation,
+    useUploadProfileImageMutation,
 } = userApi;
