@@ -1,10 +1,12 @@
+import ImageUploadMiddleware from "../middlewares/imageUpload";
 import Router from "../utils/routes";
 import ExpenseController from "./controller";
-import ExpenseService from "./service";
 import ExpenseMiddleware from "./middlewares";
+import ExpenseService from "./service";
 
 const expenseController = new ExpenseController(new ExpenseService());
 const expenseMiddleware = new ExpenseMiddleware(new ExpenseService());
+const imageMiddleware = new ImageUploadMiddleware("memory", "expense-image");
 
 const router = new Router("/expenses", {
     isAuthenticated: true,
@@ -19,8 +21,12 @@ router.createRoutes(
     expenseController.expensesType,
     []
 );
-router.createRoutes("post", "/", expenseController.addExpense, []);
-router.createRoutes("put", "/:expenseId", expenseController.putExpense, []);
+router.createRoutes("post", "/", expenseController.addExpense, [
+    imageMiddleware.upload("single"),
+]);
+router.createRoutes("put", "/:expenseId", expenseController.putExpense, [
+    imageMiddleware.upload("single"),
+]);
 router.createRoutes(
     "delete",
     "/:expenseId",

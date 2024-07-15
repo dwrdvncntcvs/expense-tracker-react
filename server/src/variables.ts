@@ -4,18 +4,29 @@ const PORT = +(process.env.PORT || 3000);
 const SECRET_KEY = process.env.SECRET_KEY as string;
 const MONGO_URL = process.env.MONGO_URL as string;
 
-type MONTH_TYPE = "JANUARY" |
-    "FEBRUARY" |
-    "MARCH" |
-    "APRIL" |
-    "MAY" |
-    "JUNE" |
-    "JULY" |
-    "AUGUST" |
-    "SEPTEMBER" |
-    "OCTOBER" |
-    "NOVEMBER" |
-    "DECEMBER"
+const FIREBASE_VARS = {
+    API_KEY: process.env.F_API_KEY,
+    AUTH_DOMAIN: process.env.F_AUTH_DOMAIN,
+    DATABASE_URL: process.env.F_DATABASE_URL,
+    PROJECT_ID: process.env.F_PROJECT_ID,
+    STORAGE_BUCKET: process.env.F_STORAGE_BUCKET,
+    MESSAGING_SENDER_ID: process.env.F_MESSAGING_SENDER_ID,
+    APP_ID: process.env.F_APP_ID,
+};
+
+type MONTH_TYPE =
+    | "JANUARY"
+    | "FEBRUARY"
+    | "MARCH"
+    | "APRIL"
+    | "MAY"
+    | "JUNE"
+    | "JULY"
+    | "AUGUST"
+    | "SEPTEMBER"
+    | "OCTOBER"
+    | "NOVEMBER"
+    | "DECEMBER";
 
 export const MONTHS_OBJ = {
     JANUARY: 1,
@@ -30,9 +41,11 @@ export const MONTHS_OBJ = {
     OCTOBER: 10,
     NOVEMBER: 11,
     DECEMBER: 12,
-}
+};
 
-const MONTHS = Object.keys(MONTHS_OBJ).map(key => MONTHS_OBJ[key as MONTH_TYPE])
+const MONTHS = Object.keys(MONTHS_OBJ).map(
+    (key) => MONTHS_OBJ[key as MONTH_TYPE]
+);
 
 const EXPENSE_TYPE = [
     "needs",
@@ -43,4 +56,4 @@ const EXPENSE_TYPE = [
     "hobby",
 ];
 
-export { PORT, SECRET_KEY, MONGO_URL, MONTHS, EXPENSE_TYPE };
+export { PORT, SECRET_KEY, MONGO_URL, MONTHS, EXPENSE_TYPE, FIREBASE_VARS };
