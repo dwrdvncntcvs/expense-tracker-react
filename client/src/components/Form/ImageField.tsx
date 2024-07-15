@@ -24,6 +24,8 @@ const ImageField: FC<InputProps> = ({
     const { error } = p2;
     const { setValue, setError } = p3;
 
+    if (!imageUrl && !enableRemoveImage) return null;
+
     return (
         <>
             <input
