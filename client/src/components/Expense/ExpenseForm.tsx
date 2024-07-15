@@ -5,6 +5,7 @@ import Textarea from "@components/Form/Textarea";
 import { useSettings } from "@store/slices/settings";
 import { FormikState } from "formik";
 import { FC } from "react";
+import { expenseValidation } from "@validation/expense";
 
 type OnSubmit = (
     val: any,
@@ -40,6 +41,7 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
                     description: "",
                 }
             }
+            validationSchema={expenseValidation}
             onSubmit={onSubmit}
         >
             <ImageField

@@ -18,6 +18,7 @@ export default defineConfig({
             "@store": resolve(root, "store"),
             "@_types": resolve(root, "types"),
             "@common": resolve(root, "common"),
+            "@validation": resolve(root, "validation"),
         },
     },
 });
