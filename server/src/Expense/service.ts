@@ -368,7 +368,7 @@ class ExpenseService {
             const label = key.toLowerCase();
             const monthValue = MONTHS_OBJ[key as keyof typeof MONTHS_OBJ];
             return {
-                case: { $eq: ["$_id.month", +monthValue] },
+                case: { $eq: ["$id", +monthValue] },
                 then: `${label.charAt(0).toUpperCase()}${label.slice(1)}`,
             };
         });
@@ -404,8 +404,9 @@ class ExpenseService {
                     monthlyTotalExpenses: [
                         {
                             $group: {
-                                _id: { month: { $month: "$purchaseDate" } },
+                                _id: "$month",
                                 id: { $first: "$month" },
+                                label: { $first: "$month" },
                                 totalAmount: { $sum: "$amount" },
                             },
                         },
@@ -429,6 +430,8 @@ class ExpenseService {
 
         const totalYearlyObject = data[0].totalAmount[0];
         const monthlyTotalExpenseArr = data[0].monthlyTotalExpenses;
+
+        console.log(monthlyTotalExpenseArr);
 
         const monthlyTotalExpensesWithPercentage = monthlyTotalExpenseArr.map(
             (val: { id: number; totalAmount: number; label: string }) => ({

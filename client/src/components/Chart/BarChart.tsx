@@ -16,35 +16,43 @@ interface BarChartProps {
 
 const BarChart: FC<BarChartProps> = ({ data }) => {
     return (
-        <_BarChart
-            slotProps={{ legend: { hidden: true } }}
-            height={400}
-            width={470}
-            dataset={data.map((val) => ({
-                totalAmount: val.totalAmount,
-                label: val.label,
-            }))}
-            yAxis={[{ scaleType: "band", dataKey: "label" }]}
-            xAxis={[
-                {
-                    valueFormatter: (val: string) => {
-                        return formatCurrency(`${val}`, "PHP");
+        <div className="flex items-end w-full justify-end">
+            <_BarChart
+                slotProps={{ legend: { hidden: true } }}
+                height={400}
+                width={350}
+                dataset={data.map((val) => ({
+                    totalAmount: val.totalAmount,
+                    label: val.label,
+                }))}
+                yAxis={[
+                    {
+                        scaleType: "band",
+                        dataKey: "label",
                     },
-                },
-            ]}
-            series={[
-                {
-                    dataKey: "totalAmount",
-                    label: "Total Amount",
-                    valueFormatter: (val) => {
-                        return formatCurrency(`${val}`, "PHP");
+                ]}
+                xAxis={[
+                    {
+                        valueFormatter: (val: string) => {
+                            return formatCurrency(`${val}`, "PHP");
+                        },
                     },
-                },
-            ]}
-            colors={generateAccents("#427D9D", data.length, true)}
-            layout="horizontal"
-            className="w-full"
-        />
+                ]}
+                series={[
+                    {
+                        dataKey: "totalAmount",
+                        label: "Total Amount",
+                        valueFormatter: (val) => {
+                            return formatCurrency(`${val}`, "PHP");
+                        },
+                    },
+                ]}
+                colors={generateAccents("#427D9D", data.length, true)}
+                layout="horizontal"
+                grid={{ vertical: true }}
+                borderRadius={10}
+            />
+        </div>
     );
 };
 

@@ -1,5 +1,3 @@
-import { formatCurrency } from "@common/utils/str";
-import Button from "@components/Button";
 import { BarChart, PieChart } from "@components/Chart";
 import { Modal } from "@components/Overlays";
 import { useAppDispatch } from "@hooks/storeHooks";
@@ -7,14 +5,11 @@ import ChartLayout from "@layouts/ChartLayout";
 import { useGetExpensesYearlyAnalyticsQuery } from "@store/queries/expense";
 import { hide, show } from "@store/slices/modal";
 import { FC, useEffect, useState } from "react";
-import { HiChartBar, HiChartPie } from "react-icons/hi2";
 import { useNavigate, useParams } from "react-router-dom";
 
 const ExpenseYearlyAnalytics: FC = () => {
     const params = useParams();
     const navigate = useNavigate();
-
-    const [chartType, setChartType] = useState<"bar" | "pie">("bar");
 
     const dispatch = useAppDispatch();
 
@@ -30,6 +25,18 @@ const ExpenseYearlyAnalytics: FC = () => {
 
     const metaData = data?.data.meta;
     const analyticsData = data?.data.data;
+
+    console.log(
+        analyticsData?.map((val) => {
+            return {
+                id: val.id,
+                value: val.percentage,
+                label: val.label,
+                totalAmount: val.totalAmount,
+                percentage: val.percentage,
+            };
+        })
+    );
 
     return (
         <Modal
