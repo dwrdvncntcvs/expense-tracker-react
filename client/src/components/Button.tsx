@@ -34,6 +34,7 @@ const Button: FC<ButtonProp> = ({
         success: "text-success",
         warning: "text-warning",
         plain: "text-white",
+        light: "text-light/30",
     };
 
     const bgColorClass: BgColorClass = {
@@ -45,6 +46,7 @@ const Button: FC<ButtonProp> = ({
         success: "bg-success hover:bg-success/80",
         warning: "bg-warning hover:bg-warning/80",
         plain: "bg-white hover:bg-gray/10",
+        light: "bg-light/30",
     };
 
     const roundedClass: RoundnessClass = {

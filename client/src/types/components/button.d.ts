@@ -8,7 +8,8 @@ export type Color =
     | "failure"
     | "success"
     | "warning"
-    | "plain";
+    | "plain"
+    | "light";
 
 export type Size = "sm" | "md" | "lg" | "xl";
 
@@ -23,6 +24,7 @@ export interface ColorClass {
     success: string;
     warning: string;
     plain: string;
+    light: string;
 }
 
 export type BgColorClass = ColorClass;

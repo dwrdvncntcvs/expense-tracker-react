@@ -1,4 +1,5 @@
 import { ExpenseMonthHeader, ExpenseMonthList } from "@components/Expense";
+import { YearlyExpenseLoader } from "@components/LoadingScreen";
 import { useGetExpensesQuery } from "@store/queries/expense";
 import { FC } from "react";
 import { Outlet } from "react-router-dom";
@@ -6,7 +7,7 @@ import { Outlet } from "react-router-dom";
 const Home: FC = () => {
     const { data, isLoading } = useGetExpensesQuery();
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <YearlyExpenseLoader />;
 
     if (Object.keys(data.months).length < 1)
         return (
