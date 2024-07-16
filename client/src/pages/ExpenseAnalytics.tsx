@@ -1,6 +1,7 @@
 import { MONTHS } from "@common/constants";
-import { capitalize, formatCurrency } from "@common/utils/str";
+import { capitalize } from "@common/utils/str";
 import { BarChart, PieChart } from "@components/Chart";
+import { AnalyticsModalLoading } from "@components/LoadingScreen";
 import { Modal } from "@components/Overlays";
 import { useAppDispatch } from "@hooks/storeHooks";
 import ChartLayout from "@layouts/ChartLayout";
@@ -14,18 +15,18 @@ export const ExpenseAnalytics: FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const { data, isLoading } = useGetExpensesByMonthAnalyticsQuery({
-        month: MONTHS[params.month?.toUpperCase() as keyof typeof MONTHS]
-            ? MONTHS[params.month?.toUpperCase() as keyof typeof MONTHS]
-            : "",
-        year: params.year || "",
-    });
+    const { data, isLoading, isFetching } = useGetExpensesByMonthAnalyticsQuery(
+        {
+            month: MONTHS[params.month?.toUpperCase() as keyof typeof MONTHS]
+                ? MONTHS[params.month?.toUpperCase() as keyof typeof MONTHS]
+                : "",
+            year: params.year || "",
+        }
+    );
 
     useEffect(() => {
         dispatch(show("expense-analytics"));
     }, []);
-
-    if (isLoading) return <div>Loading...</div>;
 
     return (
         <Modal
@@ -38,38 +39,45 @@ export const ExpenseAnalytics: FC = () => {
                 },
             }}
         >
-            <>
-                <ChartLayout amount={data.data.expenseAnalytics.totalAmount}>
-                    {(chart) => (
-                        <>
-                            {chart === "pie" && (
-                                <PieChart
-                                    data={data.data.categoriesExpenseAnalytics.map(
-                                        (analytic) => ({
-                                            id: analytic.id,
-                                            value: analytic.percentage,
-                                            label: `${analytic.name} `,
-                                            totalAmount: analytic.totalAmount,
-                                            percentage: analytic.percentage,
-                                        })
-                                    )}
-                                />
-                            )}
-                            {chart === "bar" && (
-                                <BarChart
-                                    data={data.data.categoriesExpenseAnalytics.map(
-                                        (val) => ({
-                                            ...val,
-                                            id: val.id,
-                                            label: val.name,
-                                        })
-                                    )}
-                                />
-                            )}
-                        </>
-                    )}
-                </ChartLayout>
-            </>
+            {isLoading || isFetching ? (
+                <AnalyticsModalLoading />
+            ) : (
+                <>
+                    <ChartLayout
+                        amount={data.data.expenseAnalytics.totalAmount}
+                    >
+                        {(chart) => (
+                            <>
+                                {chart === "pie" && (
+                                    <PieChart
+                                        data={data.data.categoriesExpenseAnalytics.map(
+                                            (analytic) => ({
+                                                id: analytic.id,
+                                                value: analytic.percentage,
+                                                label: `${analytic.name} `,
+                                                totalAmount:
+                                                    analytic.totalAmount,
+                                                percentage: analytic.percentage,
+                                            })
+                                        )}
+                                    />
+                                )}
+                                {chart === "bar" && (
+                                    <BarChart
+                                        data={data.data.categoriesExpenseAnalytics.map(
+                                            (val) => ({
+                                                ...val,
+                                                id: val.id,
+                                                label: val.name,
+                                            })
+                                        )}
+                                    />
+                                )}
+                            </>
+                        )}
+                    </ChartLayout>
+                </>
+            )}
         </Modal>
     );
 };

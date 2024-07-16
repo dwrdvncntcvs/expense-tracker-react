@@ -115,7 +115,7 @@ const ExpenseMonth: FC = () => {
                                 icon: HiTrendingUp,
                                 onClick: () => {
                                     navigate(
-                                        `analytics?${searchParams.toString()}`
+                                        `analytics`
                                     );
                                 },
                             },

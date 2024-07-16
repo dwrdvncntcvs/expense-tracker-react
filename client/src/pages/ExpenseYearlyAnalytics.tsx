@@ -1,4 +1,5 @@
 import { BarChart, PieChart } from "@components/Chart";
+import { AnalyticsModalLoading } from "@components/LoadingScreen";
 import { Modal } from "@components/Overlays";
 import { useAppDispatch } from "@hooks/storeHooks";
 import ChartLayout from "@layouts/ChartLayout";
@@ -50,7 +51,7 @@ const ExpenseYearlyAnalytics: FC = () => {
             }}
         >
             {isLoading ? (
-                <div>Loading ...</div>
+                <AnalyticsModalLoading />
             ) : (
                 <>
                     <ChartLayout amount={metaData.totalAmount}>
