@@ -43,7 +43,7 @@ const ExpenseMonth: FC = () => {
 
     searchParams.set("limit", "16");
 
-    const { data, isLoading } = useGetExpensesByMonthQuery({
+    const { data, isLoading, isFetching } = useGetExpensesByMonthQuery({
         month: params?.month
             ? MONTHS[params?.month.toUpperCase() as keyof typeof MONTHS]
             : "",
@@ -67,7 +67,7 @@ const ExpenseMonth: FC = () => {
         }
     }, [searchParams, data?.data?.expenses?.data, isLoading]);
 
-    if (isLoading) return <MonthlyExpenseLoading />;
+    if (isLoading || isFetching) return <MonthlyExpenseLoading />;
 
     const metaData = data.data.expenses.metadata;
     const totalAmount = data.data.expenses.totalAmount;
