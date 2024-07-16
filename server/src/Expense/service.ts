@@ -429,17 +429,24 @@ class ExpenseService {
                         },
                         {
                             $group: {
-                                _id: "$_id.month",
-                                categories: {
+                                _id: "$_id.categoryId",
+                                categoryName: { $first: "$categoryName" },
+                                id: { $first: "$_id.categoryId" },
+                                months: {
                                     $push: {
-                                        categoryId: "$_id.categoryId",
-                                        categoryName: "$categoryName",
+                                        month: "$_id.month",
                                         totalAmount: "$totalAmount",
                                         count: "$count",
                                     },
                                 },
-                                monthlyTotalAmount: { $sum: "$totalAmount" },
-                                monthlyCount: { $sum: "$count" },
+                            },
+                        },
+                        {
+                            $project: {
+                                _id: 0,
+                                id: 1,
+                                months: 1,
+                                categoryName: 1,
                             },
                         },
                     ],
@@ -447,7 +454,15 @@ class ExpenseService {
             },
         ]);
 
-        return data[0];
+        const totalAmount = data[0].totalAmount[0].totalAmount;
+        const analyticsData = data[0].monthlyExpensesPerCategory;
+
+        return {
+            meta: {
+                totalAmount,
+            },
+            data: analyticsData,
+        };
     };
 
     getYearlyExpenseAnalytics = async ({

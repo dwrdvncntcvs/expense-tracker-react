@@ -45,6 +45,7 @@ const expenseApi = api.injectEndpoints({
                 "expense-month-analytics",
                 "expense-months",
                 "expense-months-details",
+                "expense-year-analytics-cat",
             ],
         }),
         updateExpense: build.mutation<any, IExpense>({
@@ -57,6 +58,7 @@ const expenseApi = api.injectEndpoints({
                 "expense-months-details",
                 "expense-month-analytics",
                 "expense-year-analytics",
+                "expense-year-analytics-cat",
             ],
         }),
         deleteExpense: build.mutation<any, string>({
@@ -65,6 +67,7 @@ const expenseApi = api.injectEndpoints({
                 "expense-months-details",
                 "expense-month-analytics",
                 "expense-year-analytics",
+                "expense-year-analytics-cat",
             ],
         }),
         getExpensesByMonthAnalytics: build.query<any, ExpenseByMonthParams>({
@@ -81,6 +84,16 @@ const expenseApi = api.injectEndpoints({
             }),
             providesTags: ["expense-year-analytics"],
         }),
+        getExpensesYearlyAnalyticsPerCategory: build.query<
+            any,
+            { year: string }
+        >({
+            query: (val) => ({
+                url: `/expenses/per-categories/year/${val.year}/analytics`,
+                method: "get",
+            }),
+            providesTags: ["expense-year-analytics-cat"],
+        }),
     }),
 });
 
@@ -92,6 +105,7 @@ export const {
     useDeleteExpenseMutation,
     useGetExpensesByMonthAnalyticsQuery,
     useGetExpensesYearlyAnalyticsQuery,
+    useGetExpensesYearlyAnalyticsPerCategoryQuery,
 } = expenseApi;
 
 export default expenseApi;

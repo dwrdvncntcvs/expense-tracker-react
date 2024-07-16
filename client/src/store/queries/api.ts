@@ -11,6 +11,7 @@ const api = createApi({
         "expense-months-details",
         "expense-month-analytics",
         "expense-year-analytics",
+        "expense-year-analytics-cat"
     ],
     endpoints: () => ({}),
 });

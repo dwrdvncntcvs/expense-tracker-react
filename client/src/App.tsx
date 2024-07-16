@@ -65,7 +65,7 @@ function App() {
                             element={<ExpenseAnalytics />}
                         />
                     </Route>
-                    <Route path="/:id" element={<Profile />} />
+                    <Route path="/user/:year?" element={<Profile />} />
                 </Route>
             </Routes>
             {!shouldNotDisplayCreateExpense.includes(pathname) && (

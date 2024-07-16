@@ -10,6 +10,7 @@ export interface User {
     username: string;
     email: string;
     password: string;
+    profileImage?: string;
 }
 
 export type SignUpData = Omit<User, "id">;

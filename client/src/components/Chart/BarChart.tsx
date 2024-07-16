@@ -12,15 +12,17 @@ interface BarChartData {
 
 interface BarChartProps {
     data: BarChartData[];
+    height?: number;
+    width?: number;
 }
 
-const BarChart: FC<BarChartProps> = ({ data }) => {
+const BarChart: FC<BarChartProps> = ({ data, height = 400, width = 350 }) => {
     return (
-        <div className="flex items-end w-full justify-end">
+        <div className="flex items-end w-full h-auto justify-end">
             <_BarChart
                 slotProps={{ legend: { hidden: true } }}
-                height={400}
-                width={350}
+                height={height}
+                width={width}
                 dataset={data.map((val) => ({
                     totalAmount: val.totalAmount,
                     label: val.label,

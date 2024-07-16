@@ -16,7 +16,7 @@ const MainLayout: FC<PropsWithChildren> = ({ children }) => {
         "w-full px-4 xl:w-[1200px] mx-auto h-full";
 
     return (
-        <div className="w-screen h-screen relative">
+        <div className="w-screen h-screen relative overflow-auto">
             {!shouldExclude && (
                 <div id="header" className="absolute top-0 left-0 w-full h-24">
                     <nav className={contentAndHeaderClassName}>
