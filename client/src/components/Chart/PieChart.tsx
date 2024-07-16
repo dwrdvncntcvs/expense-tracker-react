@@ -13,8 +13,6 @@ interface PieChartData {
 
 interface PieChartProps {
     data: PieChartData[];
-    height: number;
-    width: number;
 }
 
 const PieChart: FC<PieChartProps> = ({ data }) => {

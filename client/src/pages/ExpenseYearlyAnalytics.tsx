@@ -5,7 +5,7 @@ import { useAppDispatch } from "@hooks/storeHooks";
 import ChartLayout from "@layouts/ChartLayout";
 import { useGetExpensesYearlyAnalyticsQuery } from "@store/queries/expense";
 import { hide, show } from "@store/slices/modal";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 const ExpenseYearlyAnalytics: FC = () => {
@@ -26,18 +26,6 @@ const ExpenseYearlyAnalytics: FC = () => {
 
     const metaData = data?.data.meta;
     const analyticsData = data?.data.data;
-
-    console.log(
-        analyticsData?.map((val) => {
-            return {
-                id: val.id,
-                value: val.percentage,
-                label: val.label,
-                totalAmount: val.totalAmount,
-                percentage: val.percentage,
-            };
-        })
-    );
 
     return (
         <Modal
