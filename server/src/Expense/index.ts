@@ -48,4 +48,11 @@ router.createRoutes(
     []
 );
 
+router.createRoutes(
+    "get",
+    "/per-categories/year/:year/analytics",
+    expenseController.getExpenseYearlyAnalyticsPerCategories,
+    []
+);
+
 export default router.routerDetails();

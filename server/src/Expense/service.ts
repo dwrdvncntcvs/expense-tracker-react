@@ -354,6 +354,102 @@ class ExpenseService {
         return await this.model.findOne({ userId });
     };
 
+    getYearlyExpenseAnalyticsPerCategories = async ({
+        year,
+        userId,
+    }: {
+        year: number;
+        userId: string;
+    }) => {
+        const startDate = new Date(`${year}-01-01T00:00:00.000Z`);
+        const endDate = new Date(`${year + 1}-01-01T00:00:00.000Z`);
+
+        const mappedSwitchCaseMonth = Object.keys(MONTHS_OBJ).map((key) => {
+            const label = key.toLowerCase();
+            const monthValue = MONTHS_OBJ[key as keyof typeof MONTHS_OBJ];
+            return {
+                case: { $eq: ["$id", +monthValue] },
+                then: `${label.charAt(0).toUpperCase()}${label.slice(1)}`,
+            };
+        });
+
+        const data = await this.model.aggregate([
+            {
+                $match: {
+                    userId: userId,
+                    purchaseDate: {
+                        $gte: startDate,
+                        $lt: endDate,
+                    },
+                },
+            },
+            {
+                $facet: {
+                    totalAmount: [
+                        {
+                            $group: {
+                                _id: null,
+                                totalAmount: { $sum: "$amount" },
+                            },
+                        },
+                        {
+                            $project: {
+                                _id: 0,
+                                totalAmount: 1,
+                            },
+                        },
+                    ],
+                    monthlyExpensesPerCategory: [
+                        {
+                            $lookup: {
+                                from: "categories",
+                                localField: "categoryId",
+                                foreignField: "_id",
+                                as: "category",
+                            },
+                        },
+                        {
+                            $unwind: {
+                                path: "$category",
+                                includeArrayIndex: "string",
+                                preserveNullAndEmptyArrays: true,
+                            },
+                        },
+                        {
+                            $group: {
+                                _id: {
+                                    categoryId: "$categoryId",
+                                    month: "$month",
+                                },
+                                totalAmount: { $sum: "$amount" },
+                                monthName: { $first: "$month" },
+                                categoryName: { $first: "$category.name" },
+                                count: { $sum: 1 },
+                            },
+                        },
+                        {
+                            $group: {
+                                _id: "$_id.month",
+                                categories: {
+                                    $push: {
+                                        categoryId: "$_id.categoryId",
+                                        categoryName: "$categoryName",
+                                        totalAmount: "$totalAmount",
+                                        count: "$count",
+                                    },
+                                },
+                                monthlyTotalAmount: { $sum: "$totalAmount" },
+                                monthlyCount: { $sum: "$count" },
+                            },
+                        },
+                    ],
+                },
+            },
+        ]);
+
+        return data[0];
+    };
+
     getYearlyExpenseAnalytics = async ({
         year,
         userId,
@@ -430,6 +526,7 @@ class ExpenseService {
 
         const totalYearlyObject = data[0].totalAmount[0];
         const monthlyTotalExpenseArr = data[0].monthlyTotalExpenses;
+        const monthlyExpensesPerCategory = data[0].monthlyExpensesPerCategory;
 
         const monthlyTotalExpensesWithPercentage = monthlyTotalExpenseArr.map(
             (val: { id: number; totalAmount: number; label: string }) => ({
