@@ -1,8 +1,8 @@
 import { IExpense } from "@_types/expense";
 import { MONTHS } from "@common/constants";
-import { capitalize, formatCurrency, formatDate } from "@common/utils/str";
+import { formatCurrency, formatDate } from "@common/utils/str";
 import ActionButtons from "@components/ActionButtons";
-import { ExpenseForm } from "@components/Expense";
+import { ExpenseForm, MonthlyExpenseHeader } from "@components/Expense";
 import { MonthlyExpenseLoading } from "@components/LoadingScreen";
 import { ExpenseFilterModal } from "@components/Modal";
 import { Modal } from "@components/Overlays";
@@ -16,11 +16,7 @@ import {
 import { hide, show } from "@store/slices/modal";
 import { success } from "@store/slices/toast";
 import { FC, Fragment, useEffect, useState } from "react";
-import { HiTrendingUp } from "react-icons/hi";
 import {
-    HiArrowLeft,
-    HiArrowRight,
-    HiFunnel,
     HiOutlineFunnel,
     HiOutlinePencil,
     HiOutlinePhoto,
@@ -39,7 +35,7 @@ const ExpenseMonth: FC = () => {
     const dispatch = useAppDispatch();
     const params = useParams();
     const navigate = useNavigate();
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
 
     searchParams.set("limit", "16");
 
@@ -75,98 +71,11 @@ const ExpenseMonth: FC = () => {
 
     return (
         <div className="flex flex-col gap-4 h-full">
-            <div className="flex items-center justify-between h-10">
-                <div className="flex gap-2 items-center">
-                    <button
-                        onClick={() => navigate("/", { replace: true })}
-                        className="text-primary rounded-full h-10 w-10 flex justify-center items-center hover:border-2 hover:border-primary"
-                    >
-                        <HiArrowLeft size={20} />
-                    </button>
-                    {params?.month && (
-                        <h2 className="font-bold text-3xl text-primary">
-                            {capitalize(params?.month)}{" "}
-                        </h2>
-                    )}
-                </div>
-                <div className="flex gap-4 items-center">
-                    {expenses && (
-                        <span className="text-sm ml-2 text-gray-600 font-normal">
-                            Total: {formatCurrency(totalAmount, "PHP")}
-                        </span>
-                    )}
-                    <ActionButtons
-                        rounded="full"
-                        className="h-10 w-10 flex justify-center items-center"
-                        options={[
-                            {
-                                type: "button",
-                                bgColor: "secondary",
-                                color: "plain",
-                                icon: HiFunnel,
-                                onClick: () => {
-                                    dispatch(show("expense-filter"));
-                                },
-                            },
-                            {
-                                type: "button",
-                                bgColor: "secondary",
-                                color: "plain",
-                                icon: HiTrendingUp,
-                                onClick: () => {
-                                    navigate(
-                                        `analytics`
-                                    );
-                                },
-                            },
-                        ]}
-                    />
-                    {(metaData.hasNext || metaData.hasPrev) && (
-                        <ActionButtons
-                            className="h-10 w-10 flex justify-center items-center"
-                            rounded="full"
-                            options={[
-                                {
-                                    type: "button",
-                                    bgColor: "primary",
-                                    color: "plain",
-                                    icon: HiArrowLeft,
-                                    disabled: !metaData.hasPrev,
-                                    onClick: () => {
-                                        if (metaData.hasPrev)
-                                            setSearchParams((val) => {
-                                                val.set(
-                                                    "page",
-                                                    (
-                                                        metaData.page - 1
-                                                    ).toString()
-                                                );
-                                                return val;
-                                            });
-                                    },
-                                },
-                                {
-                                    type: "button",
-                                    bgColor: "primary",
-                                    color: "plain",
-                                    icon: HiArrowRight,
-                                    disabled: !metaData.hasNext,
-                                    onClick: () => {
-                                        if (metaData.hasNext)
-                                            setSearchParams((val) => {
-                                                val.set(
-                                                    "page",
-                                                    metaData.page + 1
-                                                );
-                                                return val;
-                                            });
-                                    },
-                                },
-                            ]}
-                        />
-                    )}
-                </div>
-            </div>
+            <MonthlyExpenseHeader
+                month={params?.month || ""}
+                pagination={metaData}
+                totalAmount={totalAmount}
+            />
 
             {!expenses && searchParams.get("categoryId") && (
                 <div className="flex flex-col h-full w-full justify-center items-center gap-4">
