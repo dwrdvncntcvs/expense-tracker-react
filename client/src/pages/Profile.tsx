@@ -1,6 +1,7 @@
 import { MONTHS } from "@common/constants";
 import { generateAccents } from "@common/utils/color";
 import { capitalize, formatCurrency } from "@common/utils/str";
+import { AnalyticsLoading } from "@components/LoadingScreen";
 import { UploadProfileImage } from "@components/Modal";
 import { useAppDispatch } from "@hooks/storeHooks";
 import { BarChart, LineChart, PieChart } from "@mui/x-charts";
@@ -103,6 +104,7 @@ const Profile: FC = () => {
                             id="year"
                             value={params.year}
                             onChange={(e) => {
+                                setMonth("");
                                 navigate(`/user/${e.target.value}`);
                             }}
                         >
@@ -136,14 +138,21 @@ const Profile: FC = () => {
                                 generate your yearly expenses.
                             </p>
                             <p>
-                                Click "<span className="font-bold text-primary">Select Year</span>" to generate
-                                your yearly expenses analytics.
+                                Click "
+                                <span className="font-bold text-primary">
+                                    Select Year
+                                </span>
+                                " to generate your yearly expenses analytics.
                             </p>
                         </div>
                     </div>
                 ) : (
                     <div className="grid grid-cols-2 grid-rows-2 h-full p-4 px-0 gap-2">
-                        {params.year && yearlyExpensesDataDetails && (
+                        {isYearlyExpenseLoading || isYearlyExpenseFetching ? (
+                            <div className="col-span-1 row-span-1 shadow-md border p-2 px-4 rounded-lg">
+                                <AnalyticsLoading />
+                            </div>
+                        ) : (
                             <div className="col-span-1 row-span-1 shadow-md border p-2 px-4 rounded-lg">
                                 <div className="w-full">
                                     <h1 className="text-xl font-bold text-primary py-2">
@@ -213,7 +222,11 @@ const Profile: FC = () => {
                                 </div>
                             </div>
                         )}
-                        {params.year && (
+                        {isMonthlyExpenseFetching || isMonthlyExpenseLoading ? (
+                            <div className="col-span-1 row-span-1 shadow-md border p-2 px-4 rounded-lg">
+                                <AnalyticsLoading />
+                            </div>
+                        ) : (
                             <div className="col-span-1 row-span-1 shadow-md border p-2 px-4 rounded-lg">
                                 <div className="flex items-center justify-between">
                                     <h1 className="text-xl font-bold text-primary py-2">
@@ -224,6 +237,7 @@ const Profile: FC = () => {
                                             name="month"
                                             id="month"
                                             className="appearance-none p-2 text-center text-secondary"
+                                            value={month}
                                             onChange={(e) => {
                                                 setMonth(e.target.value);
                                             }}
@@ -296,7 +310,12 @@ const Profile: FC = () => {
                                 </div>
                             </div>
                         )}
-                        {params.year && (
+                        {isYearlyExpenseCatFetching ||
+                        isYearlyExpenseCatLoading ? (
+                            <div className="shadow-md border col-span-2 rounded-lg p-2 px-4">
+                                <AnalyticsLoading />
+                            </div>
+                        ) : (
                             <div className="shadow-md border col-span-2 rounded-lg p-2 px-4">
                                 <h1 className="text-xl font-bold text-primary py-2">
                                     Yearly Expenses / Category
@@ -312,7 +331,6 @@ const Profile: FC = () => {
                                             ]}
                                             series={yearlyExpenseCatData.data.data.map(
                                                 (category) => {
-                                                    console.log(category);
                                                     const dataSet = Object.keys(
                                                         MONTHS
                                                     ).map((key) => {
@@ -333,8 +351,6 @@ const Profile: FC = () => {
                                                             ? totalAmount
                                                             : 0;
                                                     });
-
-                                                    console.log(dataSet);
 
                                                     return {
                                                         label: category.categoryName,

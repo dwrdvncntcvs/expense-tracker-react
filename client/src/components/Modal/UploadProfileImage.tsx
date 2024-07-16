@@ -37,7 +37,6 @@ const UploadProfileImage: FC = () => {
                         const fileReader = new FileReader();
                         fileReader.readAsDataURL(file);
                         fileReader.onload = (e) => {
-                            console.log(e.target?.result);
                             setImageUrl(e.target?.result as string);
                             setImageData(file);
                         };
