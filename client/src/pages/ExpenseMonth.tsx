@@ -3,6 +3,7 @@ import { MONTHS } from "@common/constants";
 import { capitalize, formatCurrency, formatDate } from "@common/utils/str";
 import ActionButtons from "@components/ActionButtons";
 import { ExpenseForm } from "@components/Expense";
+import { MonthlyExpenseLoading } from "@components/LoadingScreen";
 import { ExpenseFilterModal } from "@components/Modal";
 import { Modal } from "@components/Overlays";
 import { useAppDispatch } from "@hooks/storeHooks";
@@ -66,7 +67,7 @@ const ExpenseMonth: FC = () => {
         }
     }, [searchParams, data?.data?.expenses?.data, isLoading]);
 
-    if (isLoading) return <div>Loading ...</div>;
+    if (isLoading) return <MonthlyExpenseLoading />;
 
     const metaData = data.data.expenses.metadata;
     const totalAmount = data.data.expenses.totalAmount;
