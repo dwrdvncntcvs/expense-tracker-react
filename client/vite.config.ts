@@ -21,4 +21,8 @@ export default defineConfig({
             "@validation": resolve(root, "validation"),
         },
     },
+    preview: {
+        port: 8080,
+        strictPort: true,
+    },
 });
