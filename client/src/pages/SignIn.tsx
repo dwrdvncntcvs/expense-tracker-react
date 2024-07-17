@@ -6,8 +6,12 @@ import { HiEye } from "react-icons/hi";
 import { HiAtSymbol, HiEyeSlash, HiLockClosed } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 import { signInSchema } from "../validation/user";
+import { useAppDispatch } from "@hooks/storeHooks";
+import { error } from "@store/slices/toast";
 
 const SignIn: FC = () => {
+    const dispatch = useAppDispatch();
+
     const [showPass, setShowPass] = useState(false);
     const [signInRequest] = useSignInMutation();
 
@@ -17,6 +21,10 @@ const SignIn: FC = () => {
                 initialValues={{ email: "", password: "" }}
                 onSubmit={async (val, resetForm) => {
                     const res = await signInRequest(val);
+
+                    if (res.error) {
+                        dispatch(error({ message: res.error.data.message }));
+                    }
 
                     resetForm();
                 }}

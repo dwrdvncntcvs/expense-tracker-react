@@ -4,6 +4,10 @@ import {
     HiExclamationCircle,
     HiExclamationTriangle,
     HiInformationCircle,
+    HiOutlineCheckCircle,
+    HiOutlineExclamationCircle,
+    HiOutlineExclamationTriangle,
+    HiOutlineInformationCircle,
 } from "react-icons/hi2";
 import { HiX } from "react-icons/hi";
 import { useToast } from "@store/slices/toast";
@@ -15,13 +19,13 @@ const Toast: FC = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        const timeouts: (number)[] = [];
+        const timeouts: NodeJS.Timeout[] = [];
 
         toasts.forEach((toast) => {
             const timeout = setTimeout(() => {
                 dispatch(hide(toast.id));
-                timeouts.push(timeout);
             }, toast.timeout);
+            timeouts.push(timeout);
         });
 
         return () => {
@@ -32,38 +36,42 @@ const Toast: FC = () => {
     }, [toasts]);
 
     const toastTypeClass = {
-        info: "bg-blue-900/30 border border-blue-900 text-blue-900",
-        success: "bg-success/30 border border-success text-success",
-        error: "bg-failure/30 border border-failure text-failure",
-        warning: "bg-warning/30 border border-warning text-warning",
+        info: "bg-blue-300/10 border border-blue-300 text-blue-500",
+        success: "bg-success/10 border border-success text-success",
+        error: "bg-failure/10 border border-failure text-failure",
+        warning: "bg-warning/10 border border-warning text-warning",
     };
 
     const toastIconByType = {
-        info: HiInformationCircle,
-        success: HiCheckCircle,
-        error: HiExclamationCircle,
-        warning: HiExclamationTriangle,
+        info: HiOutlineInformationCircle,
+        success: HiOutlineCheckCircle,
+        error: HiOutlineExclamationCircle,
+        warning: HiOutlineExclamationTriangle,
     };
 
     return (
         toasts.length > 0 && (
-            <div className="fixed max-h-screen w-96 flex flex-col gap-2 right-0 top-0 p-4">
+            <div className="fixed max-h-screen w-96 flex flex-col gap-4 left-0 bottom-0 p-4">
                 {toasts.map((toast) => {
                     const Icon = toastIconByType[toast.type];
                     return (
                         <div
-                            className={`p-2 rounded-lg border-2 flex gap-4 items-center relative ${
+                            className={`p-4 rounded border-1 flex gap-4 items-center relative ${
                                 toastTypeClass[toast.type]
                             }`}
                             key={toast.id}
                         >
-                            <Icon /> {toast.message}
-                            <button
-                                className="absolute top-2 right-2"
-                                onClick={() => dispatch(hide(toast.id))}
-                            >
-                                <HiX />
-                            </button>
+                            <Icon size={30} />
+                            <div className="w-full">
+                                <p>{toast.message}</p>
+                            </div>
+                            <div className="flex items-center w-10 justify-center">
+                                <button
+                                    onClick={() => dispatch(hide(toast.id))}
+                                >
+                                    <HiX />
+                                </button>
+                            </div>
                         </div>
                     );
                 })}

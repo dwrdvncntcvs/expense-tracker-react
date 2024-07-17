@@ -8,7 +8,7 @@ interface Toast {
     id: string;
     type: ToastType;
     message: string;
-    timeout: number;
+    timeout?: number;
 }
 
 interface ToastPayload {
