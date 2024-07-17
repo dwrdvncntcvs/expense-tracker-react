@@ -10,9 +10,9 @@ The application supports the following features to manage and view your personal
 
 ### **_Expenses Management_**
 
--   This allows users to add their own expenses within the system.
--   This allows users also to filter expenses based on categories.
--   This also provide a high level analytics depends on the page that you're currently at within the application
+-   User is allowed to add their own expenses within the system.
+-   User can filter expenses based on categories.
+-   Provides a high level analytics depends on the page that you're currently at within the application
 
 ### **_Customizable Categories_**
 
@@ -37,7 +37,7 @@ Since the application is already dockerized it will be much more easier for you 
 2. You could run the docker by simply running this commands:
 
     ```bash
-    docker-compose build 
+    docker-compose build
     # or
     docker-compose up
     ```
