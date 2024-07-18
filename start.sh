@@ -1,9 +1,39 @@
-APP_TITLE="Expense Tracker"
+#!/bin/bash
 
-echo "Starting..."
+if [[ -z "$1" ]]; then
+    echo "You should pass a parameter either 'docker-build' or 'run-dev'"
+    exit 1
+fi
 
-docker-compose build
+if [[ "$1" == "docker-build" ]]; then
+    APP_TITLE="Expense Tracker"
 
-echo "$APP_TITLE Docker built..."
+    echo "Starting..."
 
-docker-compose up
+    docker-compose build
+
+    echo "$APP_TITLE Docker built..."
+
+    docker-compose up
+elif [[ "$1" == "run-dev" ]]; then
+    # Add your run-dev logic here
+    echo "Running in development mode..."
+    # Example commands for run-dev
+
+    echo "Runnint Client"
+    cd ./client
+    pnpm run dev &
+
+    wait & cd ..
+
+    cd ./server
+    yarn dev &
+
+    cd .. &
+
+    wait
+    
+else 
+    echo "You should pass a parameter either 'docker-build' or 'run-dev'"
+    exit 1
+fi
