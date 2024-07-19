@@ -60,6 +60,8 @@ const Navigation: FC = () => {
                 ))}
                 <li className="flex items-center justify-center  h-10 ">
                     <button
+                        id="logout"
+                        name="logout-btn"
                         className="w-10 h-10 rounded-lg flex justify-center items-center  border-primary text-primary hover:border-failure hover:text-failure bg-plain"
                         type="button"
                         onClick={async () => {

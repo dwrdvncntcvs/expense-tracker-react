@@ -1,8 +1,13 @@
 import { test as base, expect } from "@playwright/test";
-import SignUpPage from "./pages/SignUpPage";
-import SignInPage from "./pages/SignInPage";
+import SignUpPage from "./fixtures/pages/SignUpPage";
+import SignInPage from "./fixtures/pages/SignInPage";
+import Authentication from "./fixtures/Authentication";
 
-const test = base.extend<{ signUpPage: SignUpPage; signInPage: SignInPage }>({
+const test = base.extend<{
+    signUpPage: SignUpPage;
+    signInPage: SignInPage;
+    auth: Authentication;
+}>({
     signUpPage: async ({ page, request }, use) => {
         const signUpPageInstance = new SignUpPage(page, request);
         await use(signUpPageInstance);
@@ -10,6 +15,10 @@ const test = base.extend<{ signUpPage: SignUpPage; signInPage: SignInPage }>({
     signInPage: async ({ page }, use) => {
         const signInPageInstance = new SignInPage(page);
         await use(signInPageInstance);
+    },
+    auth: async ({ page }, use) => {
+        const authInstance = new Authentication(page);
+        await use(authInstance);
     },
 });
 
@@ -224,5 +233,27 @@ test.describe("Account Sign In Page", () => {
         await expect(
             signInPage.fieldError("Invalid email format")
         ).toBeVisible();
+    });
+});
+
+test.describe("Account Sign Out", () => {
+    test.beforeEach(async ({ auth }) => {
+        await auth.authenticate("sample@sample.com", "sample1");
+    });
+
+    test("Success - Sign out", async ({ page, signInPage }) => {
+        await page.waitForURL("/");
+
+        const logoutBtn = page.locator("#logout");
+
+        await expect(logoutBtn).toBeVisible();
+
+        await logoutBtn.click();
+
+        await page.waitForURL("/sign-in");
+
+        await expect(logoutBtn).not.toBeVisible();
+
+        await expect(signInPage.signInButton).toBeVisible();
     });
 });
