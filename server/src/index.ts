@@ -1,9 +1,10 @@
 import userRoutes from "./User";
 import expenseRoutes from "./Expense";
 import categoryRoutes from "./Settings/Category";
+import testRoutes from "./Test";
 import TrackerApp from "./app";
 import { createConnection } from "./database/mongoDb";
-import { MONGO_URL, PORT } from "./variables";
+import { MONGO_URL, PORT, ENV } from "./variables";
 
 new TrackerApp({
     port: PORT,
@@ -19,5 +20,6 @@ new TrackerApp({
     .addRoute(userRoutes)
     .addRoute(expenseRoutes)
     .addRoute(categoryRoutes)
+    .addRoute(ENV === "test" ? testRoutes : undefined)
     .addErrorHandler()
     .execute();
