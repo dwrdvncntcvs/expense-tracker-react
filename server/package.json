@@ -5,7 +5,9 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": " concurrently \"tsc --w\" \"nodemon ./dist\"",
+        "dev": " concurrently \"tsc --w\" \"set NODE_ENV=dev && nodemon ./dist\"",
+        "test:env": " concurrently \"tsc --w\" \"set NODE_ENV=test && nodemon ./dist\"",
+        "prod:env": " concurrently \"tsc --w\" \"set NODE_ENV=prod && nodemon ./dist\"",
         "build": "tsc",
         "start": "node ./dist"
     },

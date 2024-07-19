@@ -1,4 +1,13 @@
-require("dotenv").config();
+import dotenv from "dotenv";
+import path from "path";
+
+const ENV = process.env.NODE_ENV || "dev";
+
+console.log(path.resolve(__dirname, `../.env.${ENV.trim()}`));
+
+dotenv.config({
+    path: path.resolve(__dirname, `../.env.${ENV.trim()}`),
+});
 
 const PORT = +(process.env.PORT || 3000);
 const SECRET_KEY = process.env.SECRET_KEY as string;
