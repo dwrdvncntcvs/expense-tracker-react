@@ -1,15 +1,23 @@
 import { test as base, expect } from "@playwright/test";
 import SignUpPage from "./pages/SignUpPage";
+import SignInPage from "./pages/SignInPage";
 
-const test = base.extend<{ signUpPage: SignUpPage }>({
+const test = base.extend<{ signUpPage: SignUpPage; signInPage: SignInPage }>({
     signUpPage: async ({ page, request }, use) => {
         const signUpPageInstance = new SignUpPage(page, request);
-        await signUpPageInstance.goto();
         await use(signUpPageInstance);
+    },
+    signInPage: async ({ page }, use) => {
+        const signInPageInstance = new SignInPage(page);
+        await use(signInPageInstance);
     },
 });
 
 test.describe("Account Sign Up", () => {
+    test.beforeEach(async ({ signUpPage }) => {
+        await signUpPage.goto();
+    });
+
     const signUpData = {
         first_name: {
             placeholder: "First Name",
@@ -78,14 +86,13 @@ test.describe("Account Sign Up", () => {
     test("Navigate - Clicking 'Already have an account?'", async ({
         page,
         signUpPage,
+        signInPage,
     }) => {
         await signUpPage.alreadyHaveAnAccount.click();
 
         await page.waitForURL("/sign-in");
 
-        await expect(
-            page.getByRole("button", { name: "Sign In" })
-        ).toBeVisible();
+        await expect(signInPage.signInButton).toBeVisible();
     });
 
     test("Failure - Submitting empty fields", async ({ page, signUpPage }) => {
@@ -140,6 +147,82 @@ test.describe("Account Sign Up", () => {
 
         await expect(
             signUpPage.fieldError(signUpData.password.error.min)
+        ).toBeVisible();
+    });
+});
+
+test.describe("Account Sign In Page", () => {
+    const EMAIL = "sample@sample.com";
+    const PASSWORD = "sample1";
+
+    test.beforeEach(async ({ signInPage }) => {
+        await signInPage.goto();
+    });
+
+    test("Successful - Submitting valid fields", async ({
+        signInPage,
+        page,
+    }) => {
+        await signInPage.inputField("email", EMAIL);
+        await signInPage.inputField("password", PASSWORD);
+        await signInPage.signInButton.click();
+
+        await page.waitForURL("/");
+
+        await expect(signInPage.signInButton).not.toBeVisible();
+    });
+
+    test("Navigation - Go to sign up when 'Doesn't have an account?' was clicked", async ({
+        signInPage,
+        signUpPage,
+        page,
+    }) => {
+        await signInPage.noAccount.click();
+
+        await page.waitForURL("/sign-up");
+
+        await expect(signUpPage.signUpButton).toBeVisible();
+    });
+
+    test("Failed - Submitting empty fields", async ({ signInPage }) => {
+        await signInPage.inputField("email");
+        await signInPage.inputField("password");
+
+        await signInPage.signInButton.click();
+
+        await expect(signInPage.fieldError("Email is required")).toBeVisible();
+        await expect(
+            signInPage.fieldError("Password is required")
+        ).toBeVisible();
+    });
+
+    test("Failed - Signing in with incorrect credentials", async ({
+        signInPage,
+        page,
+    }) => {
+        await signInPage.inputField("email", EMAIL);
+        await signInPage.inputField("password", "incorrect-pass");
+
+        await signInPage.signInButton.click();
+
+        const toast = await page.getByText("Invalid Username or Password");
+
+        await expect(toast).toBeVisible();
+
+        await page.waitForTimeout(5000);
+
+        await expect(toast).not.toBeVisible();
+    });
+
+    test("Failed - Signing in with invalid email format", async ({
+        signInPage,
+    }) => {
+        await signInPage.inputField("email", "sample.com");
+        await signInPage.inputField("password", PASSWORD);
+        await signInPage.signInButton.click();
+
+        await expect(
+            signInPage.fieldError("Invalid email format")
         ).toBeVisible();
     });
 });
