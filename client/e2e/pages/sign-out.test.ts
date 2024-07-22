@@ -7,7 +7,6 @@ let auth: Authentication;
 test.beforeEach(async ({ page }) => {
     auth = new Authentication(page);
     await auth.authenticate(EMAIL, PASSWORD);
-    page.waitForLoadState("domcontentloaded");
 });
 
 test("Success - Sign out", async ({ page }) => {

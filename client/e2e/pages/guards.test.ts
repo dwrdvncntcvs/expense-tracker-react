@@ -9,7 +9,6 @@ let auth: Authentication;
 test.beforeEach(async ({ page }) => {
     auth = new Authentication(page);
     signInPage = new SignInPage(page);
-    page.waitForLoadState("domcontentloaded");
 });
 
 test("Navigate back - Should be back to sign in page when trying to access home page when not authenticated", async ({

@@ -5,7 +5,6 @@ let signUpPage: SignUpPage;
 
 test.beforeEach(async ({ page, request }) => {
     await page.goto("/sign-up", { waitUntil: "commit" });
-    page.waitForLoadState("domcontentloaded");
     signUpPage = new SignUpPage(page, request);
 });
 
