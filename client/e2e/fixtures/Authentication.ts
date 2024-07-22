@@ -7,7 +7,7 @@ export default class Authentication {
     async authenticate(email: string, password: string) {
         const signInInstance = new SignInPage(this.page);
 
-        await this.page.goto("/sign-in")
+        await signInInstance.goto();
         await this.page.waitForURL("/sign-in");
 
         await signInInstance.inputField("email", email);

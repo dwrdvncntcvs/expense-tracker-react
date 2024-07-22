@@ -18,7 +18,7 @@ export default class SignInPage {
     }
 
     async goto() {
-        await this.page.goto("/sign-in");
+        await this.page.goto("/sign-in", { waitUntil: "commit" });
     }
 
     fieldError(message: string) {
