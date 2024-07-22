@@ -10,10 +10,12 @@ const test = base.extend<{
 }>({
     signUpPage: async ({ page, request }, use) => {
         const signUpPageInstance = new SignUpPage(page, request);
+        await signUpPageInstance.goto();
         await use(signUpPageInstance);
     },
     signInPage: async ({ page }, use) => {
         const signInPageInstance = new SignInPage(page);
+        await signInPageInstance.goto();
         await use(signInPageInstance);
     },
     auth: async ({ page }, use) => {
@@ -23,10 +25,6 @@ const test = base.extend<{
 });
 
 test.describe("Account Sign Up", () => {
-    test.beforeEach(async ({ signUpPage }) => {
-        await signUpPage.goto();
-    });
-
     const signUpData = {
         first_name: {
             placeholder: "First Name",
@@ -95,13 +93,14 @@ test.describe("Account Sign Up", () => {
     test("Navigate - Clicking 'Already have an account?'", async ({
         page,
         signUpPage,
-        signInPage,
     }) => {
         await signUpPage.alreadyHaveAnAccount.click();
 
         await page.waitForURL("/sign-in");
 
-        await expect(signInPage.signInButton).toBeVisible();
+        await expect(
+            page.getByRole("button", { name: "Sign In" })
+        ).toBeVisible();
     });
 
     test("Failure - Submitting empty fields", async ({ page, signUpPage }) => {
@@ -139,9 +138,9 @@ test.describe("Account Sign Up", () => {
 
         await signUpPage.signUpButton.click();
 
-        expect(
+        await expect(
             signUpPage.fieldError(signUpData.email.error.format)
-        ).toBeDefined();
+        ).toBeVisible();
     });
 
     test("Failure - Submitting password containing below 5 characters", async ({
@@ -160,14 +159,10 @@ test.describe("Account Sign Up", () => {
     });
 });
 
+const EMAIL = "sample@sample.com";
+const PASSWORD = "sample1";
+
 test.describe("Account Sign In Page", () => {
-    const EMAIL = "sample@sample.com";
-    const PASSWORD = "sample1";
-
-    test.beforeEach(async ({ signInPage }) => {
-        await signInPage.goto();
-    });
-
     test("Successful - Submitting valid fields", async ({
         signInPage,
         page,
@@ -183,14 +178,15 @@ test.describe("Account Sign In Page", () => {
 
     test("Navigation - Go to sign up when 'Doesn't have an account?' was clicked", async ({
         signInPage,
-        signUpPage,
         page,
     }) => {
         await signInPage.noAccount.click();
 
         await page.waitForURL("/sign-up");
 
-        await expect(signUpPage.signUpButton).toBeVisible();
+        await expect(
+            page.getByRole("button", { name: "Sign Up" })
+        ).toBeVisible();
     });
 
     test("Failed - Submitting empty fields", async ({ signInPage }) => {
@@ -238,10 +234,12 @@ test.describe("Account Sign In Page", () => {
 
 test.describe("Account Sign Out", () => {
     test.beforeEach(async ({ auth }) => {
-        await auth.authenticate("sample@sample.com", "sample1");
+        await auth.authenticate(EMAIL, PASSWORD);
     });
 
-    test("Success - Sign out", async ({ page, signInPage }) => {
+    test("Success - Sign out", async ({ page, auth }) => {
+        await auth.authenticate(EMAIL, PASSWORD);
+
         await page.waitForURL("/");
 
         const logoutBtn = page.locator("#logout");
@@ -254,6 +252,36 @@ test.describe("Account Sign Out", () => {
 
         await expect(logoutBtn).not.toBeVisible();
 
+        await expect(
+            page.getByRole("button", { name: "Sign In" })
+        ).toBeVisible();
+    });
+});
+
+test.describe("Page Guards - Public", () => {
+    test("Navigate back - Should be back to sign in page when trying to access home page when not authenticated", async ({
+        page,
+        signInPage,
+    }) => {
+        await page.goto("/");
+
+        await page.waitForURL("/sign-in");
+
         await expect(signInPage.signInButton).toBeVisible();
+    });
+
+    test("Navigate home - Should be automatically navigated to home page when already authenticated", async ({
+        auth,
+        page,
+    }) => {
+        await auth.authenticate(EMAIL, PASSWORD);
+
+        await page.waitForURL("/");
+
+        await page.goto("/sign-in");
+
+        await page.waitForURL("/");
+
+        await expect(page.locator("#logout")).toBeVisible();
     });
 });

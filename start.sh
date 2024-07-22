@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ -z "$1" ]]; then
-    echo "You should pass a parameter either 'docker-build' or 'run-dev'"
+    echo "You should pass a parameter either 'docker-build', 'run-dev', or 'run-test'"
     exit 1
 fi
 
@@ -33,7 +33,25 @@ elif [[ "$1" == "run-dev" ]]; then
 
     wait
     
+elif [[ "$1" == "run-test" ]]; then
+    # Add your run-dev logic here
+    echo "Running in test environment mode..."
+    # Example commands for run-dev
+
+    echo "Running Client"
+    cd ./client
+    pnpm run test:env &
+
+    wait & cd ..
+
+    cd ./server
+    yarn test:env &
+
+    cd .. &
+
+    wait
+    
 else 
-    echo "You should pass a parameter either 'docker-build' or 'run-dev'"
+    echo "You should pass a parameter either 'docker-build', 'run-dev', or 'run-test'"
     exit 1
 fi
