@@ -71,7 +71,9 @@ class TrackerApp {
         return this;
     }
 
-    addRoute(route: RouteReturn) {
+    addRoute(route?: RouteReturn) {
+        if (!route) return this;
+
         const routeLogger = new RouteLogger(route.routes);
         routeLogger.routeName();
         routeLogger.routesPath();

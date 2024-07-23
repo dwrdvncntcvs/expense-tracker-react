@@ -1,4 +1,11 @@
-require("dotenv").config();
+import dotenv from "dotenv";
+import path from "path";
+
+const ENV = (process.env.NODE_ENV || "dev").trim();
+
+dotenv.config({
+    path: path.resolve(__dirname, `../.env.${ENV}`),
+});
 
 const PORT = +(process.env.PORT || 3000);
 const SECRET_KEY = process.env.SECRET_KEY as string;
@@ -56,4 +63,12 @@ const EXPENSE_TYPE = [
     "hobby",
 ];
 
-export { PORT, SECRET_KEY, MONGO_URL, MONTHS, EXPENSE_TYPE, FIREBASE_VARS };
+export {
+    PORT,
+    SECRET_KEY,
+    MONGO_URL,
+    MONTHS,
+    EXPENSE_TYPE,
+    FIREBASE_VARS,
+    ENV,
+};
