@@ -1,17 +1,8 @@
-import test, { expect } from "@playwright/test";
-import SignInPage from "../fixtures/pages/SignInPage";
-import Authentication from "../fixtures/Authentication";
+import test, { expect } from "../fixtures";
 import { EMAIL, PASSWORD } from "../variables/auth";
 
-let signInPage: SignInPage;
-let auth: Authentication;
-
-test.beforeEach(async ({ page }) => {
-    auth = new Authentication(page);
-    signInPage = new SignInPage(page);
-});
-
 test("Navigate back - Should be back to sign in page when trying to access home page when not authenticated", async ({
+    signInPage,
     page,
 }) => {
     await page.goto("/");
@@ -23,6 +14,7 @@ test("Navigate back - Should be back to sign in page when trying to access home 
 
 test("Navigate home - Should be automatically navigated to home page when already authenticated", async ({
     page,
+    auth,
 }) => {
     await auth.authenticate(EMAIL, PASSWORD);
 

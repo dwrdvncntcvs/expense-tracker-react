@@ -18,7 +18,8 @@ export default class SignInPage {
     }
 
     async goto() {
-        await this.page.goto("/sign-in", { waitUntil: "commit" });
+        await this.page.goto("/sign-in");
+        await this.page.waitForLoadState("domcontentloaded");
     }
 
     fieldError(message: string) {
@@ -26,20 +27,9 @@ export default class SignInPage {
     }
 
     async inputField(type: InputType, value: string = "") {
-        switch (type) {
-            case "email": {
-                await this.emailField.fill(value);
-                break;
-            }
-            case "password": {
-                await this.passwordField.fill(value);
-                break;
-            }
-
-            default: {
-                throw new Error("Invalid type");
-            }
-        }
+        if (type === "email") await this.emailField.fill(value);
+        else if (type === "password") await this.passwordField.fill(value);
+        else return;
     }
 
     private createInputLocator(placeholder: string) {

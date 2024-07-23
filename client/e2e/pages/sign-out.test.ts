@@ -1,17 +1,11 @@
-import { test, expect } from "@playwright/test";
-import Authentication from "../fixtures/Authentication";
+import test, { expect } from "../fixtures";
 import { EMAIL, PASSWORD } from "../variables/auth";
 
-let auth: Authentication;
-
-test.beforeEach(async ({ page }) => {
-    auth = new Authentication(page);
+test.beforeEach(async ({ auth }) => {
     await auth.authenticate(EMAIL, PASSWORD);
 });
 
 test("Success - Sign out", async ({ page }) => {
-    await auth.authenticate(EMAIL, PASSWORD);
-
     await page.waitForURL("/");
 
     const logoutBtn = page.locator("#logout");

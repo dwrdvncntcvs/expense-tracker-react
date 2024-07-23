@@ -1,11 +1,7 @@
-import { expect, test } from "@playwright/test";
-import SignUpPage from "../fixtures/pages/SignUpPage";
+import test, { expect } from "../fixtures";
 
-let signUpPage: SignUpPage;
-
-test.beforeEach(async ({ page, request }) => {
-    await page.goto("/sign-up", { waitUntil: "commit" });
-    signUpPage = new SignUpPage(page, request);
+test.beforeEach(async ({ signUpPage }) => {
+    await signUpPage.goto();
 });
 
 const signUpData = {
@@ -48,7 +44,7 @@ const signUpData = {
     },
 };
 
-test("Successful -  Submitting valid fields", async ({ page }) => {
+test("Successful -  Submitting valid fields", async ({ signUpPage, page }) => {
     await signUpPage.inputField("first_name", signUpData.first_name.value);
     await signUpPage.inputField("last_name", signUpData.last_name.value);
     await signUpPage.inputField("username", signUpData.username.value);
@@ -70,7 +66,10 @@ test("Successful -  Submitting valid fields", async ({ page }) => {
     await signUpPage.removeCreatedUser(signUpData.email.value);
 });
 
-test("Navigate - Clicking 'Already have an account?'", async ({ page }) => {
+test("Navigate - Clicking 'Already have an account?'", async ({
+    signUpPage,
+    page,
+}) => {
     await signUpPage.alreadyHaveAnAccount.click();
 
     await page.waitForURL("/sign-in");
@@ -78,7 +77,7 @@ test("Navigate - Clicking 'Already have an account?'", async ({ page }) => {
     await expect(page.getByRole("button", { name: "Sign In" })).toBeVisible();
 });
 
-test("Failure - Submitting empty fields", async ({ page }) => {
+test("Failure - Submitting empty fields", async ({ signUpPage, page }) => {
     await signUpPage.inputField("first_name");
     await signUpPage.inputField("last_name");
     await signUpPage.inputField("username");
@@ -104,7 +103,7 @@ test("Failure - Submitting empty fields", async ({ page }) => {
     ).toBeVisible();
 });
 
-test("Failure - Submitting invalid email", async () => {
+test("Failure - Submitting invalid email", async ({ signUpPage }) => {
     await signUpPage.inputField("first_name", signUpData.first_name.value);
     await signUpPage.inputField("last_name", signUpData.last_name.value);
     await signUpPage.inputField("username", signUpData.username.value);
@@ -118,7 +117,9 @@ test("Failure - Submitting invalid email", async () => {
     ).toBeVisible();
 });
 
-test("Failure - Submitting password containing below 5 characters", async () => {
+test("Failure - Submitting password containing below 5 characters", async ({
+    signUpPage,
+}) => {
     await signUpPage.inputField("first_name", signUpData.first_name.value);
     await signUpPage.inputField("last_name", signUpData.last_name.value);
     await signUpPage.inputField("username", signUpData.username.value);

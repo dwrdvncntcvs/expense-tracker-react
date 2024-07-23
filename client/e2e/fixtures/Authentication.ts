@@ -8,7 +8,6 @@ export default class Authentication {
         const signInInstance = new SignInPage(this.page);
 
         await signInInstance.goto();
-        await this.page.waitForURL("/sign-in");
 
         await signInInstance.inputField("email", email);
         await signInInstance.inputField("password", password);
