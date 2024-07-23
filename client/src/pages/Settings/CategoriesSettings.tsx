@@ -8,6 +8,7 @@ import {
 } from "@store/queries/categories";
 import { useSettings } from "@store/slices/settings";
 import { success } from "@store/slices/toast";
+import { categoriesSchema } from "@validation/settings";
 import { FC, useCallback } from "react";
 import { HiListBullet, HiOutlineTrash, HiTag } from "react-icons/hi2";
 
@@ -34,6 +35,7 @@ const CategoriesSettings: FC = () => {
         <SettingsContentLayout title="Category">
             <Form
                 initialValues={{ name: "" }}
+                validationSchema={categoriesSchema}
                 onSubmit={async (val, resetForm) => {
                     await createCategoryRequest(val);
 

@@ -1,5 +1,5 @@
 import { useField } from "formik";
-import type { FC, InputHTMLAttributes } from "react";
+import { type FC, type InputHTMLAttributes } from "react";
 import type { IconType } from "react-icons";
 
 interface InputIcon {
@@ -13,7 +13,6 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const Field: FC<InputProps> = ({ icon, ...props }) => {
     const [p1, p2] = useField(props?.name || "");
-
     const { name, onBlur, onChange, value } = p1;
     const { error, touched } = p2;
 
