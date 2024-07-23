@@ -19,7 +19,6 @@ export default class SignInPage {
 
     async goto() {
         await this.page.goto("/sign-in");
-        await this.page.waitForLoadState("domcontentloaded");
     }
 
     fieldError(message: string) {

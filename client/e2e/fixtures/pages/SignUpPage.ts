@@ -30,7 +30,6 @@ export default class SignUpPage {
 
     async goto() {
         await this.page.goto("/sign-up");
-        await this.page.waitForLoadState("domcontentloaded");
     }
 
     fieldError(message: string) {
