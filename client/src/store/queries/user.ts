@@ -9,7 +9,16 @@ export const userApi = api.injectEndpoints({
             providesTags: ["auth"],
         }),
         signIn: build.mutation<any, SignInData>({
-            invalidatesTags: ["auth", "categories"],
+            invalidatesTags: [
+                "auth",
+                "categories",
+                "expense-month-analytics",
+                "expense-months",
+                "expense-months-details",
+                "expense-year-analytics",
+                "expense-year-analytics-cat",
+                "settings",
+            ],
             query: (user) => ({
                 url: "/users/sign-in",
                 method: "post",
@@ -25,7 +34,16 @@ export const userApi = api.injectEndpoints({
         }),
         signOut: build.mutation<any, void>({
             query: () => ({ url: "/users/sign-out", method: "get" }),
-            invalidatesTags: ["auth"],
+            invalidatesTags: [
+                "auth",
+                "categories",
+                "expense-month-analytics",
+                "expense-months",
+                "expense-months-details",
+                "expense-year-analytics",
+                "expense-year-analytics-cat",
+                "settings",
+            ],
         }),
         updateUser: build.mutation<any, { id: string; user: UpdateUserData }>({
             query: ({ id, user }) => ({
