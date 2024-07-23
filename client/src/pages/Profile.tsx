@@ -161,11 +161,11 @@ const Profile: FC = () => {
                 ) : (
                     <div className="grid grid-cols-2 grid-rows-2 h-full p-4 px-0 gap-2">
                         {isYearlyExpenseLoading || isYearlyExpenseFetching ? (
-                            <div className="col-span-1 row-span-1 shadow-md border p-2 px-4 rounded-lg">
+                            <div className="col-span-1 row-span-1 border p-2 px-4 rounded-lg">
                                 <AnalyticsLoading />
                             </div>
                         ) : (
-                            <div className="col-span-1 row-span-1 shadow-md border p-2 px-4 rounded-lg">
+                            <div className="col-span-1 row-span-1 border p-2 px-4 rounded-lg">
                                 <div className="w-full">
                                     <h1 className="text-xl font-bold text-primary py-2">
                                         Yearly Expenses
@@ -220,12 +220,12 @@ const Profile: FC = () => {
                                                     },
                                                 },
                                             ]}
-                                            colors={generateAccents(
-                                                "#427D9D",
-                                                yearlyExpenseData.data.data
-                                                    .length,
-                                                true
-                                            )}
+                                            // colors={generateAccents(
+                                            //     "#427D9D",
+                                            //     yearlyExpenseData.data.data
+                                            //         .length,
+                                            //     true
+                                            // )}
                                             layout="horizontal"
                                             grid={{ vertical: true }}
                                             borderRadius={10}
@@ -235,14 +235,14 @@ const Profile: FC = () => {
                             </div>
                         )}
                         {isMonthlyExpenseFetching || isMonthlyExpenseLoading ? (
-                            <div className="col-span-1 row-span-1 shadow-md border p-2 px-4 rounded-lg">
+                            <div className="col-span-1 row-span-1 border p-2 px-4 rounded-lg">
                                 <AnalyticsLoading />
                             </div>
                         ) : (
-                            <div className="col-span-1 row-span-1 shadow-md border p-2 px-4 rounded-lg">
+                            <div className="col-span-1 row-span-1 border p-2 px-4 rounded-lg">
                                 <div className="flex items-center justify-between">
                                     <h1 className="text-xl font-bold text-primary py-2">
-                                        Monthly Expenses per Category
+                                        Monthly Expenses / Category
                                     </h1>
                                     {params?.year && (
                                         <select
@@ -286,12 +286,12 @@ const Profile: FC = () => {
                                         </p>
                                     ) : (
                                         <PieChart
-                                            colors={generateAccents(
-                                                "#427D9D",
-                                                monthlyExpenseData?.data
-                                                    ?.categoriesExpenseAnalytics
-                                                    .length
-                                            )}
+                                            // colors={generateAccents(
+                                            //     "#427D9D",
+                                            //     monthlyExpenseData?.data
+                                            //         ?.categoriesExpenseAnalytics
+                                            //         .length
+                                            // )}
                                             height={300}
                                             width={450}
                                             className="flex items-center justify-center"
@@ -324,11 +324,11 @@ const Profile: FC = () => {
                         )}
                         {isYearlyExpenseCatFetching ||
                         isYearlyExpenseCatLoading ? (
-                            <div className="shadow-md border col-span-2 rounded-lg p-2 px-4">
+                            <div className="border col-span-2 rounded-lg p-2 px-4">
                                 <AnalyticsLoading />
                             </div>
                         ) : (
-                            <div className="shadow-md border col-span-2 rounded-lg p-2 px-4">
+                            <div className="border col-span-2 rounded-lg p-2 px-4">
                                 <h1 className="text-xl font-bold text-primary py-2">
                                     Yearly Expenses / Category
                                 </h1>
