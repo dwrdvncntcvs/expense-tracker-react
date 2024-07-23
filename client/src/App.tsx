@@ -21,7 +21,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 
 function App() {
     const { isLoading } = useIsAuthenticatedQuery();
-    useGetCategoriesQuery();
+    const { data } = useGetCategoriesQuery();
 
     const { pathname } = useLocation();
 
@@ -68,9 +68,8 @@ function App() {
                     <Route path="/user/:year?" element={<Profile />} />
                 </Route>
             </Routes>
-            {!shouldNotDisplayCreateExpense.includes(pathname) && (
-                <CreateExpense />
-            )}
+            {!shouldNotDisplayCreateExpense.includes(pathname) &&
+                data?.data?.length > 0 && <CreateExpense />}
             <Toast />
         </MainLayout>
     );
