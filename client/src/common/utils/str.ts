@@ -15,3 +15,16 @@ export const formatDate = (value: Date) => {
 
     return `${year}-${month}-${day}`;
 };
+
+export const abbreviate = (val: string, numberOfChar?: number) => {
+    const str = val
+        .split(" ")
+        .map((val) => val.charAt(0).toUpperCase())
+        .join("");
+
+    if (numberOfChar) {
+        return str.slice(0, numberOfChar);
+    }
+
+    return str;
+};

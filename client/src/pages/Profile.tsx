@@ -1,6 +1,6 @@
 import { MONTHS } from "@common/constants";
 import { generateAccents } from "@common/utils/color";
-import { capitalize, formatCurrency } from "@common/utils/str";
+import { abbreviate, capitalize, formatCurrency } from "@common/utils/str";
 import { AnalyticsLoading } from "@components/LoadingScreen";
 import { UploadProfileImage } from "@components/Modal";
 import { useAppDispatch } from "@hooks/storeHooks";
@@ -75,26 +75,38 @@ const Profile: FC = () => {
         <>
             <div className="flex h-full flex-col">
                 <div className="flex gap-4 justify-between items-center">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                         <button
-                            className="w-14 h-14 rounded-full flex items-center justify-center bg-gray-400 overflow-auto p-[2px]"
+                            className="w-14 h-14 rounded-full flex items-center justify-center hover:opacity-80 transition-all bg-primary overflow-auto p-[2px] font-bold text-2xl text-white"
                             onClick={() => {
                                 dispatch(show("upload-profile-image"));
                             }}
                         >
-                            <img
-                                src={user?.profileImage}
-                                className="object-cover w-full h-full rounded-full"
-                                alt=""
-                            />
+                            {user?.profileImage ? (
+                                <img
+                                    src={user?.profileImage}
+                                    className="object-cover w-full h-full rounded-full"
+                                    alt=""
+                                />
+                            ) : (
+                                abbreviate(
+                                    `${user?.first_name} ${user?.last_name}`,
+                                    2
+                                )
+                            )}
                         </button>
-                        <div className="flex flex-col">
-                            <p className="text-sm italic text-gray-500">
-                                @{user?.username}
-                            </p>
-                            <p className="text-xl font-bold text-primary">
+                        <div className="flex flex-col gap-2">
+                            <p className="text-2xl font-bold text-primary">
                                 Expenses Overview
                             </p>
+                            <div>
+                                <p className="text-sm font-semibold italic text-secondary">
+                                    {user?.first_name} {user?.last_name}
+                                </p>
+                                <p className="text-xs italic text-gray-500">
+                                    @{user?.username}
+                                </p>
+                            </div>
                         </div>
                     </div>
                     <div className="flex gap-2 items-center">

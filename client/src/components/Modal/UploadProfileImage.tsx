@@ -5,6 +5,7 @@ import { useUploadProfileImageMutation } from "@store/queries/user";
 import { hide } from "@store/slices/modal";
 import { success } from "@store/slices/toast";
 import { FC, useRef, useState } from "react";
+import { HiPhoto } from "react-icons/hi2";
 
 const UploadProfileImage: FC = () => {
     const dispatch = useAppDispatch();
@@ -30,6 +31,8 @@ const UploadProfileImage: FC = () => {
                     onChange={(e) => {
                         const files = e.target.files;
 
+                        console.log(files);
+
                         if (!files) return;
 
                         const file = files[0];
@@ -51,15 +54,17 @@ const UploadProfileImage: FC = () => {
                         />
                     </div>
                 ) : (
-                    <div
-                        className="w-44 h-44 bg-slate-300 rounded-full"
+                    <button
+                        className="w-44 h-44 bg-slate-300 rounded-full flex items-center justify-center text-white"
                         onClick={() => {
                             fileRef.current?.click();
                         }}
-                    ></div>
+                    >
+                        +<HiPhoto size={50} />
+                    </button>
                 )}
                 {imageData && (
-                    <div className="flex gap-4">
+                    <div className="flex self-end gap-2">
                         <Button
                             className="p-4 py-2"
                             bgColor="failure"
