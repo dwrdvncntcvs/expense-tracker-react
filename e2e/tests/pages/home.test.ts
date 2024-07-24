@@ -1,5 +1,5 @@
 import test, { expect } from "../fixtures";
-import { EMAILS, PASSWORD } from "../variables/auth";
+import { EMAILS, MONTHS, PASSWORD } from "../variables/auth";
 
 test.describe("Home page w/ newly created account", () => {
     test.beforeEach(async ({ auth, homePage, page }) => {
@@ -81,5 +81,38 @@ test.describe("Home page w/ partially created account", () => {
         await page.waitForTimeout(2000);
 
         await expect(page.locator("div#add-expense-modal")).toBeAttached();
+    });
+});
+
+test.describe("Home page w/ account that has expenses", () => {
+    test.beforeEach(async ({ auth, page }) => {
+        await auth.authenticate(EMAILS[0], PASSWORD);
+
+        await page.waitForURL("/");
+    });
+
+    // 2024 and 2023 will always be expected
+    test("Home page render years of 2024 and 2023", async ({ page }) => {
+        const months = Object.keys(MONTHS).map((val) => val.toLowerCase());
+
+        await expect(page.getByText("2023")).toBeVisible();
+        await expect(page.locator("[id='2023-analytics']")).toBeAttached();
+
+        await Promise.all(
+            months.map((val) =>
+                expect(page.locator(`[id='${val}-2023']`)).toBeVisible()
+            )
+        );
+
+        await expect(page.getByText("2024")).toBeVisible();
+        await expect(page.locator("[id='2024-analytics']")).toBeAttached();
+
+        await Promise.all(
+            months.map((val) =>
+                expect(page.locator(`[id='${val}-2024']`)).toBeVisible()
+            )
+        );
+
+        await page.pause();
     });
 });
