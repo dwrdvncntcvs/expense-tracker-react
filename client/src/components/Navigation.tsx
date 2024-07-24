@@ -14,16 +14,19 @@ const Navigation: FC = () => {
             icon: HiHome,
             label: "Home",
             path: "/",
+            name: "home",
         },
         {
             icon: HiCog8Tooth,
             label: "Settings",
             path: "/settings",
+            name: "settings",
         },
         {
             icon: HiUser,
             label: "User",
             path: "/user",
+            name: "user",
         },
     ];
 
@@ -41,11 +44,12 @@ const Navigation: FC = () => {
             <ul className="flex gap-2">
                 {links.map((link) => (
                     <li
-                        key={link.path}
+                        key={link.name}
                         className="flex items-center justify-center w-10 h-10 "
                     >
                         <NavLink
                             to={link.path}
+                            id={link.name}
                             className={({ isActive }) =>
                                 `w-10 h-10 rounded-full flex justify-center items-center hover:border-2  hover:border-primary ${
                                     isActive
