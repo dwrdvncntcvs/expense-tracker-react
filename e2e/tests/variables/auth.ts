@@ -1,2 +1,2 @@
-export const EMAIL = "sample@sample.com";
+export const EMAIL = "johndoe@sample.com";
 export const PASSWORD = "sample1";
