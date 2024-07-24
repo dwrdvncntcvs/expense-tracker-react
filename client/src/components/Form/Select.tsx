@@ -12,23 +12,28 @@ const Select: FC<SelectProps> = ({ options, ...props }) => {
     const { error, touched } = p2;
 
     return (
-        <select
-            {...props}
-            className={`border rounded-xl w-full overflow-auto flex items-center resize-none  ${
-                error && touched ? "border-failure" : ""
-            } w-full p-2 outline-none px-4`}
-            name={name}
-            onBlur={onBlur}
-            onChange={onChange}
-            value={value}
-        >
-            <option value=""></option>
-            {options.map((option) => (
-                <option key={option.value} value={option.value}>
-                    {option.label}
-                </option>
-            ))}
-        </select>
+        <div className="flex flex-col w-full items-end">
+            <select
+                {...props}
+                className={`border rounded-xl w-full overflow-auto flex items-center resize-none  ${
+                    error && touched ? "border-failure" : ""
+                } w-full p-2 outline-none px-4`}
+                name={name}
+                onBlur={onBlur}
+                onChange={onChange}
+                value={value}
+            >
+                <option value=""></option>
+                {options.map((option) => (
+                    <option key={option.value} value={option.value}>
+                        {option.label}
+                    </option>
+                ))}
+            </select>
+            {error && touched && (
+                <p className="text-failure text-sm">{error}</p>
+            )}
+        </div>
     );
 };
 
