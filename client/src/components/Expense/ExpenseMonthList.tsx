@@ -12,6 +12,7 @@ export const ExpenseMonthList: FC<ExpenseMonthListProps> = ({ data, year }) => {
             {data.map((month: string) => (
                 <Link
                     to={`/${month}/${year}`}
+                    id={month}
                     key={month}
                     className="uppercase rounded-full bg-tertiary text-white text-xl w-20 h-20 flex items-center justify-center hover:bg-secondary transition-all"
                 >

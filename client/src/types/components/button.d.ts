@@ -55,4 +55,5 @@ export interface ActionButtonOptions {
     label?: string;
     icon?: IconType;
     disabled?: boolean;
+    id?: string;
 }

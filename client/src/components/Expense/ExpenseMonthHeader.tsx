@@ -22,6 +22,7 @@ const ExpenseMonthHeader: FC<ExpenseMonthHeaderProps> = ({ year }) => {
                   onClick: () => {
                       navigate(`/${year}/analytics`);
                   },
+                  id: `${year}-analytics`,
               },
           ]
         : [];
@@ -36,13 +37,16 @@ const ExpenseMonthHeader: FC<ExpenseMonthHeaderProps> = ({ year }) => {
                   onClick: () => {
                       console.log("Export");
                   },
+                  id: `${year}-exports`,
               },
           ]
         : [];
 
     return (
         <div className="h-14 flex justify-between items-center text-2xl px-6 font-bold text-primary">
-            <h2 className="text-3xl">{year}</h2>
+            <h2 className="text-3xl" id={year}>
+                {year}
+            </h2>
             <ActionButtons
                 className="p-2 h-10 w-10 flex justify-center items-center"
                 rounded="full"

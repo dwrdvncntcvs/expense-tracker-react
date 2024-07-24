@@ -25,6 +25,7 @@ const ActionButtons: FC<ActionButtonsProps> = ({
                         onClick,
                         icon: Icon,
                         disabled = false,
+                        id,
                     },
                     i
                 ) => (
@@ -37,6 +38,7 @@ const ActionButtons: FC<ActionButtonsProps> = ({
                         className={`flex gap-2 items-center ${className}`}
                         rounded={rounded}
                         disabled={disabled}
+                        id={id}
                     >
                         {Icon && <Icon size={20} />}
                         {label && label}

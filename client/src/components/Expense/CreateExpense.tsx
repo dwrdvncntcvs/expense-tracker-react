@@ -16,6 +16,7 @@ const CreateExpense: FC = () => {
         <>
             <button
                 onClick={() => dispatch(show("add-expense"))}
+                id="create-expense  "
                 className="fixed bottom-10 right-10 text-white bg-primary p-4 rounded-full hover:bg-primary/80 transition-all"
             >
                 <HiPlus size={40} />
