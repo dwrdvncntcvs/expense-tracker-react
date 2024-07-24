@@ -1,9 +1,9 @@
 import test, { expect } from "../fixtures";
-import { SECOND_EMAIL, SECOND_PASSWORD } from "../variables/auth";
+import { EMAILS, PASSWORD } from "../variables/auth";
 
 test.describe("Home page w/ newly created account", () => {
     test.beforeEach(async ({ auth, homePage, page }) => {
-        await auth.authenticate(SECOND_EMAIL, SECOND_PASSWORD);
+        await auth.authenticate(EMAILS[1], PASSWORD);
 
         await page.waitForURL("/");
 

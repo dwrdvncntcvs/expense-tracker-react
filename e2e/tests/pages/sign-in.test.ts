@@ -1,5 +1,5 @@
 import test, { expect } from "../fixtures";
-import { EMAIL, PASSWORD } from "../variables/auth";
+import { EMAILS, PASSWORD } from "../variables/auth";
 
 test.describe("Sign In Page", () => {
     test.beforeEach(async ({ signInPage }) => {
@@ -10,7 +10,7 @@ test.describe("Sign In Page", () => {
         page,
         signInPage,
     }) => {
-        await signInPage.inputField("email", EMAIL);
+        await signInPage.inputField("email", EMAILS[0]);
         await signInPage.inputField("password", PASSWORD);
         await signInPage.signInButton.click();
 
@@ -48,7 +48,7 @@ test.describe("Sign In Page", () => {
         page,
         signInPage,
     }) => {
-        await signInPage.inputField("email", EMAIL);
+        await signInPage.inputField("email", EMAILS[0]);
         await signInPage.inputField("password", "incorrect-pass");
 
         await signInPage.signInButton.click();

@@ -1,5 +1,5 @@
 import test, { expect } from "../fixtures";
-import { EMAIL, PASSWORD } from "../variables/auth";
+import { EMAILS, PASSWORD } from "../variables/auth";
 
 test.describe("Page Guards", () => {
     test("Navigate back - Should be back to sign in page when trying to access home page when not authenticated", async ({
@@ -17,7 +17,7 @@ test.describe("Page Guards", () => {
         page,
         auth,
     }) => {
-        await auth.authenticate(EMAIL, PASSWORD);
+        await auth.authenticate(EMAILS[0], PASSWORD);
 
         await page.waitForURL("/");
 

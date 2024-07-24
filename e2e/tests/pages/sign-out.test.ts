@@ -1,9 +1,9 @@
 import test, { expect } from "../fixtures";
-import { EMAIL, PASSWORD } from "../variables/auth";
+import { EMAILS, PASSWORD } from "../variables/auth";
 
 test.describe("Sign Out", () => {
     test.beforeEach(async ({ auth }) => {
-        await auth.authenticate(EMAIL, PASSWORD);
+        await auth.authenticate(EMAILS[0], PASSWORD);
     });
 
     test("Success - Sign out", async ({ page }) => {
