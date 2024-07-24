@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import mongoose from "mongoose";
 import Expense from "../Expense/model";
 import Category from "../Settings/Category/model";
@@ -9,8 +8,6 @@ import {
 } from "../types/Settings/Category/category";
 import { CreateUser } from "../types/User/model";
 import User from "../User/model";
-
-dotenv.config({ path: "../.env.test" });
 
 const userData: CreateUser = {
     first_name: "John",
@@ -65,7 +62,7 @@ const generateExpenses = (
 
 async function accountSeeder() {
     mongoose
-        .connect("mongodb://localhost:27017/expense-tracker-test")
+        .connect(process.env.MONGO_URL || "")
         .then((val) => {
             console.log("Connected");
         })

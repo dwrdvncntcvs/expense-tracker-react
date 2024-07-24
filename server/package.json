@@ -11,7 +11,7 @@
         "build": "tsc",
         "build:w": "tsc --w",
         "start": "node ./dist",
-        "seed:default-acc": "tsc && node ./dist/seed/defaultAccount.js"
+        "seed:default-acc": "set NODE_ENV=test&& tsc && node ./dist/seed/defaultAccount.js"
     },
     "author": "Edward Vincent Cuevas",
     "license": "ISC",
