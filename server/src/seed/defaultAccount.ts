@@ -60,7 +60,37 @@ const generateExpenses = (
     return expenses;
 };
 
-async function accountSeeder() {
+interface Options {
+    hasCategories: boolean;
+    hasExpenses: boolean;
+}
+
+async function accountSeeder(
+    user: CreateUser,
+    options: Options = { hasCategories: true, hasExpenses: true }
+) {
+    const createdUser = await User.create(user);
+
+    console.log("User added...");
+
+    let categories: ICategory[] = [];
+    if (options.hasCategories) {
+        categories = await Category.insertMany(categoriesData(createdUser.id));
+
+        console.log("Categories added... ");
+    }
+
+    if (options.hasExpenses && categories.length > 0) {
+        const expense2023 = generateExpenses(categories, 2023, createdUser.id);
+        const expense2024 = generateExpenses(categories, 2024, createdUser.id);
+
+        await Expense.insertMany([...expense2023, ...expense2024]);
+
+        console.log("Expenses added...");
+    }
+}
+
+const seed = async () => {
     mongoose
         .connect(process.env.MONGO_URL || "")
         .then((val) => {
@@ -70,24 +100,22 @@ async function accountSeeder() {
 
     await mongoose.connection.dropDatabase();
 
-    const createdUser = await User.create(userData);
-
-    console.log("User added...");
-
-    let categories: ICategory[] = await Category.insertMany(
-        categoriesData(createdUser.id)
+    await accountSeeder(userData);
+    await accountSeeder(
+        {
+            email: "janedoe@sample.com",
+            first_name: "Jane",
+            last_name: "Doe",
+            password: "sample1",
+            username: "jane_doe",
+        },
+        {
+            hasCategories: false,
+            hasExpenses: false,
+        }
     );
 
-    console.log("Categories added... ");
-
-    const expense2023 = generateExpenses(categories, 2023, createdUser.id);
-    const expense2024 = generateExpenses(categories, 2024, createdUser.id);
-
-    await Expense.insertMany([...expense2023, ...expense2024]);
-
-    console.log("Expenses added...");
-
     mongoose?.disconnect();
-}
+};
 
-accountSeeder();
+seed();
