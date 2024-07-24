@@ -71,6 +71,8 @@ async function accountSeeder() {
         })
         .catch((err) => console.log("Error: ", err));
 
+    await mongoose.connection.dropDatabase();
+
     const createdUser = await User.create(userData);
 
     console.log("User added...");

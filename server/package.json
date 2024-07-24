@@ -10,7 +10,8 @@
         "prod:env": " concurrently \"tsc --w\" \"set NODE_ENV=prod && nodemon ./dist\"",
         "build": "tsc",
         "build:w": "tsc --w",
-        "start": "node ./dist"
+        "start": "node ./dist",
+        "seed:default-acc": "tsc && node ./dist/seed/defaultAccount.js"
     },
     "author": "Edward Vincent Cuevas",
     "license": "ISC",
