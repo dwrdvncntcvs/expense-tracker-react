@@ -16,17 +16,22 @@ const Home: FC = () => {
     if (Object.keys(data.months).length < 1) return <NoExpenses />;
 
     return (
-        <div className="flex flex-col gap-5 divide-y divide-secondary">
-            {Object.keys(data.months).map((key) => (
-                <div key={key} className="space-y-6 py-3">
-                    <div className="space-y-3">
-                        <ExpenseMonthHeader year={key} />
-                        <ExpenseMonthList data={data.months[key]} year={key} />
-                    </div>
-                </div>
-            ))}
+        <>
+            <ul className="year-list flex flex-col gap-5 divide-y divide-secondary">
+                {Object.keys(data.months).map((key) => (
+                    <li key={key} className="year-item space-y-6 py-3">
+                        <div className="space-y-3">
+                            <ExpenseMonthHeader year={key} />
+                            <ExpenseMonthList
+                                data={data.months[key]}
+                                year={key}
+                            />
+                        </div>
+                    </li>
+                ))}
+            </ul>
             <Outlet />
-        </div>
+        </>
     );
 };
 
