@@ -9,6 +9,7 @@
         "test:env": " concurrently \"tsc --w\" \"set NODE_ENV=test && nodemon ./dist\"",
         "prod:env": " concurrently \"tsc --w\" \"set NODE_ENV=prod && nodemon ./dist\"",
         "build": "tsc",
+        "build:w": "tsc --w",
         "start": "node ./dist"
     },
     "author": "Edward Vincent Cuevas",
@@ -30,6 +31,7 @@
         "multer": "^1.4.5-lts.1"
     },
     "devDependencies": {
+        "@faker-js/faker": "^8.4.1",
         "@types/multer": "^1.4.11",
         "concurrently": "^8.2.0",
         "nodemon": "^3.0.1",
