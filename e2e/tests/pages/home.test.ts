@@ -53,12 +53,12 @@ test.describe("Home page w/ newly created account", () => {
     });
 });
 
-test.describe("Home page w/ partially created account", () => [
+test.describe("Home page w/ partially created account", () => {
     test.beforeEach(async ({ auth, page }) => {
         await auth.authenticate(EMAILS[2], PASSWORD);
 
         await page.waitForURL("/");
-    }),
+    });
 
     test("render without the list of data and with instruction and create expense btn", async ({
         homePage,
@@ -68,7 +68,7 @@ test.describe("Home page w/ partially created account", () => [
         await expect(homePage.categoryLink).not.toBeVisible();
 
         await expect(homePage.createExpenseBtn).toBeVisible();
-    }),
+    });
 
     test("render create expense modal by create expense button", async ({
         homePage,
@@ -81,5 +81,5 @@ test.describe("Home page w/ partially created account", () => [
         await page.waitForTimeout(2000);
 
         await expect(page.locator("div#add-expense-modal")).toBeAttached();
-    }),
-]);
+    });
+});
