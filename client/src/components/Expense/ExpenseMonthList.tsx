@@ -8,7 +8,10 @@ interface ExpenseMonthListProps {
 
 export const ExpenseMonthList: FC<ExpenseMonthListProps> = ({ data, year }) => {
     return (
-        <ul className="month-list flex items-center justify-center gap-2">
+        <ul
+            className="month-list flex items-center justify-center gap-2"
+            id={year}
+        >
             {data.map((month: string) => (
                 <li key={month} className="month-item">
                     <Link

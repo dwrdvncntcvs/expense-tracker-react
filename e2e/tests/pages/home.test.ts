@@ -91,28 +91,32 @@ test.describe("Home page w/ account that has expenses", () => {
         await page.waitForURL("/");
     });
 
-    // 2024 and 2023 will always be expected
-    test("Home page render years of 2024 and 2023", async ({ page }) => {
-        const months = Object.keys(MONTHS).map((val) => val.toLowerCase());
+    test("Home page render years items", async ({ page }) => {
+        const yearList = page.locator(".year-item h2");
 
-        await expect(page.getByText("2023")).toBeVisible();
-        await expect(page.locator("[id='2023-analytics']")).toBeAttached();
+        const yearListValues = await yearList.allTextContents();
 
-        await Promise.all(
-            months.map((val) =>
-                expect(page.locator(`[id='${val}-2023']`)).toBeVisible()
-            )
-        );
+        for (let year of yearListValues) {
+            await expect(page.getByText(year)).toBeVisible();
 
-        await expect(page.getByText("2024")).toBeVisible();
-        await expect(page.locator("[id='2024-analytics']")).toBeAttached();
+            const analyticsButton = page.locator(`[id='${year}-analytics']`);
 
-        await Promise.all(
-            months.map((val) =>
-                expect(page.locator(`[id='${val}-2024']`)).toBeVisible()
-            )
-        );
+            await expect(analyticsButton).toBeVisible();
 
-        await page.pause();
+            const monthList = page
+                .locator(`[id='${year}']`)
+                .locator(".month-item");
+
+            const monthTexts = await monthList.allTextContents();
+
+            for (const text of monthTexts) {
+                const monthEl = page
+                    .locator(`[id='${year}']`)
+                    .getByRole("link", { name: text });
+
+                await monthEl.hover();
+                await expect(monthEl).toHaveClass(/hover:bg-secondary/);
+            }
+        }
     });
 });
