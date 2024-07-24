@@ -88,13 +88,16 @@ async function accountSeeder(
 
         console.log("Expenses added...");
     }
+
+    console.log("Account Seed Completed...");
+    console.log("");
 }
 
 const seed = async () => {
     mongoose
         .connect(process.env.MONGO_URL || "")
         .then((val) => {
-            console.log("Connected");
+            console.log("Connected\n");
         })
         .catch((err) => console.log("Error: ", err));
 
@@ -114,8 +117,22 @@ const seed = async () => {
             hasExpenses: false,
         }
     );
+    await accountSeeder(
+        {
+            email: "johnnybravo@sample.com",
+            first_name: "Johnny",
+            last_name: "Bravo",
+            password: "sample1",
+            username: "johnny_bravo",
+        },
+        {
+            hasCategories: true,
+            hasExpenses: false,
+        }
+    );
 
     mongoose?.disconnect();
+    console.log("Disconnected");
 };
 
 seed();
