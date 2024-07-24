@@ -35,12 +35,16 @@ const Modal: FC<ModalProps> = ({ name, title, children, options }) => {
             <>
                 <Portal element={overlay!}>
                     <div
+                        id={`${name}-overlay`}
                         className="fixed top-0 left-0 backdrop-blur-sm bg-black/20 h-screen w-screen z-40"
                         onClick={handleClose}
                     />
                 </Portal>
                 <Portal element={modal!}>
-                    <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-[500px] z-40 rounded-xl">
+                    <div
+                        id={`${name}-modal`}
+                        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-[500px] z-40 rounded-xl"
+                    >
                         <div className="p-4 pb-0 relative">
                             {title && (
                                 <h2 className="font-bold text-xl text-primary">
