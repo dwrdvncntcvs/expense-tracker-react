@@ -25,6 +25,7 @@ const NoExpenses: FC = () => {
                             Add a category first before you can create expenses
                         </p>
                         <Link
+                            id="settings-category"
                             to="/settings/categories"
                             className="flex gap-4 items-center text-primary p-2 px-4 mt-4  hover:text-plain hover:bg-primary transition-all rounded-xl"
                         >
