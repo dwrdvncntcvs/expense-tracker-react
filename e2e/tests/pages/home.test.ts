@@ -134,7 +134,11 @@ test.describe("Create Expense", () => {
         await page.waitForSelector("div#add-expense-modal");
     });
 
-    test("successfully create expense", async ({ page, browserName }) => {
+    test("successfully create expense", async ({
+        page,
+        browserName,
+        request,
+    }) => {
         const year = EXPENSE.YEAR;
         const month = EXPENSE.MONTH.NUM;
         const monthName = EXPENSE.MONTH.NAME;
@@ -183,8 +187,6 @@ test.describe("Create Expense", () => {
                     .locator(".month-item");
 
                 const monthTexts = await monthList.allTextContents();
-
-                console.log("shortMonthName: ", shortMonthName);
 
                 for (const text of monthTexts) {
                     if (text === shortMonthName) {
@@ -240,6 +242,10 @@ test.describe("Create Expense", () => {
                 break;
             }
         }
+
+        await request.delete(
+            `http://localhost:5010/test/expenses/${EXPENSE.MONTH.NUM}/${EXPENSE.YEAR}`
+        );
     });
 
     test("creating expense with empty fields value", async ({ page }) => {
