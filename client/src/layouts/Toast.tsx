@@ -1,18 +1,13 @@
+import { useAppDispatch } from "@hooks/storeHooks";
+import { hide, useToast } from "@store/slices/toast";
 import { FC, useEffect } from "react";
+import { HiX } from "react-icons/hi";
 import {
-    HiCheckCircle,
-    HiExclamationCircle,
-    HiExclamationTriangle,
-    HiInformationCircle,
     HiOutlineCheckCircle,
     HiOutlineExclamationCircle,
     HiOutlineExclamationTriangle,
     HiOutlineInformationCircle,
 } from "react-icons/hi2";
-import { HiX } from "react-icons/hi";
-import { useToast } from "@store/slices/toast";
-import { hide } from "@store/slices/toast";
-import { useAppDispatch } from "@hooks/storeHooks";
 
 const Toast: FC = () => {
     const { toasts } = useToast();
@@ -56,7 +51,7 @@ const Toast: FC = () => {
                     const Icon = toastIconByType[toast.type];
                     return (
                         <div
-                            className={`p-4 rounded border-1 flex gap-4 items-center relative ${
+                            className={`toast-item p-4 rounded border-1 flex gap-4 items-center relative ${
                                 toastTypeClass[toast.type]
                             }`}
                             key={toast.id}

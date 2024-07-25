@@ -229,4 +229,62 @@ test.describe.serial("Expenses Feature", () => {
             }
         }
     });
+
+    test("successfully delete expense", async ({ page, browserName }) => {
+        await page.goto(`/${EXPENSE.MONTH.NAME}/${EXPENSE.YEAR}`);
+
+        await expect(
+            page.getByRole("heading", {
+                name: new RegExp(EXPENSE.MONTH.NAME, "i"),
+            })
+        ).toBeVisible();
+
+        const expenseCards = page.locator(".expense-card h3");
+        const expenseCardsValues = await expenseCards.allTextContents();
+
+        for (let i = 0; expenseCardsValues.length > i; i++) {
+            const expenseLabel = `Test 1 - ${browserName}`;
+
+            if (expenseLabel === expenseCardsValues[i]) {
+                const card = page.getByTestId(`expense-${i}`);
+
+                await expect(card.getByText(expenseLabel)).toBeVisible();
+
+                await card.getByText(expenseLabel).hover();
+
+                const updateExpenseBtn = card.locator("button#update-expense");
+                const deleteExpenseBtn = card.locator("button#delete-expense");
+
+                await expect(updateExpenseBtn).toBeVisible();
+                await expect(deleteExpenseBtn).toBeVisible();
+
+                await deleteExpenseBtn.click();
+
+                const modalTitle = page.getByRole("heading", {
+                    name: `Delete ${expenseLabel}`,
+                });
+
+                await expect(modalTitle).toBeVisible();
+
+                const modalDeleteBtn = page.getByRole("button", {
+                    name: "Delete",
+                });
+
+                await modalDeleteBtn.click();
+
+                const toastModal = page.getByText(
+                    `${expenseLabel} successfully deleted.`
+                );
+
+                await expect(toastModal).toBeVisible();
+                await expect(modalTitle).not.toBeVisible();
+
+                await page.waitForTimeout(5000);
+
+                await expect(toastModal).not.toBeVisible();
+
+                break;
+            }
+        }
+    });
 });
