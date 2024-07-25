@@ -123,23 +123,19 @@ test.describe("Home page w/ account that has expenses", () => {
 });
 
 test.describe("Create Expense", () => {
-    test.beforeEach(async ({ auth, page }) => {
+    test.beforeEach(async ({ auth, page, homePage }) => {
         await auth.authenticate(EMAILS[0], PASSWORD);
 
         await page.waitForURL("/");
-    });
-
-    test("successfully create expense", async ({
-        page,
-        homePage,
-        browserName,
-    }) => {
-        const year = 2025;
-        const month = 10;
 
         await homePage.createExpenseBtn.click();
 
         await page.waitForSelector("div#add-expense-modal");
+    });
+
+    test("successfully create expense", async ({ page, browserName }) => {
+        const year = 2025;
+        const month = 10;
 
         const createExpenseForm = new CreateExpenseForm(page);
 
@@ -148,7 +144,7 @@ test.describe("Create Expense", () => {
         await createExpenseForm.fillCreateExpenseForm({
             amount: "10000",
             categoryId: "Hobby",
-            description: "Sample",
+            description: `Sample from ${browserName}`,
             label: `Test 1 - ${browserName}`,
             purchaseDate: `${year}-${month}-20`,
         });
@@ -193,5 +189,34 @@ test.describe("Create Expense", () => {
                 }
             }
         }
+    });
+
+    test("creating expense with empty fields value", async ({ page }) => {
+        const createExpenseForm = new CreateExpenseForm(page);
+
+        await expect(createExpenseForm.modalTitle).toBeVisible();
+
+        createExpenseForm.fillCreateExpenseForm({
+            amount: "",
+            categoryId: "",
+            description: "",
+            label: "",
+            purchaseDate: "",
+        });
+
+        await createExpenseForm.createExpenseBtn.click();
+
+        await expect(
+            createExpenseForm.getErrorLocator("label", "req")
+        ).toBeVisible();
+        await expect(
+            createExpenseForm.getErrorLocator("categoryId", "req")
+        ).toBeVisible();
+        await expect(
+            createExpenseForm.getErrorLocator("amount", "req")
+        ).toBeVisible();
+        await expect(
+            createExpenseForm.getErrorLocator("purchaseDate", "req")
+        ).toBeVisible();
     });
 });

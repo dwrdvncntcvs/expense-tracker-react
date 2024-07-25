@@ -8,6 +8,8 @@ interface CreateExpense {
     amount: string;
 }
 
+type ErrorName = keyof Omit<CreateExpense, "description">;
+
 class CreateExpenseForm {
     label: Locator;
     description: Locator;
@@ -37,6 +39,25 @@ class CreateExpenseForm {
         await this.categoryId.selectOption({ label: expense.categoryId });
         await this.purchaseDate.fill(expense.purchaseDate);
         await this.amount.fill(expense.amount);
+    }
+
+    getErrorLocator(errorName: ErrorName, errorType: "req") {
+        const errors = {
+            label: {
+                req: "Label is required",
+            },
+            categoryId: {
+                req: "Category is required",
+            },
+            purchaseDate: {
+                req: "Purchased Date is required",
+            },
+            amount: {
+                req: "Amount is required",
+            },
+        };
+
+        return this.page.getByText(errors[errorName][errorType]);
     }
 }
 
