@@ -123,22 +123,23 @@ test.describe("Home page w/ account that has expenses", () => {
     });
 });
 
-test.describe("Create Expense", () => {
-    test.beforeEach(async ({ auth, page, homePage }) => {
+test.describe.serial("Expenses Feature", () => {
+    test.beforeEach(async ({ auth, page }) => {
         await auth.authenticate(EMAILS[0], PASSWORD);
 
         await page.waitForURL("/");
-
-        await homePage.createExpenseBtn.click();
-
-        await page.waitForSelector("div#add-expense-modal");
     });
 
     test("successfully create expense", async ({
         page,
         browserName,
         request,
+        homePage,
     }) => {
+        await homePage.createExpenseBtn.click();
+
+        await page.waitForSelector("div#add-expense-modal");
+
         const year = EXPENSE.YEAR;
         const month = EXPENSE.MONTH.NUM;
         const monthName = EXPENSE.MONTH.NAME;
@@ -243,12 +244,18 @@ test.describe("Create Expense", () => {
             }
         }
 
-        await request.delete(
-            `http://localhost:5010/test/expenses/${EXPENSE.MONTH.NUM}/${EXPENSE.YEAR}`
-        );
+        // await request.delete(
+        //     `http://localhost:5010/test/expenses/${EXPENSE.MONTH.NUM}/${EXPENSE.YEAR}`
+        // );
     });
 
-    test("creating expense with empty fields value", async ({ page }) => {
+    test("creating expense with empty fields value", async ({
+        page,
+        homePage,
+    }) => {
+        await homePage.createExpenseBtn.click();
+
+        await page.waitForSelector("div#add-expense-modal");
         const createExpenseForm = new CreateExpenseForm(page);
 
         await expect(createExpenseForm.modalTitle).toBeVisible();
@@ -275,5 +282,71 @@ test.describe("Create Expense", () => {
         await expect(
             createExpenseForm.getErrorLocator("purchaseDate", "req")
         ).toBeVisible();
+    });
+
+    test("successfully update expense", async ({ page, browserName }) => {
+        await page.goto(`/${EXPENSE.MONTH.NAME}/${EXPENSE.YEAR}`);
+
+        await expect(
+            page.getByRole("heading", {
+                name: new RegExp(EXPENSE.MONTH.NAME, "i"),
+            })
+        ).toBeVisible();
+
+        const expenseCards = page.locator(".expense-card h3");
+        const expenseCardsValues = await expenseCards.allTextContents();
+
+        for (let i = 0; expenseCardsValues.length > i; i++) {
+            const expenseLabel = `Test 1 - ${browserName}`;
+
+            if (expenseLabel === expenseCardsValues[i]) {
+                const card = page.getByTestId(`expense-${i}`);
+
+                await expect(card.getByText(expenseLabel)).toBeVisible();
+
+                await card.getByText(expenseLabel).hover();
+
+                const updateExpenseBtn = card.locator("button#update-expense");
+                const deleteExpenseBtn = card.locator("button#delete-expense");
+
+                await expect(updateExpenseBtn).toBeVisible();
+                await expect(deleteExpenseBtn).toBeVisible();
+
+                await updateExpenseBtn.click();
+
+                const expenseForm = new CreateExpenseForm(page);
+
+                const modalLabel = page.getByText(`Edit ${expenseLabel}`);
+
+                await expect(modalLabel).toBeVisible();
+
+                expect(expenseForm.amount.isDisabled()).toBeTruthy();
+                expect(expenseForm.purchaseDate.isDisabled()).toBeTruthy();
+
+                const updatedLabel = `${expenseLabel} Updated`;
+
+                await expenseForm.fillCreateExpenseForm({
+                    label: updatedLabel,
+                });
+
+                await expenseForm.updateExpenseBtn.click();
+
+                await expect(modalLabel).not.toBeVisible();
+
+                await card.getByText(updatedLabel).hover();
+
+                await updateExpenseBtn.click();
+
+                await expenseForm.fillCreateExpenseForm({
+                    label: expenseLabel,
+                });
+
+                await expenseForm.updateExpenseBtn.click();
+
+                await expect(modalLabel).not.toBeVisible();
+
+                break;
+            }
+        }
     });
 });

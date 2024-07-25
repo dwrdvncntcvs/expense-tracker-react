@@ -18,6 +18,7 @@ class CreateExpenseForm {
     amount: Locator;
     createExpenseBtn: Locator;
     modalTitle: Locator;
+    updateExpenseBtn: Locator;
 
     constructor(private page: Page) {
         this.modalTitle = this.page.getByRole("heading", {
@@ -31,14 +32,20 @@ class CreateExpenseForm {
         this.createExpenseBtn = this.page.getByRole("button", {
             name: "Create Expense",
         });
+        this.updateExpenseBtn = this.page.getByRole("button", {
+            name: "Save",
+        });
     }
 
-    async fillCreateExpenseForm(expense: CreateExpense) {
-        await this.label.fill(expense.label);
-        await this.description.fill(expense.description);
-        await this.categoryId.selectOption({ label: expense.categoryId });
-        await this.purchaseDate.fill(expense.purchaseDate);
-        await this.amount.fill(expense.amount);
+    async fillCreateExpenseForm(expense: Partial<CreateExpense>) {
+        if (expense.label) await this.label.fill(expense.label);
+        if (expense.description)
+            await this.description.fill(expense.description);
+        if (expense.categoryId)
+            await this.categoryId.selectOption({ label: expense.categoryId });
+        if (expense.purchaseDate)
+            await this.purchaseDate.fill(expense.purchaseDate);
+        if (expense.amount) await this.amount.fill(expense.amount);
     }
 
     getErrorLocator(errorName: ErrorName, errorType: "req") {
