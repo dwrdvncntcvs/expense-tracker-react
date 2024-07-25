@@ -36,14 +36,67 @@ Since the application is already dockerized it will be much more easier for you 
 
 2. You could run the docker by simply running this commands:
 
+    You can input these commands directly from the console
+
     ```bash
     docker-compose build
     # or
     docker-compose up
     ```
 
-    or just simple run this shell script for building and running docker
+    or you can also use the shell script that I created.
 
     ```bash
-    ./start.sh
+    ./start.sh docker-build
     ```
+
+## How to test?
+
+The application uses **_Playwright_** a testing framework for end-to-end **_(e2e)_** testing of application
+
+The **_server_** and **_client_** side of the application do have a different environment that you can run in order to test it effectively. Here are the guides for testing the application:
+
+### File Tree
+
+```bash
+expense-tracker
+├── client
+├── e2e
+│   └── tests
+├── server
+├── start.sg
+└── README.md
+```
+
+1. Before you go to **_e2e_** directory you should first run the following command:
+
+    You can use this command to run the test environment of the application in both client and server side.
+
+    ```bash
+    ./start.sh run-test
+    ```
+
+    Or you can initialize or start the application separately by accessing each directories.
+
+    ```bash
+    # Running Server
+    cd ./server
+    yarn test:env
+
+    #Running Client
+    cd ./client
+    pnpm test:env
+    ```
+
+    **_NOTE:_** These commands **_"test:env"_** will initialize environment variables for the test environments
+
+2. Once the test environment is currently running you could start testing the application.
+
+    ```bash
+    cd ./e2e
+    pnpm test
+    # or
+    pnpm test:ui
+    ```
+
+### Thank you for visiting my repository! 🔥
