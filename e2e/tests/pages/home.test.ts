@@ -1,6 +1,7 @@
 import CreateExpenseForm from "../components/expenseForm";
 import test, { expect } from "../fixtures";
 import { EMAILS, MONTHS, PASSWORD } from "../variables/auth";
+import { EXPENSE } from "../variables/home";
 
 test.describe("Home page w/ newly created account", () => {
     test.beforeEach(async ({ auth, homePage, page }) => {
@@ -134,20 +135,24 @@ test.describe("Create Expense", () => {
     });
 
     test("successfully create expense", async ({ page, browserName }) => {
-        const year = 2025;
-        const month = 10;
+        const year = EXPENSE.YEAR;
+        const month = EXPENSE.MONTH.NUM;
+        const monthName = EXPENSE.MONTH.NAME;
+        const shortMonthName = EXPENSE.MONTH.SHORT;
 
         const createExpenseForm = new CreateExpenseForm(page);
 
         await expect(createExpenseForm.modalTitle).toBeVisible();
 
-        await createExpenseForm.fillCreateExpenseForm({
+        const expenseData = {
             amount: "10000",
             categoryId: "Hobby",
             description: `Sample from ${browserName}`,
             label: `Test 1 - ${browserName}`,
             purchaseDate: `${year}-${month}-20`,
-        });
+        };
+
+        await createExpenseForm.fillCreateExpenseForm(expenseData);
 
         await createExpenseForm.createExpenseBtn.click();
 
@@ -179,14 +184,60 @@ test.describe("Create Expense", () => {
 
                 const monthTexts = await monthList.allTextContents();
 
-                for (const text of monthTexts) {
-                    const monthEl = page
-                        .locator(`[id='${yearVal}']`)
-                        .getByRole("link", { name: text });
+                console.log("shortMonthName: ", shortMonthName);
 
-                    await monthEl.hover();
-                    await expect(monthEl).toHaveClass(/hover:bg-secondary/);
+                for (const text of monthTexts) {
+                    if (text === shortMonthName) {
+                        const monthEl = page
+                            .locator(`[id='${yearVal}']`)
+                            .getByRole("link", { name: text });
+
+                        await monthEl.hover();
+                        await expect(monthEl).toHaveClass(/hover:bg-secondary/);
+
+                        await monthEl.click();
+
+                        await page.waitForURL(`/${monthName}/${year}`);
+
+                        await expect(
+                            page.getByRole("heading", {
+                                name: new RegExp(monthName, "i"),
+                            })
+                        ).toBeVisible();
+
+                        const expenseCard = page.locator(".expense-card h3");
+
+                        const expenseCardH3s =
+                            await expenseCard.allTextContents();
+
+                        for (let i = 0; i < expenseCardH3s.length; i++) {
+                            const val = expenseCardH3s[i];
+                            if (val === expenseData.label) {
+                                const expenseItem = page.getByTestId(
+                                    `expense-${i}`
+                                );
+                                await expect(
+                                    expenseItem.getByText(val)
+                                ).toBeVisible();
+
+                                await expenseItem.hover();
+
+                                await expect(
+                                    expenseItem.locator("button#update-expense")
+                                ).toBeVisible();
+
+                                await expect(
+                                    expenseItem.locator("button#delete-expense")
+                                ).toBeVisible();
+
+                                break;
+                            }
+                        }
+                    }
+
+                    break;
                 }
+                break;
             }
         }
     });

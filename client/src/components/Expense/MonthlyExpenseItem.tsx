@@ -16,9 +16,13 @@ import ExpenseForm from "./ExpenseForm";
 
 interface MonthlyExpenseItemProps {
     expense: IExpense;
+    index: number;
 }
 
-const MonthlyExpenseItem: FC<MonthlyExpenseItemProps> = ({ expense }) => {
+const MonthlyExpenseItem: FC<MonthlyExpenseItemProps> = ({
+    expense,
+    index,
+}) => {
     const dispatch = useAppDispatch();
     const [hoveredId, setHoveredId] = useState("");
 
@@ -33,7 +37,8 @@ const MonthlyExpenseItem: FC<MonthlyExpenseItemProps> = ({ expense }) => {
         <>
             <div className="w-full xs:w-1/2 sm:w-1/2 md:w-1/2 lg:w-1/4 p-2">
                 <div
-                    className="h-full shadow-md rounded-lg flex flex-col justify-between border-primary border-2 relative overflow-auto"
+                    data-testid={`expense-${index}`}
+                    className="expense-card h-full shadow-md rounded-lg flex flex-col justify-between border-primary border-2 relative overflow-auto"
                     onMouseOver={() => {
                         if (hoveredId !== expense.id) {
                             setHoveredId(expense.id);
@@ -47,7 +52,8 @@ const MonthlyExpenseItem: FC<MonthlyExpenseItemProps> = ({ expense }) => {
                         <div className="w-full absolute bottom-0 flex flex-col bg-white">
                             {expense.imageUrl && (
                                 <button
-                                    className="bg-secondary w-full p-2 py-3 text-white flex items-center justify-center hover:bg-secondary/80"
+                                    id="view-expense-image"
+                                    className="expense-item-action-btn bg-secondary w-full p-2 py-3 text-white flex items-center justify-center hover:bg-secondary/80"
                                     onClick={() => {
                                         dispatch(
                                             show(`expense-image-${expense.id}`)
@@ -58,7 +64,8 @@ const MonthlyExpenseItem: FC<MonthlyExpenseItemProps> = ({ expense }) => {
                                 </button>
                             )}
                             <button
-                                className="bg-warning w-full p-2 py-3 text-white flex items-center justify-center hover:bg-warning/80"
+                                id="update-expense"
+                                className="expense-item-action-btn bg-warning w-full p-2 py-3 text-white flex items-center justify-center hover:bg-warning/80"
                                 onClick={() => {
                                     dispatch(
                                         show(`update-expense-${expense.id}`)
@@ -68,7 +75,8 @@ const MonthlyExpenseItem: FC<MonthlyExpenseItemProps> = ({ expense }) => {
                                 <HiOutlinePencil size={20} />
                             </button>
                             <button
-                                className="bg-failure w-full p-2 py-3 text-white flex items-center justify-center hover:bg-failure/80"
+                                id="delete-expense"
+                                className="expense-item-action-btn bg-failure w-full p-2 py-3 text-white flex items-center justify-center hover:bg-failure/80"
                                 onClick={() => {
                                     dispatch(
                                         show(`delete-expense-${expense.id}`)

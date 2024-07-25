@@ -65,8 +65,9 @@ const ExpenseMonth: FC = () => {
             )}
             <div className="flex flex-wrap">
                 {expenses &&
-                    expenses?.map((expense) => (
+                    expenses?.map((expense, i) => (
                         <MonthlyExpenseItem
+                            index={i}
                             expense={expense}
                             key={expense.id}
                         />
