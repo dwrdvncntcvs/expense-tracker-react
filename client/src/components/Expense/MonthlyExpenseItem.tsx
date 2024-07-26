@@ -88,14 +88,9 @@ const MonthlyExpenseItem: FC<MonthlyExpenseItemProps> = ({
                         </div>
                     )}
                     <div className="p-4 flex flex-col gap-3">
-                        <div>
-                            <h3 className="text-2xl font-semibold text-primary text-start">
-                                {expense.label}
-                            </h3>
-                        </div>
-                        <p className="line-clamp-4 text-xs">
-                            {expense.description}
-                        </p>
+                        <h3 className="text-2xl font-semibold text-primary text-start">
+                            {expense.label}
+                        </h3>
                     </div>
                     <div className="flex gap-4 p-4 justify-between items-end">
                         <p className="italic text-sm text-gray-600">
