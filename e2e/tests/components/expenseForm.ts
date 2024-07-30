@@ -10,7 +10,7 @@ interface CreateExpense {
 
 type ErrorName = keyof Omit<CreateExpense, "description">;
 
-class CreateExpenseForm {
+class ExpenseForm {
     label: Locator;
     description: Locator;
     categoryId: Locator;
@@ -37,7 +37,7 @@ class CreateExpenseForm {
         });
     }
 
-    async fillCreateExpenseForm(expense: Partial<CreateExpense>) {
+    async fillExpenseForm(expense: Partial<CreateExpense>) {
         if (expense.label) await this.label.fill(expense.label);
         if (expense.description)
             await this.description.fill(expense.description);
@@ -68,4 +68,4 @@ class CreateExpenseForm {
     }
 }
 
-export default CreateExpenseForm;
+export default ExpenseForm;

@@ -3,12 +3,15 @@ import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import Authentication from "./Authentication";
 import HomePage from "./pages/HomePage";
+import Expense from "./Expense";
 
 const test = base.extend<{
     signInPage: SignInPage;
     signUpPage: SignUpPage;
     auth: Authentication;
     homePage: HomePage;
+    addExpense: Expense;
+    updateExpense: Expense;
 }>({
     signInPage: async ({ page }, use) => {
         await use(new SignInPage(page));
@@ -21,6 +24,9 @@ const test = base.extend<{
     },
     homePage: async ({ page }, use) => {
         await use(new HomePage(page));
+    },
+    addExpense: async ({ page, browserName, request }, use) => {
+        await use(new Expense("add-expense-modal", page, browserName, request));
     },
 });
 

@@ -1,9 +1,9 @@
-import CreateExpenseForm from "../components/expenseForm";
+import ExpenseForm from "../components/expenseForm";
 import test, { expect } from "../fixtures";
 import { EMAILS, PASSWORD } from "../variables/auth";
 import { EXPENSE } from "../variables/home";
 
-test.describe.serial("Expenses Feature", () => {
+test.describe("Expenses Feature", () => {
     test.beforeEach(async ({ auth, page }) => {
         await auth.authenticate(EMAILS[0], PASSWORD);
 
@@ -13,8 +13,8 @@ test.describe.serial("Expenses Feature", () => {
     test("successfully create expense", async ({
         page,
         browserName,
-        request,
         homePage,
+        addExpense,
     }) => {
         await homePage.createExpenseBtn.click();
 
@@ -25,9 +25,7 @@ test.describe.serial("Expenses Feature", () => {
         const monthName = EXPENSE.MONTH.NAME;
         const shortMonthName = EXPENSE.MONTH.SHORT;
 
-        const createExpenseForm = new CreateExpenseForm(page);
-
-        await expect(createExpenseForm.modalTitle).toBeVisible();
+        await expect(addExpense.expenseForm.modalTitle).toBeVisible();
 
         const expenseData = {
             amount: "10000",
@@ -37,9 +35,9 @@ test.describe.serial("Expenses Feature", () => {
             purchaseDate: `${year}-${month}-20`,
         };
 
-        await createExpenseForm.fillCreateExpenseForm(expenseData);
+        await addExpense.expenseForm.fillExpenseForm(expenseData);
 
-        await createExpenseForm.createExpenseBtn.click();
+        await addExpense.expenseForm.createExpenseBtn.click();
 
         const toastMessage = page.getByText("Expense successfully added");
 
@@ -124,23 +122,21 @@ test.describe.serial("Expenses Feature", () => {
             }
         }
 
-        // await request.delete(
-        //     `http://localhost:5010/test/expenses/${EXPENSE.MONTH.NUM}/${EXPENSE.YEAR}`
-        // );
+        await addExpense.removeDefaultExpense();
     });
 
     test("creating expense with empty fields value", async ({
         page,
         homePage,
+        addExpense,
     }) => {
         await homePage.createExpenseBtn.click();
 
         await page.waitForSelector("div#add-expense-modal");
-        const createExpenseForm = new CreateExpenseForm(page);
 
-        await expect(createExpenseForm.modalTitle).toBeVisible();
+        await expect(addExpense.expenseForm.modalTitle).toBeVisible();
 
-        createExpenseForm.fillCreateExpenseForm({
+        addExpense.expenseForm.fillExpenseForm({
             amount: "",
             categoryId: "",
             description: "",
@@ -148,28 +144,41 @@ test.describe.serial("Expenses Feature", () => {
             purchaseDate: "",
         });
 
-        await createExpenseForm.createExpenseBtn.click();
+        await addExpense.expenseForm.createExpenseBtn.click();
 
         await expect(
-            createExpenseForm.getErrorLocator("label", "req")
+            addExpense.expenseForm.getErrorLocator("label", "req")
         ).toBeVisible();
         await expect(
-            createExpenseForm.getErrorLocator("categoryId", "req")
+            addExpense.expenseForm.getErrorLocator("categoryId", "req")
         ).toBeVisible();
         await expect(
-            createExpenseForm.getErrorLocator("amount", "req")
+            addExpense.expenseForm.getErrorLocator("amount", "req")
         ).toBeVisible();
         await expect(
-            createExpenseForm.getErrorLocator("purchaseDate", "req")
+            addExpense.expenseForm.getErrorLocator("purchaseDate", "req")
         ).toBeVisible();
     });
+});
 
-    test("successfully update expense", async ({ page, browserName }) => {
-        await page.goto(`/${EXPENSE.MONTH.NAME}/${EXPENSE.YEAR}`);
+test.describe("Update Expense", () => {
+    test.beforeEach(async ({ addExpense, homePage, auth, page }) => {
+        await auth.authenticate(EMAILS[0], PASSWORD);
+        await page.waitForURL("/");
+        await homePage.createExpenseBtn.click();
+        await addExpense.createDefaultExpense(EXPENSE.MONTHS[0].NUM);
+    });
+
+    test("Successfully - update expense", async ({
+        page,
+        browserName,
+        addExpense,
+    }) => {
+        await page.goto(`/${EXPENSE.MONTHS[0].NAME}/${EXPENSE.YEAR}`);
 
         await expect(
             page.getByRole("heading", {
-                name: new RegExp(EXPENSE.MONTH.NAME, "i"),
+                name: new RegExp(EXPENSE.MONTHS[0].NAME, "i"),
             })
         ).toBeVisible();
 
@@ -192,9 +201,9 @@ test.describe.serial("Expenses Feature", () => {
                 await expect(updateExpenseBtn).toBeVisible();
                 await expect(deleteExpenseBtn).toBeVisible();
 
-                await updateExpenseBtn.click();
+                const expenseForm = new ExpenseForm(page);
 
-                const expenseForm = new CreateExpenseForm(page);
+                await updateExpenseBtn.click();
 
                 const modalLabel = page.getByText(`Edit ${expenseLabel}`);
 
@@ -205,9 +214,11 @@ test.describe.serial("Expenses Feature", () => {
 
                 const updatedLabel = `${expenseLabel} Updated`;
 
-                await expenseForm.fillCreateExpenseForm({
+                await expenseForm.fillExpenseForm({
                     label: updatedLabel,
                 });
+
+                await page.waitForTimeout(5000);
 
                 await expenseForm.updateExpenseBtn.click();
 
@@ -217,7 +228,7 @@ test.describe.serial("Expenses Feature", () => {
 
                 await updateExpenseBtn.click();
 
-                await expenseForm.fillCreateExpenseForm({
+                await expenseForm.fillExpenseForm({
                     label: expenseLabel,
                 });
 
@@ -228,63 +239,62 @@ test.describe.serial("Expenses Feature", () => {
                 break;
             }
         }
+
+        await addExpense.removeDefaultExpense(EXPENSE.MONTHS[0].NUM);
+    });
+});
+
+test.describe("Delete Expense", () => {
+    test.beforeEach(async ({ addExpense, homePage, auth, page }) => {
+        await auth.authenticate(EMAILS[0], PASSWORD);
+        await page.waitForURL("/");
+        await homePage.createExpenseBtn.click();
+        await addExpense.createDefaultExpense(EXPENSE.MONTHS[1].NUM);
     });
 
-    test("successfully delete expense", async ({ page, browserName }) => {
-        await page.goto(`/${EXPENSE.MONTH.NAME}/${EXPENSE.YEAR}`);
-
+    test("successfully - delete expense", async ({
+        page,
+        browserName,
+        addExpense,
+    }) => {
+        await page.goto(`/${EXPENSE.MONTHS[1].NAME}/${EXPENSE.YEAR}`);
         await expect(
             page.getByRole("heading", {
-                name: new RegExp(EXPENSE.MONTH.NAME, "i"),
+                name: new RegExp(EXPENSE.MONTHS[1].NAME, "i"),
             })
         ).toBeVisible();
-
         const expenseCards = page.locator(".expense-card h3");
         const expenseCardsValues = await expenseCards.allTextContents();
-
         for (let i = 0; expenseCardsValues.length > i; i++) {
             const expenseLabel = `Test 1 - ${browserName}`;
-
             if (expenseLabel === expenseCardsValues[i]) {
                 const card = page.getByTestId(`expense-${i}`);
-
                 await expect(card.getByText(expenseLabel)).toBeVisible();
-
                 await card.getByText(expenseLabel).hover();
-
                 const updateExpenseBtn = card.locator("button#update-expense");
                 const deleteExpenseBtn = card.locator("button#delete-expense");
-
                 await expect(updateExpenseBtn).toBeVisible();
                 await expect(deleteExpenseBtn).toBeVisible();
-
                 await deleteExpenseBtn.click();
-
                 const modalTitle = page.getByRole("heading", {
                     name: `Delete ${expenseLabel}`,
                 });
-
                 await expect(modalTitle).toBeVisible();
-
                 const modalDeleteBtn = page.getByRole("button", {
                     name: "Delete",
                 });
-
                 await modalDeleteBtn.click();
-
                 const toastModal = page.getByText(
                     `${expenseLabel} successfully deleted.`
                 );
-
                 await expect(toastModal).toBeVisible();
                 await expect(modalTitle).not.toBeVisible();
-
                 await page.waitForTimeout(5000);
-
                 await expect(toastModal).not.toBeVisible();
-
                 break;
             }
         }
+
+        await addExpense.removeDefaultExpense(EXPENSE.MONTHS[1].NUM);
     });
 });
