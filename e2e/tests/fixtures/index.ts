@@ -4,6 +4,7 @@ import SignUpPage from "./pages/SignUpPage";
 import Authentication from "./Authentication";
 import HomePage from "./pages/HomePage";
 import Expense from "./Expense";
+import CategoriesPage from "./pages/CategoriesPage";
 
 const test = base.extend<{
     signInPage: SignInPage;
@@ -11,7 +12,7 @@ const test = base.extend<{
     auth: Authentication;
     homePage: HomePage;
     addExpense: Expense;
-    updateExpense: Expense;
+    categoriesPage: CategoriesPage;
 }>({
     signInPage: async ({ page }, use) => {
         await use(new SignInPage(page));
@@ -27,6 +28,9 @@ const test = base.extend<{
     },
     addExpense: async ({ page, browserName, request }, use) => {
         await use(new Expense("add-expense-modal", page, browserName, request));
+    },
+    categoriesPage: async ({ page }, use) => {
+        await use(new CategoriesPage(page));
     },
 });
 
