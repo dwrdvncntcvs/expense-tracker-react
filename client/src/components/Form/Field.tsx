@@ -19,6 +19,7 @@ const Field: FC<InputProps> = ({ icon, ...props }) => {
     return (
         <div className="flex flex-col w-full items-end">
             <div
+                id={`${name}-form-group`}
                 className={`border rounded-xl w-full overflow-auto flex ${
                     icon?.position === "end" ? "flex-row-reverse" : "flex-row"
                 } items-center ${error && touched ? "border-failure" : ""}`}
@@ -41,7 +42,9 @@ const Field: FC<InputProps> = ({ icon, ...props }) => {
                 />
             </div>
             {error && touched && (
-                <p className="text-failure text-sm">{error}</p>
+                <p id={`${name}-error-msg`} className="text-failure text-sm">
+                    {error}
+                </p>
             )}
         </div>
     );

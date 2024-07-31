@@ -7,7 +7,7 @@ const AuthLayout: FC<PropsWithChildren> = ({ children }) => {
 
     return (
         <div className="flex justify-center flex-col items-center h-full">
-            <img src={logo} alt="" />
+            <img src={logo} alt="Expense Tracker Logo" />
             {children}
             {pathname === "/sign-in" && (
                 <div className="mt-5 text-primary">
