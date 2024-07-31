@@ -69,6 +69,7 @@ const CategoriesSettings: FC = () => {
                         >
                             <p>{category.name}</p>
                             <button
+                                data-testid={`delete-${category.name}`}
                                 className="hover:bg-failure text-failure p-2 rounded-full hover:text-white transition-all duration-75"
                                 onClick={async () => {
                                     await handleDeleteCategory(

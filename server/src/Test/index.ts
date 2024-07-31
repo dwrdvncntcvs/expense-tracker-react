@@ -5,10 +5,13 @@ import ErrorService from "../utils/error";
 import Router from "../utils/routes";
 import mongoose from "mongoose";
 import { MONTHS } from "../variables";
+import CategoryService from "../Settings/Category/service";
+import Category from "../Settings/Category/model";
 
 const router = new Router("/test");
 const userService = new UserService();
 const expenseService = new ExpenseService();
+const categoriesService = new CategoryService();
 
 router.createRoutes(
     "post",
@@ -68,6 +71,23 @@ router.createRoutes(
                         MONTHS[+month - 1]
                     } of year ${year}`
                 );
+        } catch (err) {
+            next(ErrorService.BAD_REQUEST(err as string));
+        }
+    },
+    []
+);
+
+router.createRoutes(
+    "post",
+    "/categories/remove",
+    async (req, res, next) => {
+        const { name } = req.body;
+
+        try {
+            await Category.deleteOne({ name });
+
+            return res.status(200).send({ message: "Category removed" });
         } catch (err) {
             next(ErrorService.BAD_REQUEST(err as string));
         }
