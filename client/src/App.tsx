@@ -67,6 +67,7 @@ function App() {
                     </Route>
                     <Route path="/user/:year?" element={<Profile />} />
                 </Route>
+                <Route path="*" element={<h1>404</h1>} />
             </Routes>
             {!shouldNotDisplayCreateExpense.includes(pathname) &&
                 data?.data?.length > 0 && <CreateExpense />}
