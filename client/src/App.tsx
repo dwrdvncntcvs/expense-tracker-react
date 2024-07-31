@@ -33,6 +33,17 @@ function App() {
         "/sign-up",
     ];
 
+    const shouldDisplayCreateExpense = ["/", "/:month/:year"];
+
+    const shouldDisplay =
+        shouldDisplayCreateExpense.some((route) =>
+            new RegExp(`^${route.replace(/:[^\s/]+/g, "[^/]+")}$`).test(
+                pathname
+            )
+        ) &&
+        !shouldNotDisplayCreateExpense.includes(pathname) &&
+        data?.data?.length > 0;
+
     return (
         <MainLayout>
             <Routes>
@@ -69,8 +80,7 @@ function App() {
                 </Route>
                 <Route path="*" element={<h1>404</h1>} />
             </Routes>
-            {!shouldNotDisplayCreateExpense.includes(pathname) &&
-                data?.data?.length > 0 && <CreateExpense />}
+            {shouldDisplay && data?.data?.length > 0 && <CreateExpense />}
             <Toast />
         </MainLayout>
     );
