@@ -1,5 +1,5 @@
-import test, { expect } from "../fixtures";
-import { EMAILS, PASSWORD } from "../variables/auth";
+import test, { expect } from "../../fixtures";
+import { EMAILS, PASSWORD } from "../../variables/auth";
 
 test.describe("Categories Page", () => {
     test.beforeEach(async ({ auth, page, categoriesPage }) => {
