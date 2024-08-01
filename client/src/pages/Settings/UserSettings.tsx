@@ -1,12 +1,15 @@
 import ActionButtons from "@components/ActionButtons";
 import { Field, Form } from "@components/Form";
+import { useAppDispatch } from "@hooks/storeHooks";
 import SettingsContentLayout from "@layouts/SettingsContentLayout";
 import { useUpdateUserMutation } from "@store/queries/user";
+import { success } from "@store/slices/toast";
 import { useUser } from "@store/slices/user";
 import { FC } from "react";
 
 const UserSettings: FC = () => {
     const { user } = useUser();
+    const dispatch = useAppDispatch();
 
     const [updateUserRequest] = useUpdateUserMutation();
 
@@ -21,8 +24,16 @@ const UserSettings: FC = () => {
                     email: user?.email,
                 }}
                 onSubmit={async (val) => {
-                    if (user?.id)
-                        await updateUserRequest({ id: user.id, user: val });
+                    if (user?.id) {
+                        await updateUserRequest({
+                            id: user.id,
+                            user: val,
+                        });
+
+                        dispatch(
+                            success({ message: "User updated successfully" })
+                        );
+                    }
                 }}
             >
                 <div className="flex-1 w-1/2">

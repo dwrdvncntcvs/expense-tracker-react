@@ -51,6 +51,7 @@ const Toast: FC = () => {
                     const Icon = toastIconByType[toast.type];
                     return (
                         <div
+                            id={`${toast.type}-toast`}
                             className={`toast-item p-4 rounded border-1 flex gap-4 items-center relative ${
                                 toastTypeClass[toast.type]
                             }`}
