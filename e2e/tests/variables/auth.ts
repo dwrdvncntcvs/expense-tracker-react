@@ -1,8 +1,6 @@
-export const EMAILS = [
-    "johndoe@sample.com",
-    "janedoe@sample.com",
-    "johnnybravo@sample.com",
-];
+import { users } from "./user";
+
+export const EMAILS = users.map(({ email }) => email);
 export const PASSWORD = "sample1";
 
 export const MONTHS = {
