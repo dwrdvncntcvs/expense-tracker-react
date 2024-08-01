@@ -5,6 +5,7 @@ import Authentication from "./Authentication";
 import HomePage from "./pages/HomePage";
 import Expense from "./Expense";
 import CategoriesPage from "./pages/CategoriesPage";
+import PrivacyPage from "./pages/PrivacyPage";
 
 const test = base.extend<{
     signInPage: SignInPage;
@@ -13,6 +14,7 @@ const test = base.extend<{
     homePage: HomePage;
     addExpense: Expense;
     categoriesPage: CategoriesPage;
+    privacyPage: PrivacyPage;
 }>({
     signInPage: async ({ page }, use) => {
         await use(new SignInPage(page));
@@ -31,6 +33,9 @@ const test = base.extend<{
     },
     categoriesPage: async ({ page }, use) => {
         await use(new CategoriesPage(page));
+    },
+    privacyPage: async ({ page }, use) => {
+        await use(new PrivacyPage(page));
     },
 });
 

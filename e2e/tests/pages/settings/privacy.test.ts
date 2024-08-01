@@ -6,20 +6,21 @@ import { users } from "../../variables/user";
 const user = users[1];
 
 test.describe("Privacy Page", () => {
-    test(`Successful - Change User Password for ${user.username}`, async ({
-        page,
-        auth,
-        browserName,
-    }) => {
-        if (browserName !== "chromium") return;
-
+    test.beforeEach(async ({ auth, page, privacyPage }) => {
         await auth.authenticate(user.email, PASSWORD);
 
         await page.waitForURL("/");
 
-        const privacyPage = new PrivacyPage(page);
-
         await privacyPage.nav.goto("privacy");
+    });
+
+    test(`Successful - Change User Password for ${user.username}`, async ({
+        page,
+        auth,
+        browserName,
+        privacyPage,
+    }) => {
+        if (browserName !== "chromium") return;
 
         await expect(page.getByText("Privacy Settings")).toBeVisible();
 
@@ -63,5 +64,33 @@ test.describe("Privacy Page", () => {
         await expect(toastText).toBeVisible();
         await page.waitForTimeout(5000);
         await expect(toastText).not.toBeVisible();
+    });
+
+    test("Toggle password to text & vice versa", async ({ privacyPage }) => {
+        await privacyPage.formFields({
+            newPassword: "sample2",
+            oldPassword: PASSWORD,
+        });
+        await privacyPage.passwordToggle.click();
+
+        await expect(privacyPage.newPasswordField).toHaveAttribute(
+            "type",
+            "text"
+        );
+        await expect(privacyPage.oldPasswordField).toHaveAttribute(
+            "type",
+            "text"
+        );
+
+        await privacyPage.passwordToggle.click();
+
+        await expect(privacyPage.newPasswordField).toHaveAttribute(
+            "type",
+            "password"
+        );
+        await expect(privacyPage.oldPasswordField).toHaveAttribute(
+            "type",
+            "password"
+        );
     });
 });

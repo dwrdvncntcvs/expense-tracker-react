@@ -7,6 +7,7 @@ class PrivacyPage extends SettingsPage {
     oldPasswordField: Locator;
     newPasswordField: Locator;
 
+    passwordToggle: Locator;
     updateBtn: Locator;
 
     constructor(page: Page) {
@@ -17,6 +18,7 @@ class PrivacyPage extends SettingsPage {
         this.updateBtn = this.page.getByRole("button", {
             name: "Update Password",
         });
+        this.passwordToggle = this.page.locator("#toggle-password-btn");
     }
 
     async formFields(data: { oldPassword: string; newPassword: string }) {
