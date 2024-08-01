@@ -1,13 +1,12 @@
 import { Locator, Page } from "@playwright/test";
 import SettingsPage from "./SettingsPage";
 
-class CategoriesPage {
-    settingsPage: SettingsPage;
+class CategoriesPage extends SettingsPage {
     categoryField: Locator;
     addBtn: Locator;
 
-    constructor(private page: Page) {
-        this.settingsPage = new SettingsPage(this.page);
+    constructor(page: Page) {
+        super(page);
         this.categoryField = this.page.getByPlaceholder(
             "Enter category here..."
         );

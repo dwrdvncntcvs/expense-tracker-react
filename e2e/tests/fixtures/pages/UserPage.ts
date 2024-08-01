@@ -14,17 +14,16 @@ export interface UserValues {
     emailField: string;
 }
 
-class UserPage {
+class UserPage extends SettingsPage {
     usernameField: Locator;
     firstNameField: Locator;
     lastNameField: Locator;
     emailField: Locator;
     saveBtn: Locator;
 
-    settingsPage: SettingsPage;
+    constructor(page: Page) {
+        super(page);
 
-    constructor(private page: Page) {
-        this.settingsPage = new SettingsPage(this.page);
         this.usernameField = this.page.locator("#username");
         this.firstNameField = this.page.locator("#first_name");
         this.lastNameField = this.page.locator("#last_name");

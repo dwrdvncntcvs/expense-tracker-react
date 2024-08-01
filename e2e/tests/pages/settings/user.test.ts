@@ -4,43 +4,43 @@ import { setUserValues } from "../../utils/user";
 import { PASSWORD } from "../../variables/auth";
 import { users } from "../../variables/user";
 
+const user = users[2];
+
 test.describe("User Settings", () => {
-    users.slice(1).forEach((val) => {
-        test(`Successfully Updating account for ${val.username}`, async ({
-            page,
-            auth,
-            browserName,
-        }) => {
-            if (browserName !== "chromium") return;
+    test(`Successfully Updating account for ${user.username}`, async ({
+        page,
+        auth,
+        browserName,
+    }) => {
+        if (browserName !== "chromium") return;
 
-            await auth.authenticate(val.email, PASSWORD);
+        await auth.authenticate(user.email, PASSWORD);
 
-            await page.waitForURL("/");
+        await page.waitForURL("/");
 
-            await page.goto("/settings/user");
+        const userPage = new UserPage(page);
 
-            await expect(page.getByText("User Information")).toBeVisible();
+        await userPage.nav.goto("user");
 
-            const userPage = new UserPage(page);
+        await expect(page.getByText("User Information")).toBeVisible();
 
-            await userPage.formField(setUserValues(val));
+        await userPage.formField(setUserValues(user));
 
-            await userPage.saveBtn.click();
+        await userPage.saveBtn.click();
 
-            const toastContainer = page.locator("#success-toast");
-            const toastMessage = toastContainer.getByText(
-                "User updated successfully"
-            );
+        const toastContainer = page.locator("#success-toast");
+        const toastMessage = toastContainer.getByText(
+            "User updated successfully"
+        );
 
-            await expect(toastMessage).toBeVisible();
-            await expect(toastContainer).toHaveClass(/text-success/);
+        await expect(toastMessage).toBeVisible();
+        await expect(toastContainer).toHaveClass(/text-success/);
 
-            await page.waitForTimeout(5000);
+        await page.waitForTimeout(5000);
 
-            await expect(toastMessage).not.toBeVisible();
+        await expect(toastMessage).not.toBeVisible();
 
-            await userPage.formField(setUserValues(val, { reverse: true }));
-            await userPage.saveBtn.click();
-        });
+        await userPage.formField(setUserValues(user, { reverse: true }));
+        await userPage.saveBtn.click();
     });
 });

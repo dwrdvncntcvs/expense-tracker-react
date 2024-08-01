@@ -4,7 +4,7 @@ import SettingsNav from "../../components/SettingsNavigation";
 class SettingsPage {
     nav: SettingsNav;
 
-    constructor(private page: Page) {
+    constructor(protected page: Page) {
         this.nav = new SettingsNav(this.page);
     }
 }

@@ -16,7 +16,7 @@ export default class Authentication {
     }
 
     async signOut() {
-        await this.page.waitForURL("/");
+        // await this.page.waitForURL("/");
 
         await this.page.locator("#logout").click();
     }

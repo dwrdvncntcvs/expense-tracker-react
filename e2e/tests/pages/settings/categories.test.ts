@@ -5,7 +5,7 @@ test.describe("Categories Page", () => {
     test.beforeEach(async ({ auth, page, categoriesPage }) => {
         await auth.authenticate(EMAILS[0], PASSWORD);
         await page.waitForURL("/");
-        await categoriesPage.settingsPage.nav.goto("categories");
+        await categoriesPage.nav.goto("categories");
     });
 
     test("Create Category", async ({
