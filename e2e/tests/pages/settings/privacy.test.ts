@@ -14,6 +14,34 @@ test.describe("Privacy Page", () => {
         await privacyPage.nav.goto("privacy");
     });
 
+    test("Toggle password to text & vice versa", async ({ privacyPage }) => {
+        await privacyPage.formFields({
+            newPassword: "sample2",
+            oldPassword: PASSWORD,
+        });
+        await privacyPage.passwordToggle.click();
+
+        await expect(privacyPage.newPasswordField).toHaveAttribute(
+            "type",
+            "text"
+        );
+        await expect(privacyPage.oldPasswordField).toHaveAttribute(
+            "type",
+            "text"
+        );
+
+        await privacyPage.passwordToggle.click();
+
+        await expect(privacyPage.newPasswordField).toHaveAttribute(
+            "type",
+            "password"
+        );
+        await expect(privacyPage.oldPasswordField).toHaveAttribute(
+            "type",
+            "password"
+        );
+    });
+
     test(`Successful - Change User Password for ${user.username}`, async ({
         page,
         auth,
@@ -64,33 +92,5 @@ test.describe("Privacy Page", () => {
         await expect(toastText).toBeVisible();
         await page.waitForTimeout(5000);
         await expect(toastText).not.toBeVisible();
-    });
-
-    test("Toggle password to text & vice versa", async ({ privacyPage }) => {
-        await privacyPage.formFields({
-            newPassword: "sample2",
-            oldPassword: PASSWORD,
-        });
-        await privacyPage.passwordToggle.click();
-
-        await expect(privacyPage.newPasswordField).toHaveAttribute(
-            "type",
-            "text"
-        );
-        await expect(privacyPage.oldPasswordField).toHaveAttribute(
-            "type",
-            "text"
-        );
-
-        await privacyPage.passwordToggle.click();
-
-        await expect(privacyPage.newPasswordField).toHaveAttribute(
-            "type",
-            "password"
-        );
-        await expect(privacyPage.oldPasswordField).toHaveAttribute(
-            "type",
-            "password"
-        );
     });
 });
