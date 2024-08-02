@@ -1,5 +1,8 @@
-export const capitalize = (val: string) =>
-    `${val.charAt(0).toUpperCase()}${val.slice(1)}`;
+export const capitalize = (val: string, separator = " ", joiner = " ") =>
+    val
+        .split(separator)
+        .map((str) => `${str.charAt(0).toUpperCase()}${str.slice(1)}`)
+        .join(joiner);
 
 export const formatCurrency = (value: string, currency: string) =>
     Intl.NumberFormat("en", { style: "currency", currency }).format(+value);

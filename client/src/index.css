@@ -10,3 +10,32 @@
     padding: 0;
     margin: 0;
 }
+
+:root {
+    --light: gray;
+    --success: #2dd36f;
+    --warning: #ffc409;
+    --failure: #eb445a;
+    --plain: #fff;
+}
+
+.theme-default {
+    --primary: #164863;
+    --secondary: #427d9d;
+    --tertiary: #9bbec8;
+    --quaternary: #ddf2fd;
+}
+
+.theme-retro {
+    --primary: #ff8225;
+    --secondary: #b43f3f;
+    --tertiary: #173b45;
+    --quaternary: #f8eded;
+}
+
+.theme-ultra-violet {
+    --primary: #201e43;
+    --secondary: #134b70;
+    --tertiary: #508c9b;
+    --quaternary: #eeeeee;
+}

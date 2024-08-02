@@ -12,6 +12,7 @@ import {
 } from "@pages";
 import {
     CategoriesSettings,
+    PreferenceSettings,
     PrivacySettings,
     UserSettings,
 } from "@pages/Settings";
@@ -68,6 +69,10 @@ function App() {
                         <Route
                             path="categories"
                             element={<CategoriesSettings />}
+                        />
+                        <Route
+                            path="preferences"
+                            element={<PreferenceSettings />}
                         />
                     </Route>
                     <Route path="/:month/:year/" element={<ExpenseMonth />}>
