@@ -1,4 +1,4 @@
-import { Theme } from "@_types/theme";
+import { ColorWay, Theme } from "@_types/theme";
 import { useAppSelector } from "@hooks/storeHooks";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { userApi } from "@store/queries/user";
@@ -9,7 +9,7 @@ const themes: Theme = {
         primary: "#164863",
         secondary: "#427d9d",
         tertiary: "#9bbec8",
-        quaternary: "#ddf2fd",
+        quaternary: "#fff",
     },
     retro: {
         name: "theme-retro",
@@ -32,16 +32,32 @@ const themes: Theme = {
         tertiary: "#80AF81",
         quaternary: "#D6EFD8",
     },
+    army: {
+        name: "theme-army",
+        primary: "#1A3636",
+        secondary: "#40534C",
+        tertiary: "#677D6A",
+        quaternary: "#D6BD98",
+    },
+    github: {
+        name: "theme-github",
+        primary: "#2fbb4f",
+        secondary: "#0d74e7",
+        tertiary: "#24292d",
+        quaternary: "#2b3137",
+    },
 };
 
 export interface ThemeState {
     name: string;
     themes: Theme;
+    color: ColorWay;
 }
 
 const initialState: ThemeState = {
     name: "theme-default",
     themes,
+    color: themes.default,
 };
 
 const themeSlice = createSlice({
@@ -53,12 +69,16 @@ const themeSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addMatcher(
-            userApi.endpoints.isAuthenticated.matchFulfilled,
-            (state, action) => {
-                state.name = `theme-${action.payload.user.themeType}`;
-            }
-        );
+        builder
+            .addMatcher(
+                userApi.endpoints.isAuthenticated.matchFulfilled,
+                (state, action) => {
+                    state.name = `theme-${action.payload.user.themeType}`;
+                }
+            )
+            .addMatcher(userApi.endpoints.signOut.matchFulfilled, (state) => {
+                state.name = "theme-default";
+            });
     },
 });
 

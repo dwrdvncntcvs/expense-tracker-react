@@ -24,8 +24,8 @@ const ChartLayout: FC<ChartLayoutProps> = ({ children, amount }) => {
                         }`}
                         rounded="xl"
                         onClick={() => dispatch(changeChart("bar"))}
-                        bgColor={chart === "bar" ? "primary" : "plain"}
-                        color={chart === "bar" ? "plain" : "primary"}
+                        bgColor={chart === "bar" ? "primary" : "quaternary"}
+                        color={chart === "bar" ? "quaternary" : "primary"}
                     >
                         <HiChartBar size={20} />
                     </Button>
@@ -33,8 +33,8 @@ const ChartLayout: FC<ChartLayoutProps> = ({ children, amount }) => {
                         className="w-10 h-10 flex justify-center items-center"
                         rounded="xl"
                         onClick={() => dispatch(changeChart("pie"))}
-                        bgColor={chart === "pie" ? "primary" : "plain"}
-                        color={chart === "pie" ? "plain" : "primary"}
+                        bgColor={chart === "pie" ? "primary" : "quaternary"}
+                        color={chart === "pie" ? "quaternary" : "primary"}
                     >
                         <HiChartPie size={20} />
                     </Button>

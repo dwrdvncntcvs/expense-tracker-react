@@ -32,16 +32,13 @@ const PreferenceSettings: FC = () => {
                         return (
                             <button
                                 style={{
-                                    backgroundColor:
-                                        cardBackground?.key === theme.name
-                                            ? cardBackground.color
-                                            : "",
+                                    backgroundColor: theme.primary,
                                 }}
-                                className={`${
+                                className={`  ${
                                     `${theme.name}` === name
-                                        ? "bg-primary pointer-events-none outline outline-4 outline-offset-2 outline-primary"
+                                        ? "pointer-events-none outline outline-4 outline-offset-2 outline-primary"
                                         : ""
-                                } flex flex-col items-center gap-5 shadow-md rounded-xl p-4 border`}
+                                } flex flex-col items-center gap-5 shadow-md rounded-xl p-4`}
                                 key={key}
                                 onClick={async () => {
                                     console.log(key);
@@ -81,15 +78,7 @@ const PreferenceSettings: FC = () => {
                                         ))}
                                 </div>
                                 <p
-                                    className={`text-lg self-end rounded-full `}
-                                    style={{
-                                        color:
-                                            cardBackground?.key ===
-                                                theme.name ||
-                                            name === theme.name
-                                                ? "white"
-                                                : theme.primary,
-                                    }}
+                                    className={`text-lg self-end rounded-full text-plain`}
                                 >
                                     {capitalize(key, "-")}
                                 </p>

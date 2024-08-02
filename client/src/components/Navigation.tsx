@@ -4,8 +4,8 @@ import { FC } from "react";
 import { HiLogout } from "react-icons/hi";
 import { HiCog8Tooth, HiHome, HiUser } from "react-icons/hi2";
 import { NavLink } from "react-router-dom";
-import logo from "../assets/logo.svg";
 import { useUser } from "@store/slices/user";
+import { Logo } from "./Svgs";
 
 const Navigation: FC = () => {
     const { isAuthenticated } = useUser();
@@ -36,12 +36,8 @@ const Navigation: FC = () => {
     return (
         <div className="flex items-center justify-between h-full">
             <div>
-                <NavLink to="/">
-                    <img
-                        src={logo}
-                        alt="Expense Tracker Logo"
-                        className="object-fit w-16 h-w-16"
-                    />
+                <NavLink to="/" className="!text-primary">
+                    <Logo size="navigation" />
                 </NavLink>
             </div>
             {isAuthenticated && (
@@ -66,11 +62,11 @@ const Navigation: FC = () => {
                             </NavLink>
                         </li>
                     ))}
-                    <li className="flex items-center justify-center  h-10 ">
+                    <li className="flex items-center justify-center h-10 ">
                         <button
                             id="logout"
                             name="logout-btn"
-                            className="w-10 h-10 rounded-lg flex justify-center items-center  border-primary text-primary hover:border-failure hover:text-failure bg-plain"
+                            className="w-10 h-10 rounded-lg  flex justify-center items-center  border-primary text-primary hover:border-failure hover:text-failure "
                             type="button"
                             onClick={async () => {
                                 await signOutRequest();

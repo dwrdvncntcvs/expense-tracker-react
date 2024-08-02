@@ -23,7 +23,7 @@
     --primary: #164863;
     --secondary: #427d9d;
     --tertiary: #9bbec8;
-    --quaternary: #ddf2fd;
+    --quaternary: #fff;
 }
 
 .theme-retro {
@@ -41,8 +41,39 @@
 }
 
 .theme-forest {
-    --primary: #1A5319;
-    --secondary: #508D4E;
-    --tertiary: #80AF81;
-    --quaternary: #D6EFD8;
+    --primary: #1a5319;
+    --secondary: #508d4e;
+    --tertiary: #80af81;
+    --quaternary: #d6efd8;
 }
+
+.theme-army {
+    --primary: #1a3636;
+    --secondary: #40534c;
+    --tertiary: #677d6a;
+    --quaternary: #d6bd98;
+}
+
+.theme-github {
+    --primary: #2fbb4f;
+    --secondary: #0d74e7;
+    --tertiary: #24292d;
+    --quaternary: #2b3137;
+}
+
+.theme-github p,
+.theme-github input,
+.theme-github select,
+.theme-github textarea,
+.theme-github span,
+.theme-github label,
+.theme-github a,
+.theme-github h1,
+.theme-github h2,
+.theme-github h3,
+.theme-github h4,
+.theme-github h5,
+.theme-github h6 {
+    color: #ffffff !important;
+}
+    

@@ -111,7 +111,7 @@ const Profile: FC = () => {
                     </div>
                     <div className="flex gap-2 items-center">
                         <select
-                            className="font-bold text-3xl w-auto text-primary text-end appearance-none p-2"
+                            className="bg-quaternary font-bold text-3xl w-auto text-primary text-end appearance-none p-2"
                             name="year"
                             id="year"
                             value={params.year}
@@ -161,11 +161,11 @@ const Profile: FC = () => {
                 ) : (
                     <div className="grid grid-cols-2 grid-rows-2 h-full p-4 px-0 gap-2">
                         {isYearlyExpenseLoading || isYearlyExpenseFetching ? (
-                            <div className="col-span-1 row-span-1 border p-2 px-4 rounded-lg">
+                            <div className="col-span-1 row-span-1 border border-tertiary p-2 px-4 rounded-lg">
                                 <AnalyticsLoading />
                             </div>
                         ) : (
-                            <div className="col-span-1 row-span-1 border p-2 px-4 rounded-lg">
+                            <div className="col-span-1 row-span-1 border border-tertiary p-2 px-4 rounded-lg">
                                 <div className="w-full">
                                     <h1 className="text-xl font-bold text-primary py-2">
                                         Yearly Expenses
@@ -235,11 +235,11 @@ const Profile: FC = () => {
                             </div>
                         )}
                         {isMonthlyExpenseFetching || isMonthlyExpenseLoading ? (
-                            <div className="col-span-1 row-span-1 border p-2 px-4 rounded-lg">
+                            <div className="col-span-1 row-span-1 border border-tertiary p-2 px-4 rounded-lg">
                                 <AnalyticsLoading />
                             </div>
                         ) : (
-                            <div className="col-span-1 row-span-1 border p-2 px-4 rounded-lg">
+                            <div className="col-span-1 row-span-1 border border-tertiary p-2 px-4 rounded-lg">
                                 <div className="flex items-center justify-between">
                                     <h1 className="text-xl font-bold text-primary py-2">
                                         Monthly Expenses / Category
@@ -248,7 +248,7 @@ const Profile: FC = () => {
                                         <select
                                             name="month"
                                             id="month"
-                                            className="appearance-none p-2 text-center text-secondary"
+                                            className="bg-quaternary appearance-none p-2 text-center text-secondary"
                                             value={month}
                                             onChange={(e) => {
                                                 setMonth(e.target.value);
@@ -324,11 +324,11 @@ const Profile: FC = () => {
                         )}
                         {isYearlyExpenseCatFetching ||
                         isYearlyExpenseCatLoading ? (
-                            <div className="border col-span-2 rounded-lg p-2 px-4">
+                            <div className="border border-tertiary col-span-2 rounded-lg p-2 px-4">
                                 <AnalyticsLoading />
                             </div>
                         ) : (
-                            <div className="border col-span-2 rounded-lg p-2 px-4">
+                            <div className="border border-tertiary col-span-2 rounded-lg p-2 px-4">
                                 <h1 className="text-xl font-bold text-primary py-2">
                                     Yearly Expenses / Category
                                 </h1>

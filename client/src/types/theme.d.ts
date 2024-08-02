@@ -6,7 +6,13 @@ export interface ColorWay {
     quaternary: string;
 }
 
-export type ThemeType = "default" | "retro" | "ultra-violet" | "forest";
+export type ThemeType =
+    | "default"
+    | "retro"
+    | "ultra-violet"
+    | "forest"
+    | "army"
+    | "github";
 
 export type Theme = {
     [x in ThemeType]: ColorWay;

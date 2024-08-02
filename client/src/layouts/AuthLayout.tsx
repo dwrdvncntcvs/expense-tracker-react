@@ -1,13 +1,14 @@
 import { FC, PropsWithChildren } from "react";
-import logo from "../assets/logo.svg";
 import { Link, useLocation } from "react-router-dom";
+import { Logo } from "@components/Svgs";
 
 const AuthLayout: FC<PropsWithChildren> = ({ children }) => {
     const { pathname } = useLocation();
 
     return (
         <div className="flex justify-center flex-col items-center h-full">
-            <img src={logo} alt="Expense Tracker Logo" />
+            {/* <img src={logo} alt="Expense Tracker Logo" /> */}
+            <Logo />
             {children}
             {pathname === "/sign-in" && (
                 <div className="mt-5 text-primary">

@@ -45,7 +45,7 @@ const Modal: FC<ModalProps> = ({ name, title, children, options }) => {
                 <Portal element={modal!}>
                     <div
                         id={`${name}-modal`}
-                        className={`${themeName} fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-[500px] z-40 rounded-xl`}
+                        className={`${themeName} fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-quaternary w-[500px] z-40 rounded-xl`}
                     >
                         <div className="p-4 pb-0 relative">
                             {title && (
