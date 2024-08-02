@@ -1,18 +1,19 @@
 import { ColorWay, ThemeType } from "@_types/theme";
 import { capitalize } from "@common/utils/str";
-import { useAppDispatch } from "@hooks/storeHooks";
 import SettingsContentLayout from "@layouts/SettingsContentLayout";
-import { setTheme, useTheme } from "@store/slices/theme";
+import { useUpdateUserThemeMutation } from "@store/queries/user";
+import { useTheme } from "@store/slices/theme";
 import { FC, useState } from "react";
 import { HiSwatch } from "react-icons/hi2";
 
 const PreferenceSettings: FC = () => {
+    const [updateUserTheme] = useUpdateUserThemeMutation();
+
     const [cardBackground, setCardBackground] = useState<{
         key: string;
         color: string;
     } | null>(null);
 
-    const dispatch = useAppDispatch();
     const { themes, name } = useTheme();
 
     return (
@@ -42,12 +43,14 @@ const PreferenceSettings: FC = () => {
                                         : ""
                                 } flex flex-col items-center gap-5 shadow-md rounded-xl p-4 border`}
                                 key={key}
-                                onClick={() => {
+                                onClick={async () => {
+                                    console.log(key);
+
                                     setCardBackground({
                                         key: theme.name,
                                         color: theme.primary,
                                     });
-                                    dispatch(setTheme(`${theme.name}`));
+                                    await updateUserTheme(key);
                                 }}
                                 onMouseOver={() =>
                                     setCardBackground({
@@ -88,7 +91,7 @@ const PreferenceSettings: FC = () => {
                                                 : theme.primary,
                                     }}
                                 >
-                                    {capitalize(key, "_")}
+                                    {capitalize(key, "-")}
                                 </p>
                             </button>
                         );

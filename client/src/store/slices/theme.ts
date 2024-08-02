@@ -1,6 +1,7 @@
 import { Theme } from "@_types/theme";
 import { useAppSelector } from "@hooks/storeHooks";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { userApi } from "@store/queries/user";
 
 const themes: Theme = {
     default: {
@@ -17,7 +18,7 @@ const themes: Theme = {
         tertiary: "#173b45",
         quaternary: "#f8eded",
     },
-    ultra_violet: {
+    "ultra-violet": {
         name: "theme-ultra-violet",
         primary: "#201e43",
         secondary: "#134b70",
@@ -50,6 +51,14 @@ const themeSlice = createSlice({
         setTheme: (state, actions: PayloadAction<string>) => {
             state.name = actions.payload;
         },
+    },
+    extraReducers: (builder) => {
+        builder.addMatcher(
+            userApi.endpoints.isAuthenticated.matchFulfilled,
+            (state, action) => {
+                state.name = `theme-${action.payload.user.themeType}`;
+            }
+        );
     },
 });
 

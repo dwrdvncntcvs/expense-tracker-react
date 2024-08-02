@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { SECRET_KEY } from "../variables";
 import { handleValidationError } from "../utils/error/mongo";
 import { Error } from "mongoose";
-import { CreateUser, UpdateUser, User } from "../types/User/model";
+import { CreateUser, ThemeType, UpdateUser, User } from "../types/User/model";
 import { formatData } from "../database/mongoDb";
 
 class UserService {
@@ -102,6 +102,15 @@ class UserService {
         await this.model.deleteOne({ _id: userId });
 
         return { message: "User deleted successfully" };
+    }
+
+    async updateUserTheme(userId: string, theme: ThemeType) {
+        const data = await this.model.findOneAndUpdate(
+            { _id: userId },
+            { themeType: theme }
+        );
+
+        return formatData(data);
     }
 }
 

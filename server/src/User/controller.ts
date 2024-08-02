@@ -142,6 +142,19 @@ class UserController implements IUserController {
             next(ErrorService.BAD_REQUEST(err as any));
         }
     };
+
+    updateTheme: RequestHandler = async (req, res, next) => {
+        const { theme } = req.body;
+        const { id } = req.user;
+
+        try {
+            const data = await this.service.updateUserTheme(id, theme);
+
+            return res.status(200).send({ data: data?.themeType });
+        } catch (err) {
+            next(ErrorService.BAD_REQUEST(err as any));
+        }
+    };
 }
 
 export default UserController;
