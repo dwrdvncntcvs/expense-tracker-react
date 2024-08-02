@@ -1,18 +1,18 @@
 import { ColorWay, ThemeType } from "@_types/theme";
 import { capitalize } from "@common/utils/str";
+import { useAppDispatch } from "@hooks/storeHooks";
 import SettingsContentLayout from "@layouts/SettingsContentLayout";
 import { useUpdateUserThemeMutation } from "@store/queries/user";
 import { useTheme } from "@store/slices/theme";
+import { hideAll, success } from "@store/slices/toast";
+import { error } from "console";
 import { FC, useState } from "react";
 import { HiSwatch } from "react-icons/hi2";
 
 const PreferenceSettings: FC = () => {
     const [updateUserTheme] = useUpdateUserThemeMutation();
 
-    const [cardBackground, setCardBackground] = useState<{
-        key: string;
-        color: string;
-    } | null>(null);
+    const dispatch = useAppDispatch();
 
     const { themes, name } = useTheme();
 
@@ -43,19 +43,29 @@ const PreferenceSettings: FC = () => {
                                 onClick={async () => {
                                     console.log(key);
 
-                                    setCardBackground({
-                                        key: theme.name,
-                                        color: theme.primary,
-                                    });
-                                    await updateUserTheme(key);
+                                    const response = await updateUserTheme(key);
+
+                                    dispatch(hideAll());
+                                    if (response?.error) {
+                                        dispatch(
+                                            success({
+                                                message: `${capitalize(
+                                                    key,
+                                                    "-"
+                                                )} theme cannot be selected`,
+                                            })
+                                        );
+                                    }
+
+                                    dispatch(
+                                        success({
+                                            message: `${capitalize(
+                                                key,
+                                                "-"
+                                            )} theme selected`,
+                                        })
+                                    );
                                 }}
-                                onMouseOver={() =>
-                                    setCardBackground({
-                                        color: theme.primary,
-                                        key: theme.name,
-                                    })
-                                }
-                                onMouseLeave={() => setCardBackground(null)}
                             >
                                 <div className="flex justify-center gap-2 items-center">
                                     {Object.keys(theme)
