@@ -3,6 +3,7 @@ import Portal from "./Portal";
 import { HiX } from "react-icons/hi";
 import { useAppDispatch } from "@hooks/storeHooks";
 import { hide, useModal } from "@store/slices/modal";
+import { useTheme } from "@store/slices/theme";
 
 interface Option {
     closeCb: () => void;
@@ -17,6 +18,7 @@ interface ModalProps extends PropsWithChildren {
 const Modal: FC<ModalProps> = ({ name, title, children, options }) => {
     const dispatch = useAppDispatch();
     const _modal = useModal();
+    const { name: themeName } = useTheme();
 
     const overlay = document.getElementById("overlay");
     const modal = document.getElementById("modal");
@@ -43,7 +45,7 @@ const Modal: FC<ModalProps> = ({ name, title, children, options }) => {
                 <Portal element={modal!}>
                     <div
                         id={`${name}-modal`}
-                        className="theme-default fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-[500px] z-40 rounded-xl"
+                        className={`${themeName} fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-[500px] z-40 rounded-xl`}
                     >
                         <div className="p-4 pb-0 relative">
                             {title && (

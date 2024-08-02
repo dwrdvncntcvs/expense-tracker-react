@@ -1,9 +1,11 @@
 import { FC, PropsWithChildren } from "react";
 import Navigation from "@components/Navigation";
 import { useLocation } from "react-router-dom";
+import { useTheme } from "@store/slices/theme";
 
 const MainLayout: FC<PropsWithChildren> = ({ children }) => {
     const location = useLocation();
+    const {name} = useTheme()
 
     const excludeNavigationFromPath = [
         "/sign-in",
@@ -16,7 +18,7 @@ const MainLayout: FC<PropsWithChildren> = ({ children }) => {
         "w-full px-4 xl:w-[1200px] mx-auto h-full";
 
     return (
-        <div className="theme-default w-screen h-screen relative overflow-auto">
+        <div className={`${name} w-screen h-screen relative overflow-auto`}>
             {!shouldExclude && (
                 <div id="header" className="absolute top-0 left-0 w-full h-24">
                     <nav className={contentAndHeaderClassName}>

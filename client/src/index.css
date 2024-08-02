@@ -39,3 +39,10 @@
     --tertiary: #508c9b;
     --quaternary: #eeeeee;
 }
+
+.theme-forest {
+    --primary: #1A5319;
+    --secondary: #508D4E;
+    --tertiary: #80AF81;
+    --quaternary: #D6EFD8;
+}

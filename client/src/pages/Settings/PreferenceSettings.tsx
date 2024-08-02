@@ -1,64 +1,73 @@
+import { ColorWay, ThemeType } from "@_types/theme";
 import { capitalize } from "@common/utils/str";
+import { useAppDispatch } from "@hooks/storeHooks";
 import SettingsContentLayout from "@layouts/SettingsContentLayout";
-import { FC } from "react";
-
-interface ColorWay {
-    name: string;
-    primary: string;
-    secondary: string;
-    tertiary: string;
-    quaternary: string;
-}
-
-type ThemeType = "default" | "retro" | "ultra_violet";
-
-type Theme = {
-    [x in ThemeType]: ColorWay;
-};
+import { setTheme, useTheme } from "@store/slices/theme";
+import { FC, useState } from "react";
+import { HiSwatch } from "react-icons/hi2";
 
 const PreferenceSettings: FC = () => {
-    const themes: Theme = {
-        default: {
-            name: "theme-default",
-            primary: "#164863",
-            secondary: "#427d9d",
-            tertiary: "#9bbec8",
-            quaternary: "#ddf2fd",
-        },
-        retro: {
-            name: "theme-retro",
-            primary: "#ff8225",
-            secondary: "#b43f3f",
-            tertiary: "#173b45",
-            quaternary: "#f8eded",
-        },
-        ultra_violet: {
-            name: "theme-ultra-violet",
-            primary: "#201e43",
-            secondary: "#134b70",
-            tertiary: "#508c9b",
-            quaternary: "#eeeeee",
-        },
-    };
+    const [cardBackground, setCardBackground] = useState<{
+        key: string;
+        color: string;
+    } | null>(null);
+
+    const dispatch = useAppDispatch();
+    const { themes, name } = useTheme();
 
     return (
         <SettingsContentLayout title="Preferences">
             <div className="flex flex-col gap-4">
-                <h3>Color Theme</h3>
+                <h3 className="text-primary text-xl font-semibold flex gap-2 items-center">
+                    <span>
+                        <HiSwatch size={20} />
+                    </span>
+                    Color Theme
+                </h3>
                 <div className="grid grid-cols-3 gap-4">
                     {Object.keys(themes).map((key) => {
                         const theme = themes[key as ThemeType];
+
                         return (
                             <button
-                                className="flex flex-col items-center gap-5 shadow-md rounded-xl p-4 border"
+                                style={{
+                                    backgroundColor:
+                                        cardBackground?.key === theme.name
+                                            ? cardBackground.color
+                                            : "",
+                                }}
+                                className={`${
+                                    `${theme.name}` === name
+                                        ? "bg-primary pointer-events-none outline outline-4 outline-offset-2 outline-primary"
+                                        : ""
+                                } flex flex-col items-center gap-5 shadow-md rounded-xl p-4 border`}
                                 key={key}
+                                onClick={() => {
+                                    setCardBackground({
+                                        key: theme.name,
+                                        color: theme.primary,
+                                    });
+                                    dispatch(setTheme(`${theme.name}`));
+                                }}
+                                onMouseOver={() =>
+                                    setCardBackground({
+                                        color: theme.primary,
+                                        key: theme.name,
+                                    })
+                                }
+                                onMouseLeave={() => setCardBackground(null)}
                             >
-                                <div className="flex justify-center gap-2">
+                                <div className="flex justify-center gap-2 items-center">
                                     {Object.keys(theme)
                                         .filter((key) => key !== "name")
-                                        .map((_key) => (
+                                        .map((_key, i) => (
                                             <div
-                                                className="rounded-full h-10 w-10"
+                                                key={`${_key}-${key}`}
+                                                className={`rounded-full  ${
+                                                    i < 1
+                                                        ? "border-4 border-plain h-14 w-14"
+                                                        : "h-10 w-10"
+                                                }`}
                                                 style={{
                                                     background:
                                                         theme[
@@ -69,8 +78,15 @@ const PreferenceSettings: FC = () => {
                                         ))}
                                 </div>
                                 <p
-                                    className="text-lg p-2 px-4 bg-plain rounded-full"
-                                    style={{ color: theme.primary }}
+                                    className={`text-lg self-end rounded-full `}
+                                    style={{
+                                        color:
+                                            cardBackground?.key ===
+                                                theme.name ||
+                                            name === theme.name
+                                                ? "white"
+                                                : theme.primary,
+                                    }}
                                 >
                                     {capitalize(key, "_")}
                                 </p>

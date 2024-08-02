@@ -30,6 +30,7 @@ function App() {
         "/settings/user",
         "/settings/privacy",
         "/settings/categories",
+        "/settings/preferences",
         "/sign-in",
         "/sign-up",
     ];

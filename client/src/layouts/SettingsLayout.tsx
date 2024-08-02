@@ -32,16 +32,16 @@ const SettingsLayout: FC = () => {
 
     const settingsNavList: ILink[] = [
         {
-            name: "settings-preferences",
-            icon: HiPaintBrush,
-            label: "Preferences",
-            path: "/settings/preferences",
-        },
-        {
             name: "settings-user",
             icon: HiUser,
             label: "User",
             path: "/settings/user",
+        },
+        {
+            name: "settings-preferences",
+            icon: HiPaintBrush,
+            label: "Preferences",
+            path: "/settings/preferences",
         },
         {
             name: "settings-privacy",
