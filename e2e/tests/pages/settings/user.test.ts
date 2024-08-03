@@ -34,7 +34,7 @@ test.describe("User Settings", () => {
         );
 
         await expect(toastMessage).toBeVisible();
-        await expect(toastContainer).toHaveClass(/text-success/);
+        await expect(toastContainer).toHaveClass(/outline-success/);
 
         await page.waitForTimeout(5000);
 

@@ -8,7 +8,7 @@ class NavigationComponent {
     logoutBtn: Locator;
 
     constructor(private page: Page) {
-        this.logo = this.page.getByAltText("Expense Tracker Logo");
+        this.logo = this.page.locator("#app-logo");
         this.home = this.page.locator("a#home");
         this.settings = this.page.locator("a#settings");
         this.user = this.page.locator("a#user");
