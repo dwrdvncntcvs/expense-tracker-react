@@ -11,11 +11,7 @@ import {
     HiCheckCircle,
     HiExclamationCircle,
     HiExclamationTriangle,
-    HiInformationCircle,
-    HiOutlineCheckCircle,
-    HiOutlineExclamationCircle,
-    HiOutlineExclamationTriangle,
-    HiOutlineInformationCircle,
+    HiInformationCircle
 } from "react-icons/hi2";
 
 interface ThemModalProps {
