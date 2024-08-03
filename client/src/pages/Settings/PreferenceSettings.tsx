@@ -1,16 +1,22 @@
 import { ColorWay, ThemeType } from "@_types/theme";
 import { capitalize } from "@common/utils/str";
+import { ThemeModal } from "@components/Modal";
 import { useAppDispatch } from "@hooks/storeHooks";
 import SettingsContentLayout from "@layouts/SettingsContentLayout";
 import { useUpdateUserThemeMutation } from "@store/queries/user";
+import { show } from "@store/slices/modal";
 import { useTheme } from "@store/slices/theme";
 import { hideAll, success } from "@store/slices/toast";
-import { error } from "console";
 import { FC, useState } from "react";
 import { HiSwatch } from "react-icons/hi2";
 
 const PreferenceSettings: FC = () => {
-    const [updateUserTheme] = useUpdateUserThemeMutation();
+    const [selectedColorWay, setSelectedColorWay] = useState<
+        ColorWay | undefined
+    >(undefined);
+    const [selectedKey, setSelectedKey] = useState<ThemeType | undefined>(
+        undefined
+    );
 
     const dispatch = useAppDispatch();
 
@@ -43,28 +49,32 @@ const PreferenceSettings: FC = () => {
                                 onClick={async () => {
                                     console.log(key);
 
-                                    const response = await updateUserTheme(key);
+                                    setSelectedColorWay(theme);
+                                    setSelectedKey(key as ThemeType);
+                                    dispatch(show("theme-modal"));
 
-                                    dispatch(hideAll());
-                                    if (response?.error) {
-                                        dispatch(
-                                            success({
-                                                message: `${capitalize(
-                                                    key,
-                                                    "-"
-                                                )} theme cannot be selected`,
-                                            })
-                                        );
-                                    }
+                                    // const response = await updateUserTheme(key);
 
-                                    dispatch(
-                                        success({
-                                            message: `${capitalize(
-                                                key,
-                                                "-"
-                                            )} theme selected`,
-                                        })
-                                    );
+                                    // dispatch(hideAll());
+                                    // if (response?.error) {
+                                    //     dispatch(
+                                    //         success({
+                                    //             message: `${capitalize(
+                                    //                 key,
+                                    //                 "-"
+                                    //             )} theme cannot be selected`,
+                                    //         })
+                                    //     );
+                                    // }
+
+                                    // dispatch(
+                                    //     success({
+                                    //         message: `${capitalize(
+                                    //             key,
+                                    //             "-"
+                                    //         )} theme selected`,
+                                    //     })
+                                    // );
                                 }}
                             >
                                 <div className="flex justify-center gap-2 items-center">
@@ -97,6 +107,8 @@ const PreferenceSettings: FC = () => {
                     })}
                 </div>
             </div>
+
+            <ThemeModal color={selectedColorWay} themeType={selectedKey} />
         </SettingsContentLayout>
     );
 };
