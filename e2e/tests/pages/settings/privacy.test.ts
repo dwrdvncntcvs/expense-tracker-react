@@ -66,7 +66,7 @@ test.describe("Privacy Page", () => {
             "Password changed successfully"
         );
 
-        await expect(toastContainer).toHaveClass(/text-success/);
+        await expect(toastContainer).toHaveClass(/outline-success/);
         await expect(toastText).toBeVisible();
         await page.waitForTimeout(5000);
         await expect(toastText).not.toBeVisible();
@@ -88,7 +88,7 @@ test.describe("Privacy Page", () => {
         });
         await privacyPage.updateBtn.click();
 
-        await expect(toastContainer).toHaveClass(/text-success/);
+        await expect(toastContainer).toHaveClass(/outline-success/);
         await expect(toastText).toBeVisible();
         await page.waitForTimeout(5000);
         await expect(toastText).not.toBeVisible();

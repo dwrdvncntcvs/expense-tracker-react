@@ -93,6 +93,7 @@ const Logo: FC<LogoProps> = ({ size = "default" }) => {
 
     return (
         <svg
+            id="app-logo"
             width={logo[size].width}
             height={logo[size].height}
             viewBox={`0 0 ${logo[size].width} ${logo[size].height}`}
