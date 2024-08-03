@@ -1,3 +1,5 @@
+export type ThemeType = "default" | "retro" | "ultra-violet" | "forest";
+
 export interface User {
     id: string;
     first_name: string;
@@ -8,13 +10,14 @@ export interface User {
     refreshToken?: string | null;
     createdAt: string;
     updatedAt: string;
+    themeType: ThemeType;
 }
 
-export type UserOmittedValues = "id" | "createdAt" | "updatedAt";
+export type UserOmittedValues = "id" | "createdAt" | "updatedAt" | "themeType";
 
 export type CreateUser = Omit<User, UserOmittedValues>;
 
 export type UpdateUser = Omit<
     User,
-    "id" | "password" | "refreshToken" | "createdAt" | "updatedAt"
+    "id" | "password" | "refreshToken" | "createdAt" | "updatedAt" | "themeType"
 >;

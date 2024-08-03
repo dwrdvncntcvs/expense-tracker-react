@@ -11,8 +11,8 @@ const Textarea: FC<TextareaProps> = (props) => {
 
     return (
         <textarea
-            className={`border rounded-xl w-full overflow-auto flex items-center resize-none h-32 ${
-                error && touched ? "border-failure" : ""
+            className={`border rounded-xl w-full overflow-auto flex items-center resize-none bg-quaternary h-32 ${
+                error && touched ? "border-failure" : "border-primary"
             } w-full p-2 outline-none px-4`}
             {...props}
             onChange={onChange}

@@ -62,4 +62,8 @@ router.createRoutes(
     { isAuthenticated: true }
 );
 
+router.createRoutes("post", "/update-theme", userController.updateTheme, [], {
+    isAuthenticated: true,
+});
+
 export default router.routerDetails();

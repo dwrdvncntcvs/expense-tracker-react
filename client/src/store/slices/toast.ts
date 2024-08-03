@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "..";
 import { useAppSelector } from "@hooks/storeHooks";
+import { generateRandomId } from "@common/utils/str";
 
 type ToastType = "error" | "info" | "success" | "warning";
 
@@ -35,7 +36,7 @@ const slice = createSlice({
                 {
                     type: "success",
                     message,
-                    id: `${state.toasts.length + 1}`,
+                    id: generateRandomId(20),
                     timeout,
                 },
             ];
@@ -47,7 +48,7 @@ const slice = createSlice({
                 {
                     type: "error",
                     message,
-                    id: `${state.toasts.length + 1}`,
+                    id: generateRandomId(20),
                     timeout,
                 },
             ];
@@ -59,7 +60,7 @@ const slice = createSlice({
                 {
                     type: "warning",
                     message,
-                    id: `${state.toasts.length + 1}`,
+                    id: generateRandomId(20),
                     timeout,
                 },
             ];
@@ -71,7 +72,7 @@ const slice = createSlice({
                 {
                     type: "info",
                     message,
-                    id: `${state.toasts.length + 1}`,
+                    id: generateRandomId(20),
                     timeout,
                 },
             ];
@@ -81,10 +82,13 @@ const slice = createSlice({
                 (toast) => toast.id !== actions.payload
             );
         },
+        hideAll: (state) => {
+            state.toasts = state.toasts.slice(state.toasts.length - 1);
+        },
     },
 });
 
-export const { error, info, success, warning, hide } = slice.actions;
+export const { error, info, success, warning, hide, hideAll } = slice.actions;
 
 export const useToast = () =>
     useAppSelector((state: RootState) => state.toastReducer);

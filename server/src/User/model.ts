@@ -34,6 +34,11 @@ const UserSchema = new Schema(
         profileImage: {
             type: String,
         },
+        themeType: {
+            type: String,
+            enum: ["default", "retro", "ultra_violet", "forest"],
+            default: "default",
+        },
     },
     {
         timestamps: true,

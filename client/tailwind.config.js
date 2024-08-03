@@ -1,18 +1,18 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-    content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+    content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx,svg}"],
     theme: {
         extend: {
             colors: {
-                primary: "#164863",
-                secondary: "#427D9D",
-                tertiary: "#9BBEC8",
-                quaternary: "#DDF2FD",
-                light: "gray",
-                success: "#2DD36F",
-                warning: "#FFC409",
-                failure: "#EB445A",
-                plain: "#fff",
+                primary: "var(--primary)",
+                secondary: "var(--secondary)",
+                tertiary:"var(--tertiary)",
+                quaternary: "var(--quaternary)",
+                light: "var(--light)",
+                success: "var(--success)",
+                warning: "var(--warning)",
+                failure:"var(--failure)",
+                plain: "var(--plain)",
             },
         },
     },

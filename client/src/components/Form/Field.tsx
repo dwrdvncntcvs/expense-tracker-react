@@ -22,7 +22,9 @@ const Field: FC<InputProps> = ({ icon, ...props }) => {
                 id={`${name}-form-group`}
                 className={`border rounded-xl w-full overflow-auto flex ${
                     icon?.position === "end" ? "flex-row-reverse" : "flex-row"
-                } items-center ${error && touched ? "border-failure" : ""}`}
+                } items-center ${
+                    error && touched ? "border-failure" : "border-primary"
+                }`}
             >
                 {icon && (
                     <div className="px-4 text-primary">
@@ -33,7 +35,7 @@ const Field: FC<InputProps> = ({ icon, ...props }) => {
                     </div>
                 )}
                 <input
-                    className={`w-full p-2 outline-none px-4`}
+                    className={`w-full p-2 outline-none px-4 bg-quaternary`}
                     {...props}
                     onChange={onChange}
                     onBlur={onBlur}

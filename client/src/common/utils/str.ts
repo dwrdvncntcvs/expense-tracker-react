@@ -1,5 +1,8 @@
-export const capitalize = (val: string) =>
-    `${val.charAt(0).toUpperCase()}${val.slice(1)}`;
+export const capitalize = (val: string, separator = " ", joiner = " ") =>
+    val
+        .split(separator)
+        .map((str) => `${str.charAt(0).toUpperCase()}${str.slice(1)}`)
+        .join(joiner);
 
 export const formatCurrency = (value: string, currency: string) =>
     Intl.NumberFormat("en", { style: "currency", currency }).format(+value);
@@ -27,4 +30,19 @@ export const abbreviate = (val: string, numberOfChar?: number) => {
     }
 
     return str;
+};
+
+export const generateRandomId = (length: number = 10) => {
+    let result = "";
+    const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+        result += characters.charAt(
+            Math.floor(Math.random() * charactersLength)
+        );
+        counter += 1;
+    }
+    return result;
 };

@@ -15,8 +15,8 @@ const Select: FC<SelectProps> = ({ options, ...props }) => {
         <div className="flex flex-col w-full items-end">
             <select
                 {...props}
-                className={`border rounded-xl w-full overflow-auto flex items-center resize-none  ${
-                    error && touched ? "border-failure" : ""
+                className={`border  bg-quaternary rounded-xl w-full overflow-auto flex items-center resize-none  ${
+                    error && touched ? "border-failure" : "border-primary"
                 } w-full p-2 outline-none px-4`}
                 name={name}
                 onBlur={onBlur}

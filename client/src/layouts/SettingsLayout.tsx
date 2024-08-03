@@ -2,6 +2,7 @@ import { FC, useEffect } from "react";
 import {
     HiLockClosed,
     HiOutlineTrash,
+    HiPaintBrush,
     HiTag,
     HiTrash,
     HiUser,
@@ -31,11 +32,19 @@ const SettingsLayout: FC = () => {
 
     const settingsNavList: ILink[] = [
         {
+            name: "settings-user",
             icon: HiUser,
             label: "User",
             path: "/settings/user",
         },
         {
+            name: "settings-preferences",
+            icon: HiPaintBrush,
+            label: "Preferences",
+            path: "/settings/preferences",
+        },
+        {
+            name: "settings-privacy",
             icon: HiLockClosed,
             label: "Privacy",
             path: "/settings/privacy",
@@ -44,6 +53,7 @@ const SettingsLayout: FC = () => {
             icon: HiTag,
             label: "Categories",
             path: "/settings/categories",
+            name: "settings-categories",
         },
     ];
 
@@ -59,7 +69,7 @@ const SettingsLayout: FC = () => {
                                 className={({ isActive }) =>
                                     `flex items-center gap-2 px-5 p-2 transition-all duration-75 rounded-lg hover:bg-tertiary hover:text-white ${
                                         isActive
-                                            ? "bg-white font-bold text-primary pointer-events-none"
+                                            ? " font-bold text-primary pointer-events-none"
                                             : "text-black/80 "
                                     }`
                                 }

@@ -64,7 +64,7 @@ const SignUp: FC = () => {
                         name="password"
                     />
                     <button
-                        className="h-10 w-14 border flex items-center justify-center text-primary rounded-xl"
+                        className="h-10 w-14 bg-primary text-plain flex items-center justify-center  rounded-xl"
                         type="button"
                         onClick={() => {
                             setShowPass((val) => !val);

@@ -31,10 +31,12 @@ const Toast: FC = () => {
     }, [toasts]);
 
     const toastTypeClass = {
-        info: "bg-blue-300/10 border border-blue-300 text-blue-500",
-        success: "bg-success/10 border border-success text-success",
-        error: "bg-failure/10 border border-failure text-failure",
-        warning: "bg-warning/10 border border-warning text-warning",
+        info: "bg-tertiary text-primary outline outline-blue-400 outline-offset-2",
+        success:
+            "bg-tertiary text-primary outline outline-success outline-offset-2",
+        error: "bg-tertiary text-primary outline outline-failure outline-offset-2",
+        warning:
+            "bg-tertiary text-primary outline outline-warning outline-offset-2",
     };
 
     const toastIconByType = {
@@ -46,15 +48,15 @@ const Toast: FC = () => {
 
     return (
         toasts.length > 0 && (
-            <div className="fixed max-h-screen w-96 flex flex-col gap-4 left-0 bottom-0 p-4">
-                {toasts.map((toast) => {
+            <div className="fixed max-h-screen w-96 outline- flex flex-col gap-4 left-0 bottom-0 p-4">
+                {toasts.map((toast, i) => {
                     const Icon = toastIconByType[toast.type];
                     return (
                         <div
                             id={`${toast.type}-toast`}
                             className={`toast-item p-4 rounded border-1 flex gap-4 items-center relative ${
                                 toastTypeClass[toast.type]
-                            }`}
+                            } ${i === toasts.length -1 ? "w-full" : "w-80"}`}
                             key={toast.id}
                         >
                             <Icon size={30} />

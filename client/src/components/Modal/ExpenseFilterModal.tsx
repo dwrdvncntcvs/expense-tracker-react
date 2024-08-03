@@ -47,7 +47,7 @@ const ExpenseFilterModal: FC = () => {
                         options={[
                             {
                                 type: "button",
-                                bgColor: "plain",
+                                bgColor: "quaternary",
                                 color: "primary",
                                 label: "Cancel",
                                 onClick: () => {
@@ -56,7 +56,7 @@ const ExpenseFilterModal: FC = () => {
                             },
                             {
                                 type: "button",
-                                bgColor: "plain",
+                                bgColor: "quaternary",
                                 color: "primary",
                                 icon: HiArrowPath,
                                 onClick: () => {
