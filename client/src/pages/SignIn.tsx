@@ -43,7 +43,7 @@ const SignIn: FC = () => {
                         name="password"
                     />
                     <button
-                        className="h-10 w-14 border flex items-center justify-center text-primary rounded-xl"
+                        className="h-10 w-14 flex items-center justify-center bg-primary text-plain rounded-xl"
                         type="button"
                         onClick={() => {
                             setShowPass((val) => !val);
