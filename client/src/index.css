@@ -77,3 +77,7 @@
     color: #ffffff !important;
 }
     
+
+input::placeholder {
+    @apply text-tertiary
+}
