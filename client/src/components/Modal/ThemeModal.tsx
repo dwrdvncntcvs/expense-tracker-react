@@ -30,9 +30,41 @@ const ThemeModal: FC<ThemModalProps> = ({ color, themeType }) => {
         <Modal title="Sample" name="theme-modal" options={{ isCustom: true }}>
             <div
                 style={{ backgroundColor: color?.quaternary }}
-                className="w-[800px] h-[400px]  rounded-xl overflow-hidden relative"
+                className="w-[800px] h-[400px] rounded-xl overflow-hidden relative"
             >
-                <div className="h-10 w-1/2 mx-auto flex items-center justify-between">
+                <div className="bg-tertiary h-12 w-full flex-col ">
+                    <div className="flex items-center justify-between px-4 h-1/2">
+                        <div className="w-20 h-4 self-end bg-secondary rounded-t-lg"></div>
+                        <div className="flex gap-1 items-center">
+                            {Array.from(Array(3)).map((_, i) => (
+                                <div
+                                    key={i}
+                                    className="h-2 w-2 bg-primary rounded-full"
+                                ></div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="flex items-center bg-secondary px-2 h-1/2 gap-4">
+                        <div className="flex gap-1 items-center">
+                            {Array.from(Array(3)).map((_, i) => (
+                                <div
+                                    key={i}
+                                    className="h-3 w-3 bg-primary rounded-sm"
+                                ></div>
+                            ))}
+                        </div>
+                        <div className="w-full h-4 bg-quaternary rounded-full"></div>
+                        <div className="flex gap-1 items-center">
+                            {Array.from(Array(6)).map((_, i) => (
+                                <div
+                                    key={i}
+                                    className="h-3 w-3 bg-primary rounded-sm"
+                                ></div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+                <div className="h-12 w-1/2 mx-auto flex items-center justify-between">
                     <div
                         style={{ backgroundColor: color?.primary }}
                         className="h-6 w-6 rounded-full"
@@ -56,12 +88,12 @@ const ThemeModal: FC<ThemModalProps> = ({ color, themeType }) => {
                     </div>
                 </div>
                 <div className="h-full w-1/2 mx-auto flex flex-col gap-4 py-2 ">
-                    {Array.from(Array(4)).map((_, j) => (
+                    {Array.from(Array(2)).map((_, j) => (
                         <div key={j}>
                             <div className="flex h-4 w-full justify-between items-center">
                                 <div
                                     style={{ backgroundColor: color?.primary }}
-                                    className="w-20 h-3 rounded-xl"
+                                    className="w-16 h-4 rounded-xl"
                                 ></div>
                                 <div className="flex items-center gap-1">
                                     {Array.from(Array(2)).map((_, i) => (
@@ -93,6 +125,11 @@ const ThemeModal: FC<ThemModalProps> = ({ color, themeType }) => {
                     ))}
                 </div>
 
+                <div
+                    style={{ backgroundColor: color?.primary }}
+                    className="absolute w-12 h-12 bottom-4 right-4 rounded-full"
+                ></div>
+
                 <div className="absolute w-44 max-h-full flex flex-col gap-3 bottom-0 left-0 p-4">
                     {toasts.map((toastType) => (
                         <div
@@ -106,11 +143,8 @@ const ThemeModal: FC<ThemModalProps> = ({ color, themeType }) => {
                     ))}
                 </div>
             </div>
-            <div className="p-4 px-1 flex items-center justify-between">
-                <p
-                    style={{ color: color?.primary || "" }}
-                    className="font-bold text-xl mx-10"
-                >
+            <div className="p-4 px-4 flex items-center justify-between bg-primary mt-4 rounded-xl">
+                <p className="font-bold text-xl text-plain">
                     {color?.name
                         ? capitalize(color?.name, "-")
                               .split(" ")
@@ -123,7 +157,7 @@ const ThemeModal: FC<ThemModalProps> = ({ color, themeType }) => {
                     options={[
                         {
                             type: "button",
-                            bgColor: "tertiary",
+                            bgColor: "primary",
                             color: "plain",
                             label: "Cancel",
                             onClick: () => {
@@ -132,7 +166,7 @@ const ThemeModal: FC<ThemModalProps> = ({ color, themeType }) => {
                         },
                         {
                             type: "button",
-                            bgColor: "primary",
+                            bgColor: "secondary",
                             color: "plain",
                             label: "Apply Theme",
                             onClick: async () => {
