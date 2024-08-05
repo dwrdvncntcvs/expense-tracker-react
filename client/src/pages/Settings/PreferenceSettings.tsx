@@ -3,10 +3,8 @@ import { capitalize } from "@common/utils/str";
 import { ThemeModal } from "@components/Modal";
 import { useAppDispatch } from "@hooks/storeHooks";
 import SettingsContentLayout from "@layouts/SettingsContentLayout";
-import { useUpdateUserThemeMutation } from "@store/queries/user";
 import { show } from "@store/slices/modal";
 import { useTheme } from "@store/slices/theme";
-import { hideAll, success } from "@store/slices/toast";
 import { FC, useState } from "react";
 import { HiSwatch } from "react-icons/hi2";
 
@@ -37,10 +35,11 @@ const PreferenceSettings: FC = () => {
 
                         return (
                             <button
+                                id={theme.name}
                                 style={{
                                     backgroundColor: theme.primary,
                                 }}
-                                className={`  ${
+                                className={`${
                                     `${theme.name}` === name
                                         ? "pointer-events-none outline outline-4 outline-offset-2 outline-primary"
                                         : ""
@@ -51,30 +50,7 @@ const PreferenceSettings: FC = () => {
 
                                     setSelectedColorWay(theme);
                                     setSelectedKey(key as ThemeType);
-                                    dispatch(show("theme-modal"));
-
-                                    // const response = await updateUserTheme(key);
-
-                                    // dispatch(hideAll());
-                                    // if (response?.error) {
-                                    //     dispatch(
-                                    //         success({
-                                    //             message: `${capitalize(
-                                    //                 key,
-                                    //                 "-"
-                                    //             )} theme cannot be selected`,
-                                    //         })
-                                    //     );
-                                    // }
-
-                                    // dispatch(
-                                    //     success({
-                                    //         message: `${capitalize(
-                                    //             key,
-                                    //             "-"
-                                    //         )} theme selected`,
-                                    //     })
-                                    // );
+                                    dispatch(show("theme"));
                                 }}
                             >
                                 <div className="flex justify-center gap-2 items-center">
