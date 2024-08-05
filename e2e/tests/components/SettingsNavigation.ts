@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 
-type PageName = "categories" | "privacy" | "user";
+type PageName = "categories" | "privacy" | "user" | "preferences";
 
 class SettingsNav {
     constructor(private page: Page) {}

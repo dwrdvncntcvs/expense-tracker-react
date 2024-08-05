@@ -11,7 +11,7 @@ import {
     HiCheckCircle,
     HiExclamationCircle,
     HiExclamationTriangle,
-    HiInformationCircle
+    HiInformationCircle,
 } from "react-icons/hi2";
 
 interface ThemModalProps {
@@ -180,10 +180,10 @@ const ThemeModal: FC<ThemModalProps> = ({ color, themeType }) => {
             <div className="p-4 px-4 flex items-center justify-between bg-primary mt-4 rounded-xl">
                 <p className="font-bold text-xl text-plain">
                     {color?.name
-                        ? capitalize(color?.name, "-")
-                              .split(" ")
-                              .reverse()
-                              .join(" ")
+                        ? `${capitalize(
+                              color?.name.replace("theme-", ""),
+                              "-"
+                          )} Theme`
                         : null}
                 </p>
                 <ActionButtons

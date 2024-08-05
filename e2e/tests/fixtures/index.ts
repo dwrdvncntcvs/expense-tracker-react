@@ -6,6 +6,8 @@ import HomePage from "./pages/HomePage";
 import Expense from "./Expense";
 import CategoriesPage from "./pages/CategoriesPage";
 import PrivacyPage from "./pages/PrivacyPage";
+import SettingsPage from "./pages/SettingsPage";
+import PreferencePage from "./pages/PreferencePage";
 
 const test = base.extend<{
     signInPage: SignInPage;
@@ -15,6 +17,7 @@ const test = base.extend<{
     addExpense: Expense;
     categoriesPage: CategoriesPage;
     privacyPage: PrivacyPage;
+    preferencePage: PreferencePage;
 }>({
     signInPage: async ({ page }, use) => {
         await use(new SignInPage(page));
@@ -36,6 +39,9 @@ const test = base.extend<{
     },
     privacyPage: async ({ page }, use) => {
         await use(new PrivacyPage(page));
+    },
+    preferencePage: async ({ page }, use) => {
+        await use(new PreferencePage(page));
     },
 });
 
