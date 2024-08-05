@@ -40,7 +40,7 @@ const ThemeModal: FC<ThemModalProps> = ({ color, themeType }) => {
     };
 
     return (
-        <Modal title="Sample" name="theme-modal" options={{ isCustom: true }}>
+        <Modal title="Sample" name="theme" options={{ isCustom: true }}>
             <div
                 style={{ backgroundColor: color?.quaternary }}
                 className="w-[800px] h-[400px] rounded-xl overflow-hidden relative"
