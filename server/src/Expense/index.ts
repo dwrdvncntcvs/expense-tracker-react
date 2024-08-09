@@ -21,6 +21,7 @@ router.createRoutes(
     expenseController.expensesType,
     []
 );
+router.createRoutes("get", "/:id", expenseController.getExpense, []);
 router.createRoutes("post", "/", expenseController.addExpense, [
     imageMiddleware.upload("single"),
 ]);

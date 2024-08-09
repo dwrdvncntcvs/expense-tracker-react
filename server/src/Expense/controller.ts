@@ -173,6 +173,14 @@ class ExpenseController implements IExpenseController {
 
         return res.status(200).send({ data });
     };
+
+    getExpense: RequestHandler = async (req, res, next) => {
+        const { id } = req.params;
+
+        const data = await this.service.getExpense(id);
+
+        return res.status(200).send({ data });
+    };
 }
 
 export default ExpenseController;
