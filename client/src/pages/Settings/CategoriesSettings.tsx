@@ -10,7 +10,12 @@ import { useSettings } from "@store/slices/settings";
 import { success } from "@store/slices/toast";
 import { categoriesSchema } from "@validation/settings";
 import { FC, useCallback } from "react";
-import { HiListBullet, HiOutlineTrash, HiTag } from "react-icons/hi2";
+import {
+    HiListBullet,
+    HiOutlineTrash,
+    HiSquare3Stack3D,
+    HiTag,
+} from "react-icons/hi2";
 
 const CategoriesSettings: FC = () => {
     const dispatch = useAppDispatch();
@@ -32,7 +37,7 @@ const CategoriesSettings: FC = () => {
     );
 
     return (
-        <SettingsContentLayout title="Category">
+        <SettingsContentLayout icon={HiSquare3Stack3D} title="Category">
             <Form
                 initialValues={{ name: "" }}
                 validationSchema={categoriesSchema}

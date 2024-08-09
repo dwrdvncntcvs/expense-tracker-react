@@ -14,6 +14,7 @@ import {
     CategoriesSettings,
     PreferenceSettings,
     PrivacySettings,
+    TagsSettings,
     UserSettings,
 } from "@pages/Settings";
 import { useGetCategoriesQuery } from "@store/queries/categories";
@@ -31,6 +32,7 @@ function App() {
         "/settings/privacy",
         "/settings/categories",
         "/settings/preferences",
+        "/settings/tags",
         "/sign-in",
         "/sign-up",
     ];
@@ -75,6 +77,7 @@ function App() {
                             path="preferences"
                             element={<PreferenceSettings />}
                         />
+                        <Route path="tags" element={<TagsSettings />} />
                     </Route>
                     <Route path="/:month/:year/" element={<ExpenseMonth />}>
                         <Route

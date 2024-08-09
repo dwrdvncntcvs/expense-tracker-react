@@ -6,7 +6,7 @@ import { useUpdatePasswordMutation } from "@store/queries/user";
 import { error, success } from "@store/slices/toast";
 import { FC, useState } from "react";
 import { HiPencil } from "react-icons/hi";
-import { HiEye, HiEyeSlash } from "react-icons/hi2";
+import { HiEye, HiEyeSlash, HiLockClosed } from "react-icons/hi2";
 
 const PrivacySettings: FC = () => {
     const dispatch = useAppDispatch();
@@ -15,7 +15,7 @@ const PrivacySettings: FC = () => {
     const [updatePasswordRequest] = useUpdatePasswordMutation();
 
     return (
-        <SettingsContentLayout title="Privacy Settings">
+        <SettingsContentLayout icon={HiLockClosed} title="Privacy Settings">
             <Form
                 className="flex flex-wrap gap-4"
                 onSubmit={async (val, resetForm) => {

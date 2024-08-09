@@ -6,7 +6,7 @@ import SettingsContentLayout from "@layouts/SettingsContentLayout";
 import { show } from "@store/slices/modal";
 import { useTheme } from "@store/slices/theme";
 import { FC, useState } from "react";
-import { HiSwatch } from "react-icons/hi2";
+import { HiPaintBrush, HiSwatch } from "react-icons/hi2";
 
 const PreferenceSettings: FC = () => {
     const [selectedColorWay, setSelectedColorWay] = useState<
@@ -21,7 +21,7 @@ const PreferenceSettings: FC = () => {
     const { themes, name } = useTheme();
 
     return (
-        <SettingsContentLayout title="Preferences">
+        <SettingsContentLayout icon={HiPaintBrush} title="Preferences">
             <div className="flex flex-col gap-4">
                 <h3 className="text-primary text-xl font-semibold flex gap-2 items-center">
                     <span>
