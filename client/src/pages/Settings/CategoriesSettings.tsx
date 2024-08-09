@@ -57,7 +57,7 @@ const CategoriesSettings: FC = () => {
                     icon={{ position: "end", val: HiTag }}
                     name="name"
                 />
-                <button className="flex gap-2 text-sm items-center bg-primary text-white px-4 rounded-xl hover:bg-primary/80">
+                <button className="flex gap-2 text-sm items-center bg-primary h-10 text-white px-4 rounded-xl hover:bg-primary/80">
                     Add
                 </button>
             </Form>

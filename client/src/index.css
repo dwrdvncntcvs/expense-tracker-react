@@ -76,8 +76,7 @@
 .theme-github h6 {
     color: #ffffff !important;
 }
-    
 
 input::placeholder {
-    @apply text-tertiary
+    @apply text-secondary;
 }
