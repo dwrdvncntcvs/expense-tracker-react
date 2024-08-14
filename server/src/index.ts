@@ -1,6 +1,7 @@
 import userRoutes from "./User";
 import expenseRoutes from "./Expense";
 import categoryRoutes from "./Settings/Category";
+import tagRoutes from "./Settings/Tags";
 import testRoutes from "./Test";
 import TrackerApp from "./app";
 import { createConnection } from "./database/mongoDb";
@@ -20,6 +21,7 @@ new TrackerApp({
     .addRoute(userRoutes)
     .addRoute(expenseRoutes)
     .addRoute(categoryRoutes)
+    .addRoute(tagRoutes)
     .addRoute(ENV === "test" ? testRoutes : undefined)
     .addErrorHandler()
     .execute();
