@@ -1,11 +1,12 @@
 import { ICreateExpense } from "@_types/expense";
-import { Field, Form, ImageField } from "@components/Form";
+import { ComboBox, Field, Form, ImageField } from "@components/Form";
 import Select from "@components/Form/Select";
 import Textarea from "@components/Form/Textarea";
 import { useSettings } from "@store/slices/settings";
 import { FormikState } from "formik";
-import { FC } from "react";
+import { ChangeEvent, FC, KeyboardEventHandler, useState } from "react";
 import { expenseValidation } from "@validation/expense";
+import { Option } from "@_types/elements";
 
 type OnSubmit = (
     val: any,
@@ -27,11 +28,31 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
     editMode = false,
     imageUrl,
 }) => {
+    const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+    const [options, setOptions] = useState<Option[]>([]);
+
+    const [tagText, setTagText] = useState<string>("");
+
+    const handleTagChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setTagText(e.target.value);
+    };
+
+    const handleTagKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault(); // Prevent form submission
+
+            if (tagText.trim() !== "") {
+                setOptions((prev) => ({ ...prev, tagText }));
+                setTagText("");
+            }
+        }
+    };
+
     const { categories } = useSettings();
 
     return (
         <Form
-            className="w-full flex flex-wrap gap-2 space-y-2"
+            className="w-full grid grid-cols-2 gap-2 space-y-2"
             initialValues={
                 initialValues || {
                     categoryId: "",
@@ -39,26 +60,28 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
                     purchaseDate: "",
                     amount: "",
                     description: "",
+                    tags: [],
                 }
             }
             validationSchema={expenseValidation}
             onSubmit={onSubmit}
         >
-            <ImageField
-                name="expense-image"
-                imageUrl={imageUrl}
-                enableRemoveImage={!editMode}
-            />
-            <div className="flex flex-col gap-2 w-full">
-                <label htmlFor="label">Label</label>
+            <div className="flex flex-col col-span-2 gap-2 w-full">
+                <label className="text-sm text-tertiary" htmlFor="label">
+                    Label
+                </label>
                 <Field name="label" id="label" />
             </div>
-            <div className="flex flex-col gap-2 w-full">
-                <label htmlFor="description">Description</label>
+            <div className="flex flex-col col-span-2 gap-2 w-full">
+                <label className="text-sm text-tertiary" htmlFor="description">
+                    Description
+                </label>
                 <Textarea name="description" id="description" />
             </div>
             <div className="flex flex-col gap-2 flex-1">
-                <label htmlFor="categoryId">Category</label>
+                <label className="text-sm text-tertiary" htmlFor="categoryId">
+                    Category
+                </label>
                 <Select
                     name="categoryId"
                     id="categoryId"
@@ -71,7 +94,9 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
                 />
             </div>
             <div className="flex flex-col gap-2 flex-1">
-                <label htmlFor="purchaseDate">Purchase Date</label>
+                <label className="text-sm text-tertiary" htmlFor="purchaseDate">
+                    Purchase Date
+                </label>
                 <Field
                     type="date"
                     name="purchaseDate"
@@ -80,7 +105,9 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
                 />
             </div>
             <div className="flex flex-col gap-2 w-full">
-                <label htmlFor="amount">Price</label>
+                <label className="text-sm text-tertiary" htmlFor="amount">
+                    Price
+                </label>
                 <Field
                     name="amount"
                     id="amount"
@@ -88,7 +115,33 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
                     disabled={editMode}
                 />
             </div>
-            <div className="flex w-full items-center justify-end">
+            <div className="flex flex-col gap-2 w-full">
+                <label className="text-sm text-tertiary" htmlFor="tag">
+                    Tag
+                </label>
+                <ComboBox
+                    inputProps={{
+                        placeholder: "Enter tag here...",
+                        value: tagText,
+                        onChange: handleTagChange,
+                        onKeyDown: handleTagKeyDown,
+                    }}
+                    options={options}
+                    name="tags"
+                    setSelectedValues={setSelectedOptions}
+                />
+            </div>
+            <div className="flex flex-col gap-2 col-span-2">
+                {JSON.stringify(selectedOptions)}
+            </div>
+            <div className="col-span-2">
+                <ImageField
+                    name="expense-image"
+                    imageUrl={imageUrl}
+                    enableRemoveImage={!editMode}
+                />
+            </div>
+            <div className="flex w-full col-span-2 items-center justify-end">
                 <button
                     disabled={isLoading}
                     type="submit"

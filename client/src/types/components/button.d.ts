@@ -40,9 +40,10 @@ export interface SizeClass {
     xl: string;
 }
 
-export type Roundness = Size | "full";
+export type Roundness = Size | "full" | "none";
 export interface RoundnessClass extends SizeClass {
     full: string;
+    none: string;
 }
 
 export type Variant = "outlined" | "solid" | "none";
