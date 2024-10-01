@@ -1,14 +1,14 @@
 import { ICreateTag } from "@_types/Settings/tag";
 import api from "./api";
 
-type GetTagsParams = { search: string };
+type GetTagsParams = { search?: string };
 
 const tagsApi = api.injectEndpoints({
     endpoints: (build) => ({
-        getTags: build.query<any, GetTagsParams>({
-            query: (val) => {
+        getTags: build.query<any, GetTagsParams | void>({
+            query: (val?: GetTagsParams) => {
                 const urlParams = new URLSearchParams();
-                urlParams.set("search", val.search);
+                if (val?.search) urlParams.set("search", val.search);
 
                 return {
                     url: `/tags?${urlParams.toString()}`,

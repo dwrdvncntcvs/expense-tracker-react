@@ -1,12 +1,23 @@
+import { Option } from "@_types/elements";
 import { ICreateExpense } from "@_types/expense";
 import { ComboBox, Field, Form, ImageField } from "@components/Form";
 import Select from "@components/Form/Select";
 import Textarea from "@components/Form/Textarea";
+import { useAppDispatch } from "@hooks/storeHooks";
+import tagsApi, {
+    useCreateTagMutation,
+    useGetTagsQuery,
+} from "@store/queries/tags";
 import { useSettings } from "@store/slices/settings";
-import { FormikState } from "formik";
-import { ChangeEvent, FC, KeyboardEventHandler, useState } from "react";
 import { expenseValidation } from "@validation/expense";
-import { Option } from "@_types/elements";
+import { FormikState } from "formik";
+import {
+    ChangeEvent,
+    FC,
+    KeyboardEventHandler,
+    useEffect,
+    useState,
+} from "react";
 
 type OnSubmit = (
     val: any,
@@ -28,27 +39,69 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
     editMode = false,
     imageUrl,
 }) => {
-    const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-    const [options, setOptions] = useState<Option[]>([]);
+    const dispatch = useAppDispatch();
+    const { tags, categories } = useSettings();
 
     const [tagText, setTagText] = useState<string>("");
+    // debounced text
+    const [_tagText, set_TagText] = useState<string>("");
+    const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
-    const handleTagChange = (e: ChangeEvent<HTMLInputElement>) => {
+    useGetTagsQuery({ search: _tagText }, { skip: !_tagText });
+    const [tagMutation] = useCreateTagMutation();
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            dispatch(tagsApi.util.invalidateTags(["expense-tags"]));
+            set_TagText(tagText);
+        }, 200);
+
+        return () => clearTimeout(timeout);
+    }, [tagText]);
+
+    const handleTagChange = async (e: ChangeEvent<HTMLInputElement>) => {
         setTagText(e.target.value);
     };
 
-    const handleTagKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
+    const handleTagKeyDown: KeyboardEventHandler<HTMLInputElement> = async (
+        e
+    ) => {
+        const tagNames = tags.map((val) => val.name);
+
         if (e.key === "Enter") {
             e.preventDefault(); // Prevent form submission
 
-            if (tagText.trim() !== "") {
-                setOptions((prev) => ({ ...prev, tagText }));
-                setTagText("");
+            if (tagText.trim() === "") {
+                return;
             }
+
+            if (tagNames.includes(tagText)) {
+                console.log("Existing");
+                return;
+            }
+
+            const { data } = await tagMutation({ name: tagText });
+
+            setSelectedOptions((opts) => [...opts, data.data.id]);
+            setTagText("");
         }
     };
 
-    const { categories } = useSettings();
+    const tagOptions: Option[] = tags
+        .map((val) => ({
+            label: val.name,
+            value: val.id,
+        }))
+        .filter((option) => !selectedOptions.includes(option.value));
+
+    const categoryOptions: Option[] = categories.map((val) => {
+        return {
+            label: val.name,
+            value: val.id,
+        };
+    });
+
+    console.log(selectedOptions);
 
     return (
         <Form
@@ -85,12 +138,7 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
                 <Select
                     name="categoryId"
                     id="categoryId"
-                    options={categories.map((val) => {
-                        return {
-                            label: val.name,
-                            value: val.id,
-                        };
-                    })}
+                    options={categoryOptions}
                 />
             </div>
             <div className="flex flex-col gap-2 flex-1">
@@ -126,13 +174,20 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
                         onChange: handleTagChange,
                         onKeyDown: handleTagKeyDown,
                     }}
-                    options={options}
+                    options={tagOptions}
                     name="tags"
-                    setSelectedValues={setSelectedOptions}
+                    setSelectedValues={(values) => {
+                        setSelectedOptions(values);
+                        setTagText("");
+                    }}
                 />
             </div>
-            <div className="flex flex-col gap-2 col-span-2">
-                {JSON.stringify(selectedOptions)}
+            <div className="flex gap-2">
+                {selectedOptions.map((val) => (
+                    <div key={val} className="text-xs">
+                        {/* {getTagNameById(val)} */} {val}
+                    </div>
+                ))}
             </div>
             <div className="col-span-2">
                 <ImageField

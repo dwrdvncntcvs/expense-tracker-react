@@ -30,6 +30,9 @@ const settingsSlice = createSlice({
                 (category) => category.id !== actions.payload
             );
         },
+        resetTags: (state) => {
+            state.tags = [];
+        },
     },
     extraReducers: (builder) => {
         builder.addMatcher(
@@ -47,7 +50,7 @@ const settingsSlice = createSlice({
     },
 });
 
-export const { createCategory, removeCategory, setCategories } =
+export const { createCategory, removeCategory, setCategories, resetTags } =
     settingsSlice.actions;
 
 export const useSettings = () =>
