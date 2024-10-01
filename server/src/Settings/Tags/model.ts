@@ -14,6 +14,8 @@ const TagSchema = new Schema(
     { timestamps: true }
 );
 
+TagSchema.index({ name: "text" });
+
 TagSchema.pre("save", async function (next) {
     // Check for existing tag
     const existingTag = await TagModel.findOne({

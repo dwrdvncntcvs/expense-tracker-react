@@ -15,12 +15,15 @@ export default class TagService {
         return formatData(data);
     }
 
-    async getAll(userId: string) {
-        const data = await this.model.find({ userId });
+    async getAll(userId: string, search?: string) {
+        const data = await this.model.find({
+            userId,
+            name: { $regex: search || "", $options: "i" },
+        });
 
         return data.map((val) => formatData(val));
     }
-    
+
     async remove(tagId: string) {
         const result = await this.model.deleteOne({ _id: tagId });
 
