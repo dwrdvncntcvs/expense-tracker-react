@@ -30,3 +30,5 @@ const tagsApi = api.injectEndpoints({
 
 export const { useGetTagsQuery, useCreateTagMutation, useRemoveTagMutation } =
     tagsApi;
+
+export default tagsApi;

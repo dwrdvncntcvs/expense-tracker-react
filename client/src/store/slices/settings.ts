@@ -1,18 +1,22 @@
 import { ICategory } from "@_types/Settings/category";
+import { ITag } from "@_types/Settings/tag";
 import { useAppSelector } from "@hooks/storeHooks";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import categoriesApi from "@store/queries/categories";
+import tagsApi from "@store/queries/tags";
 
 export interface SettingsState {
     categories: ICategory[];
+    tags: ITag[];
 }
 
 const initialState: SettingsState = {
     categories: [],
+    tags: [],
 };
 
 const settingsSlice = createSlice({
-    name: "categories",
+    name: "settings",
     initialState,
     reducers: {
         setCategories: (state, actions: PayloadAction<ICategory[]>) => {
@@ -32,6 +36,12 @@ const settingsSlice = createSlice({
             categoriesApi.endpoints.getCategories.matchFulfilled,
             (state, actions) => {
                 state.categories = actions.payload.data;
+            }
+        );
+        builder.addMatcher(
+            tagsApi.endpoints.getTags.matchFulfilled,
+            (state, actions) => {
+                state.tags = actions.payload.data;
             }
         );
     },
