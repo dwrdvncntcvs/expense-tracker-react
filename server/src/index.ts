@@ -6,6 +6,9 @@ import TrackerApp from "./app";
 import { createConnection } from "./database/mongoDb";
 import { MONGO_URL, PORT, ENV, ALLOWED_ORIGINS } from "./variables";
 
+console.log("ENV: ", ENV);
+console.log("ALLOWED_ORIGIN: ", ALLOWED_ORIGINS);
+
 new TrackerApp({
     port: PORT,
     corsOpts: {
