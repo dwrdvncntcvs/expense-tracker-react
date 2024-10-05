@@ -10,6 +10,9 @@ dotenv.config({
 const PORT = +(process.env.PORT || 3000);
 const SECRET_KEY = process.env.SECRET_KEY as string;
 const MONGO_URL = process.env.MONGO_URL as string;
+const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(",")
+    : [];
 
 const FIREBASE_VARS = {
     API_KEY: process.env.F_API_KEY,
@@ -71,4 +74,5 @@ export {
     EXPENSE_TYPE,
     FIREBASE_VARS,
     ENV,
+    ALLOWED_ORIGINS,
 };

@@ -23,7 +23,7 @@ class Router implements RouterMethods {
 
     constructor(basePath = "/", private options = routerOptions) {
         this.router = express.Router();
-        this.basePath = basePath;
+        this.basePath = `/api${basePath}`;
         this.authenticationMiddleware = new AuthenticationMiddleware();
     }
 
@@ -42,7 +42,7 @@ class Router implements RouterMethods {
         this.routes.push(route);
 
         if (!options) options = this.options;
-        else options = { ...this.options, ...options }
+        else options = { ...this.options, ...options };
 
         if (options) {
             if (options.isAuthenticated)
