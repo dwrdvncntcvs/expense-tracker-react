@@ -26,7 +26,7 @@ class ExpenseService {
     };
 
     getExpense = async (expenseId: string) => {
-        const data = await this.model.findById(expenseId);
+        const data = await this.model.findById(expenseId).populate("Tags");
         return formatData(data);
     };
 
@@ -230,6 +230,20 @@ class ExpenseService {
                             },
                         },
                         {
+                            $lookup: {
+                                from: "tags", // The 'tags' collection to join
+                                localField: "tags", // The field in 'expenses' referencing the tags (an array of tag IDs)
+                                foreignField: "_id", // The field in 'tags' that matches 'tagIds'
+                                as: "matchedTags", // The output field where the tags data will be stored
+                            },
+                        },
+                        {
+                            $unwind: {
+                                path: "$matchedTags", // Unwind the 'tags' array into individual documents
+                                preserveNullAndEmptyArrays: true, // Keep expenses even if no tags are matched
+                            },
+                        },
+                        {
                             $group: {
                                 _id: null,
                                 expenses: { $push: "$$ROOT" },
@@ -253,6 +267,17 @@ class ExpenseService {
                                             category: {
                                                 id: "$$expense.category._id",
                                                 name: "$$expense.category.name",
+                                            },
+                                            tags: "$$expense.tags",
+                                            tagList: {
+                                                $map: {
+                                                    input: {$objectToArray: "$matchedTags"}, // Iterate over the matched tags array
+                                                    as: "tag",
+                                                    in: {
+                                                        id: "$$tag._id", // Get the _id of each tag
+                                                        name: "$$tag.name", // Get the name of each tag
+                                                    },
+                                                },
                                             },
                                             amount: "$$expense.amount",
                                             imageUrl: "$$expense.imageUrl",

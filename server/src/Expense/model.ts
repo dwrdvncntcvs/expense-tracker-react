@@ -1,7 +1,8 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
 import { required } from "../utils";
 import { Expense } from "../types/Expense/model";
 import { MONTHS } from "../variables";
+import { TagSchema } from "../Settings/Tags/model";
 
 const ExpenseSchema = new Schema(
     {
@@ -39,6 +40,7 @@ const ExpenseSchema = new Schema(
         imageUrl: {
             type: String,
         },
+        tags: [{ type: mongoose.Schema.Types.ObjectId, ref: "Tags" }],
     },
     {
         timestamps: true,

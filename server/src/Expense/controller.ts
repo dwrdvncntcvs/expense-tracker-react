@@ -55,8 +55,15 @@ class ExpenseController implements IExpenseController {
 
     addExpense: RequestHandler = async (req, res, next) => {
         const { id: userId } = req.user;
-        const { categoryId, amount, label, month, purchaseDate, description } =
-            req.body;
+        const {
+            categoryId,
+            amount,
+            label,
+            month,
+            purchaseDate,
+            description,
+            tags,
+        } = req.body;
         const file = req.file;
 
         const expense: CreateExpense = {
@@ -67,6 +74,7 @@ class ExpenseController implements IExpenseController {
             month,
             purchaseDate,
             description,
+            tags,
         };
 
         try {
@@ -103,13 +111,14 @@ class ExpenseController implements IExpenseController {
 
     putExpense: RequestHandler = async (req, res, next) => {
         const { expenseId } = req.params;
-        const { amount, label, description, categoryId } = req.body;
+        const { amount, label, description, categoryId, tags } = req.body;
 
         const updatedBody: UpdateExpense = {
             amount,
             label,
             description,
             categoryId,
+            tags,
         };
 
         try {

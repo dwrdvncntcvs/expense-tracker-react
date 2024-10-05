@@ -10,6 +10,7 @@ export interface Expense {
     createdAt: string;
     updatedAt: string;
     description: string;
+    tags: string[]
 }
 
 export type OmitExpenseMeta = "id" | "createdAt" | "updatedAt";

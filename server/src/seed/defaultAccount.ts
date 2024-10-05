@@ -53,6 +53,7 @@ const generateExpenses = (
                 month: i + 1,
                 purchaseDate: new Date(year, i, getRandomNumber(1, 28)),
                 userId,
+                tags: [],
             });
         });
     }

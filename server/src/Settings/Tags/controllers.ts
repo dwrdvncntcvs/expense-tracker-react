@@ -15,15 +15,13 @@ class TagController {
             return res.status(201).send({ data });
         } catch (e) {
             const err = e as Error;
-            next(ErrorService.BAD_REQUEST(err.message));    
+            next(ErrorService.BAD_REQUEST(err.message));
         }
     };
 
     getAllTag: RequestHandler = async (req, res, next) => {
         const user = req.user;
-        const { search } = req.query;   
-
-        console.log("Search : ", search);
+        const { search } = req.query;
 
         try {
             const data = await this.service.getAll(user.id, search as string);
