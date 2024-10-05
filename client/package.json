@@ -8,7 +8,7 @@
         "build": "vite build",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview",
-        "test:env": "set VITE_REACT_API_URL=http://localhost:5010&& vite"
+        "test:env": "set VITE_REACT_API_URL=http://localhost:5010/api&& vite"
     },
     "dependencies": {
         "@emotion/react": "^11.11.4",

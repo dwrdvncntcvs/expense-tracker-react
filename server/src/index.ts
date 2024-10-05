@@ -7,15 +7,12 @@ import TrackerApp from "./app";
 import { createConnection } from "./database/mongoDb";
 import { MONGO_URL, PORT, ENV, ALLOWED_ORIGINS } from "./variables";
 
-console.log("ENV: ", ENV);
-console.log("ALLOWED_ORIGIN: ", ALLOWED_ORIGINS);
-
 new TrackerApp({
     port: PORT,
     corsOpts: {
         credentials: true,
         origin:
-            ENV === "dev"
+            ENV === "dev" || ENV === "test"
                 ? ["http://localhost:8080", "http://localhost:5173"]
                 : ALLOWED_ORIGINS,
     },

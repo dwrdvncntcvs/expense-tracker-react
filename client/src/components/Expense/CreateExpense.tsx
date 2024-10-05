@@ -29,7 +29,9 @@ const CreateExpense: FC = () => {
 
                         val["month"] = month.getMonth() + 1;
 
-                        await createExpenseRequest(val);
+                        console.log(val);
+
+                        // await createExpenseRequest(val);
 
                         resetForm();
                         dispatch(

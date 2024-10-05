@@ -18,12 +18,14 @@ import {
     UserSettings,
 } from "@pages/Settings";
 import { useGetCategoriesQuery } from "@store/queries/categories";
+import { useGetTagsQuery } from "@store/queries/tags";
 import { useIsAuthenticatedQuery } from "@store/queries/user";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 function App() {
     const { isLoading } = useIsAuthenticatedQuery();
     const { data } = useGetCategoriesQuery();
+    useGetTagsQuery();
 
     const { pathname } = useLocation();
 

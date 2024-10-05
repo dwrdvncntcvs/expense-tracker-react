@@ -18,6 +18,7 @@ import {
     useEffect,
     useState,
 } from "react";
+import { Tag } from "@components/common";
 
 type OnSubmit = (
     val: any,
@@ -40,7 +41,7 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
     imageUrl,
 }) => {
     const dispatch = useAppDispatch();
-    const { tags, categories } = useSettings();
+    const { tags, searchTags, categories } = useSettings();
 
     const [tagText, setTagText] = useState<string>("");
     // debounced text
@@ -66,7 +67,7 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
     const handleTagKeyDown: KeyboardEventHandler<HTMLInputElement> = async (
         e
     ) => {
-        const tagNames = tags.map((val) => val.name);
+        const tagNames = searchTags.map((val) => val.name);
 
         if (e.key === "Enter") {
             e.preventDefault(); // Prevent form submission
@@ -87,7 +88,11 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
         }
     };
 
-    const tagOptions: Option[] = tags
+    const getTag = (id: string) => {
+        return tags.find((val) => id === val.id);
+    };
+
+    const tagOptions: Option[] = searchTags
         .map((val) => ({
             label: val.name,
             value: val.id,
@@ -101,7 +106,9 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
         };
     });
 
-    console.log(selectedOptions);
+    const removeTag = (id: string) => {
+        setSelectedOptions((val) => val.filter((opt) => opt !== id));
+    };
 
     return (
         <Form
@@ -176,19 +183,25 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
                     }}
                     options={tagOptions}
                     name="tags"
+                    selectedValues={selectedOptions}
                     setSelectedValues={(values) => {
                         setSelectedOptions(values);
                         setTagText("");
                     }}
                 />
             </div>
-            <div className="flex gap-2">
-                {selectedOptions.map((val) => (
-                    <div key={val} className="text-xs">
-                        {/* {getTagNameById(val)} */} {val}
-                    </div>
-                ))}
-            </div>
+            {selectedOptions.length > 0 && (
+                <div className="flex gap-2 border border-primary col-span-2 rounded-xl p-3 flex-wrap">
+                    {selectedOptions.map((val) => {
+                        const tag = getTag(val)!;
+                        return (
+                            <Tag key={tag.id} id={tag.id} onRemove={removeTag}>
+                                {tag.name}
+                            </Tag>
+                        );
+                    })}
+                </div>
+            )}
             <div className="col-span-2">
                 <ImageField
                     name="expense-image"

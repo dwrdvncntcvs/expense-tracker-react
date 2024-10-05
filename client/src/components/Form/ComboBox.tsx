@@ -1,13 +1,14 @@
 import { Option } from "@_types/elements";
 import Button from "@components/Button";
 import { useField } from "formik";
-import { FC, InputHTMLAttributes } from "react";
+import { FC, InputHTMLAttributes, useEffect } from "react";
 
 interface ComboBoxProps {
     inputProps: InputHTMLAttributes<HTMLInputElement>;
     name: string;
     options: Option[];
     setSelectedValues?: (values: string[]) => void;
+    selectedValues: string[];
 }
 
 const ComboBox: FC<ComboBoxProps> = ({
@@ -15,8 +16,13 @@ const ComboBox: FC<ComboBoxProps> = ({
     name,
     options,
     setSelectedValues,
+    selectedValues,
 }) => {
     const field = useField(name);
+
+    useEffect(() => {
+        field[2].setValue(selectedValues);
+    }, [selectedValues]);
 
     return (
         <div className="flex flex-col gap-1 relative">

@@ -8,11 +8,13 @@ import tagsApi from "@store/queries/tags";
 export interface SettingsState {
     categories: ICategory[];
     tags: ITag[];
+    searchTags: ITag[];
 }
 
 const initialState: SettingsState = {
     categories: [],
     tags: [],
+    searchTags: [],
 };
 
 const settingsSlice = createSlice({
@@ -44,7 +46,10 @@ const settingsSlice = createSlice({
         builder.addMatcher(
             tagsApi.endpoints.getTags.matchFulfilled,
             (state, actions) => {
-                state.tags = actions.payload.data;
+                const originalArgs = actions.meta.arg.originalArgs;
+                if (originalArgs !== undefined && "search" in originalArgs) {
+                    state.searchTags = actions.payload.data;
+                } else state.tags = actions.payload.data;
             }
         );
     },
