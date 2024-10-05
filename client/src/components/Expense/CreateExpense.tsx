@@ -31,7 +31,7 @@ const CreateExpense: FC = () => {
 
                         console.log(val);
 
-                        // await createExpenseRequest(val);
+                        await createExpenseRequest(val);
 
                         resetForm();
                         dispatch(

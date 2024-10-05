@@ -25,14 +25,15 @@ export default class TagService {
     }
 
     async remove(tagId: string) {
-        const result = await this.model.deleteOne({ _id: tagId });
+        const result = await this.model.findByIdAndDelete({ _id: tagId });
 
-        if (!result.acknowledged && result.deletedCount < 1) {
+        if (!result) {
             throw new Error("Tag was not deleted");
         }
 
         return {
             message: "Tag deleted successfully",
+            id: result.id,
         };
     }
 }

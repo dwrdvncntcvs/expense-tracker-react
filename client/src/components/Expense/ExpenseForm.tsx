@@ -83,6 +83,10 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
 
             const { data } = await tagMutation({ name: tagText });
 
+            if (!data.data) return;
+
+            console.log(data.data)
+
             setSelectedOptions((opts) => [...opts, data.data.id]);
             setTagText("");
         }

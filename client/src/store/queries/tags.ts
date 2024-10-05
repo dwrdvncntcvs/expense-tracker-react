@@ -19,11 +19,9 @@ const tagsApi = api.injectEndpoints({
         }),
         createTag: build.mutation<any, ICreateTag>({
             query: (val) => ({ url: "/tags", data: val, method: "post" }),
-            invalidatesTags: ["expense-tags"],
         }),
         removeTag: build.mutation<any, string>({
             query: (val) => ({ url: `/tags/${val}`, method: "delete" }),
-            invalidatesTags: ["expense-tags"],
         }),
     }),
 });

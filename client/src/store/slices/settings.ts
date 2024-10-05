@@ -52,6 +52,20 @@ const settingsSlice = createSlice({
                 } else state.tags = actions.payload.data;
             }
         );
+        builder.addMatcher(
+            tagsApi.endpoints.removeTag.matchFulfilled,
+            (state, actions) => {
+                state.tags = state.tags.filter(
+                    (val) => val.id !== actions.payload.data.id
+                );
+            }
+        );
+        builder.addMatcher(
+            tagsApi.endpoints.createTag.matchFulfilled,
+            (state, actions) => {
+                state.tags = [...state.tags, actions.payload.data];
+            }
+        );
     },
 });
 
