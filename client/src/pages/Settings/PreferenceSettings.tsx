@@ -3,10 +3,11 @@ import { capitalize } from "@common/utils/str";
 import { ThemeModal } from "@components/Modal";
 import { useAppDispatch } from "@hooks/storeHooks";
 import SettingsContentLayout from "@layouts/SettingsContentLayout";
+import SettingsSection from "@layouts/SettingsSection";
 import { show } from "@store/slices/modal";
 import { useTheme } from "@store/slices/theme";
 import { FC, useState } from "react";
-import { HiSwatch } from "react-icons/hi2";
+import { HiPaintBrush, HiSwatch } from "react-icons/hi2";
 
 const PreferenceSettings: FC = () => {
     const [selectedColorWay, setSelectedColorWay] = useState<
@@ -21,14 +22,8 @@ const PreferenceSettings: FC = () => {
     const { themes, name } = useTheme();
 
     return (
-        <SettingsContentLayout title="Preferences">
-            <div className="flex flex-col gap-4">
-                <h3 className="text-primary text-xl font-semibold flex gap-2 items-center">
-                    <span>
-                        <HiSwatch size={20} />
-                    </span>
-                    Color Theme
-                </h3>
+        <SettingsContentLayout icon={HiPaintBrush} title="Preferences">
+            <SettingsSection title="Color Theme" icon={HiSwatch}>
                 <div className="grid grid-cols-3 gap-4">
                     {Object.keys(themes).map((key) => {
                         const theme = themes[key as ThemeType];
@@ -82,7 +77,7 @@ const PreferenceSettings: FC = () => {
                         );
                     })}
                 </div>
-            </div>
+            </SettingsSection>
 
             <ThemeModal color={selectedColorWay} themeType={selectedKey} />
         </SettingsContentLayout>

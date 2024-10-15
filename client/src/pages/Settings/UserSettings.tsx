@@ -6,6 +6,7 @@ import { useUpdateUserMutation } from "@store/queries/user";
 import { success } from "@store/slices/toast";
 import { useUser } from "@store/slices/user";
 import { FC } from "react";
+import { HiUser } from "react-icons/hi2";
 
 const UserSettings: FC = () => {
     const { user } = useUser();
@@ -14,7 +15,7 @@ const UserSettings: FC = () => {
     const [updateUserRequest] = useUpdateUserMutation();
 
     return (
-        <SettingsContentLayout title="User Information">
+        <SettingsContentLayout icon={HiUser} title="User Information">
             <Form
                 className="flex flex-wrap gap-4"
                 initialValues={{

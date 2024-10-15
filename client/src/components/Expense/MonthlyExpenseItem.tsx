@@ -13,6 +13,7 @@ import { FC, useState } from "react";
 import { HiOutlinePencil } from "react-icons/hi";
 import { HiOutlinePhoto, HiOutlineTrash } from "react-icons/hi2";
 import ExpenseForm from "./ExpenseForm";
+import { Tag } from "@components/common";
 
 interface MonthlyExpenseItemProps {
     expense: IExpense;
@@ -91,6 +92,11 @@ const MonthlyExpenseItem: FC<MonthlyExpenseItemProps> = ({
                         <h3 className="text-2xl font-semibold text-primary text-start">
                             {expense.label}
                         </h3>
+                    </div>
+                    <div className="flex gap-1 px-3">
+                        {expense.tagList?.map((tag) => (
+                            <Tag id={tag.id}>{tag.name}</Tag>
+                        ))}
                     </div>
                     <div className="flex gap-4 p-4 justify-between items-end">
                         <p className="italic text-sm text-gray-600">

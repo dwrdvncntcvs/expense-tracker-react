@@ -1,18 +1,24 @@
 import { ICategory } from "@_types/Settings/category";
+import { ITag } from "@_types/Settings/tag";
 import { useAppSelector } from "@hooks/storeHooks";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import categoriesApi from "@store/queries/categories";
+import tagsApi from "@store/queries/tags";
 
 export interface SettingsState {
     categories: ICategory[];
+    tags: ITag[];
+    searchTags: ITag[];
 }
 
 const initialState: SettingsState = {
     categories: [],
+    tags: [],
+    searchTags: [],
 };
 
 const settingsSlice = createSlice({
-    name: "categories",
+    name: "settings",
     initialState,
     reducers: {
         setCategories: (state, actions: PayloadAction<ICategory[]>) => {
@@ -26,6 +32,9 @@ const settingsSlice = createSlice({
                 (category) => category.id !== actions.payload
             );
         },
+        resetTags: (state) => {
+            state.tags = [];
+        },
     },
     extraReducers: (builder) => {
         builder.addMatcher(
@@ -34,10 +43,33 @@ const settingsSlice = createSlice({
                 state.categories = actions.payload.data;
             }
         );
+        builder.addMatcher(
+            tagsApi.endpoints.getTags.matchFulfilled,
+            (state, actions) => {
+                const originalArgs = actions.meta.arg.originalArgs;
+                if (originalArgs !== undefined && "search" in originalArgs) {
+                    state.searchTags = actions.payload.data;
+                } else state.tags = actions.payload.data;
+            }
+        );
+        builder.addMatcher(
+            tagsApi.endpoints.removeTag.matchFulfilled,
+            (state, actions) => {
+                state.tags = state.tags.filter(
+                    (val) => val.id !== actions.payload.data.id
+                );
+            }
+        );
+        builder.addMatcher(
+            tagsApi.endpoints.createTag.matchFulfilled,
+            (state, actions) => {
+                state.tags = [...state.tags, actions.payload.data];
+            }
+        );
     },
 });
 
-export const { createCategory, removeCategory, setCategories } =
+export const { createCategory, removeCategory, setCategories, resetTags } =
     settingsSlice.actions;
 
 export const useSettings = () =>

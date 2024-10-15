@@ -14,15 +14,18 @@ import {
     CategoriesSettings,
     PreferenceSettings,
     PrivacySettings,
+    TagsSettings,
     UserSettings,
 } from "@pages/Settings";
 import { useGetCategoriesQuery } from "@store/queries/categories";
+import { useGetTagsQuery } from "@store/queries/tags";
 import { useIsAuthenticatedQuery } from "@store/queries/user";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 function App() {
     const { isLoading } = useIsAuthenticatedQuery();
     const { data } = useGetCategoriesQuery();
+    useGetTagsQuery();
 
     const { pathname } = useLocation();
 
@@ -31,6 +34,7 @@ function App() {
         "/settings/privacy",
         "/settings/categories",
         "/settings/preferences",
+        "/settings/tags",
         "/sign-in",
         "/sign-up",
     ];
@@ -75,6 +79,7 @@ function App() {
                             path="preferences"
                             element={<PreferenceSettings />}
                         />
+                        <Route path="tags" element={<TagsSettings />} />
                     </Route>
                     <Route path="/:month/:year/" element={<ExpenseMonth />}>
                         <Route

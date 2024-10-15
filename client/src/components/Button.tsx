@@ -55,6 +55,7 @@ const Button: FC<ButtonProp> = ({
         lg: "rounded-lg",
         md: "rounded-md",
         xl: "rounded-xl",
+        none: "rounded-none"
     };
 
     return (

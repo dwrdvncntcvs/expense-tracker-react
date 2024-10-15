@@ -3,6 +3,7 @@ import {
     HiLockClosed,
     HiOutlineTrash,
     HiPaintBrush,
+    HiSquare3Stack3D,
     HiTag,
     HiTrash,
     HiUser,
@@ -50,10 +51,16 @@ const SettingsLayout: FC = () => {
             path: "/settings/privacy",
         },
         {
-            icon: HiTag,
+            icon: HiSquare3Stack3D,
             label: "Categories",
             path: "/settings/categories",
             name: "settings-categories",
+        },
+        {
+            icon: HiTag,
+            label: "Tags",
+            path: "/settings/tags",
+            name: "settings-tags",
         },
     ];
 

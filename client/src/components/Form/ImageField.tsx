@@ -92,7 +92,7 @@ const ImageField: FC<InputProps> = ({
                     )}
                 </div>
             ) : (
-                <div className="relative h-60 object-center w-full border-gray-200 border rounded-lg overflow-auto">
+                <div className="relative h-36 object-center w-full border-gray-200 border rounded-lg overflow-auto">
                     {enableRemoveImage && (
                         <Button
                             className="p-2 rounded-full absolute bottom-2 right-2 "

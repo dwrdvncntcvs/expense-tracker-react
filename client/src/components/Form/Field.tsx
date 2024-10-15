@@ -35,7 +35,7 @@ const Field: FC<InputProps> = ({ icon, ...props }) => {
                     </div>
                 )}
                 <input
-                    className={`w-full p-2 outline-none px-4 bg-quaternary`}
+                    className={`w-full p-2 outline-none px-4 bg-quaternary h-10`}
                     {...props}
                     onChange={onChange}
                     onBlur={onBlur}
