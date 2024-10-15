@@ -238,12 +238,6 @@ class ExpenseService {
                             },
                         },
                         {
-                            $unwind: {
-                                path: "$matchedTags", // Unwind the 'tags' array into individual documents
-                                preserveNullAndEmptyArrays: true, // Keep expenses even if no tags are matched
-                            },
-                        },
-                        {
                             $group: {
                                 _id: null,
                                 expenses: { $push: "$$ROOT" },
@@ -271,7 +265,7 @@ class ExpenseService {
                                             tags: "$$expense.tags",
                                             tagList: {
                                                 $map: {
-                                                    input: {$objectToArray: "$matchedTags"}, // Iterate over the matched tags array
+                                                    input: "$$expense.matchedTags", // Directly map matched tags
                                                     as: "tag",
                                                     in: {
                                                         id: "$$tag._id", // Get the _id of each tag
