@@ -24,6 +24,8 @@ const FIREBASE_VARS = {
     APP_ID: process.env.F_APP_ID,
 };
 
+const IS_PROD = ENV === "prod" || ENV === "production";
+
 type MONTH_TYPE =
     | "JANUARY"
     | "FEBRUARY"
@@ -75,4 +77,5 @@ export {
     FIREBASE_VARS,
     ENV,
     ALLOWED_ORIGINS,
+    IS_PROD,
 };

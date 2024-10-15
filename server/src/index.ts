@@ -14,7 +14,7 @@ new TrackerApp({
     corsOpts: {
         credentials: true,
         origin:
-            ENV === "dev"
+            ENV === "dev" || ENV === "test"
                 ? ["http://localhost:8080", "http://localhost:5173"]
                 : ALLOWED_ORIGINS,
     },

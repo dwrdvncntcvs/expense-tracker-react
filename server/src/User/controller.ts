@@ -5,6 +5,7 @@ import UserService from "./service";
 import JwtService from "../services/jwt";
 import { RequestHandler } from "express";
 import FirebaseStorage from "../services/firebaseStorage";
+import { IS_PROD } from "../variables";
 
 const jwtService = new JwtService();
 class UserController implements IUserController {
@@ -32,12 +33,14 @@ class UserController implements IUserController {
 
         res.cookie("accessToken", accessToken, {
             httpOnly: true,
-            secure: false,
+            secure: IS_PROD,
+            sameSite: IS_PROD ? "none" : "lax",
             maxAge: 24 * 60 * 60 * 1000,
         });
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            secure: false,
+            secure: IS_PROD,
+            sameSite: IS_PROD ? "none" : "lax",
         });
 
         return res.send({ user: req.user as any, accessToken, refreshToken });
