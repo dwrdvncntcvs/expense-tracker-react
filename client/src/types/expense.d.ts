@@ -1,5 +1,6 @@
 import { PaginationData } from "./pagination";
 import { IExpenseCategory } from "./Settings/category";
+import { ITag } from "./Settings/tag";
 
 export interface IExpense {
     id: string;
@@ -12,7 +13,9 @@ export interface IExpense {
     createdAt: string;
     updatedAt: string;
     description: string;
-    imageUrl?:string;
+    imageUrl?: string;
+    tags?: string[];
+    tagList?: ITag[];
     category: IExpenseCategory;
 }
 
