@@ -12,6 +12,7 @@ import {
 } from "@pages";
 import {
     CategoriesSettings,
+    DataSettings,
     PreferenceSettings,
     PrivacySettings,
     TagsSettings,
@@ -35,6 +36,7 @@ function App() {
         "/settings/categories",
         "/settings/preferences",
         "/settings/tags",
+        "/settings/data",
         "/sign-in",
         "/sign-up",
     ];
@@ -80,6 +82,7 @@ function App() {
                             element={<PreferenceSettings />}
                         />
                         <Route path="tags" element={<TagsSettings />} />
+                        <Route path="data" element={<DataSettings />} />
                     </Route>
                     <Route path="/:month/:year/" element={<ExpenseMonth />}>
                         <Route

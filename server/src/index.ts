@@ -4,6 +4,7 @@ import categoryRoutes from "./Settings/Category";
 import tagRoutes from "./Settings/Tags";
 import testRoutes from "./Test";
 import TrackerApp from "./app";
+import exportJsonRoutes from "./Export/JSON";
 import { createConnection } from "./database/mongoDb";
 import { MONGO_URL, PORT, ENV, ALLOWED_ORIGINS } from "./variables";
 
@@ -25,6 +26,7 @@ new TrackerApp({
     .addRoute(expenseRoutes)
     .addRoute(categoryRoutes)
     .addRoute(tagRoutes)
+    .addRoute(exportJsonRoutes)
     .addRoute(ENV === "test" ? testRoutes : undefined)
     .addErrorHandler()
     .execute();

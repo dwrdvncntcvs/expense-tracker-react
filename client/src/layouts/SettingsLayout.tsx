@@ -1,27 +1,18 @@
+import { ILink } from "@_types/navigation";
 import { FC, useEffect } from "react";
 import {
+    HiArrowDownOnSquareStack,
     HiLockClosed,
-    HiOutlineTrash,
     HiPaintBrush,
     HiSquare3Stack3D,
     HiTag,
-    HiTrash,
     HiUser,
 } from "react-icons/hi2";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { ILink } from "@_types/navigation";
-import { useDeleteUserMutation } from "@store/queries/user";
-import { Modal } from "@components/Overlays";
-import { useAppDispatch } from "@hooks/storeHooks";
-import { hide, show } from "@store/slices/modal";
-import ActionButtons from "@components/ActionButtons";
 
 const SettingsLayout: FC = () => {
-    const dispatch = useAppDispatch();
     const location = useLocation();
     const navigate = useNavigate();
-
-    const [deleteUserRequest] = useDeleteUserMutation();
 
     useEffect(() => {
         const listOfUrlToTriggerNavigate = ["/settings", "/settings/"];
@@ -62,6 +53,12 @@ const SettingsLayout: FC = () => {
             path: "/settings/tags",
             name: "settings-tags",
         },
+        {
+            icon: HiArrowDownOnSquareStack,
+            label: "Data",
+            path: "/settings/data",
+            name: "settings-data",
+        },
     ];
 
     return (
@@ -87,45 +84,10 @@ const SettingsLayout: FC = () => {
                         </li>
                     ))}
                 </ul>
-                <button
-                    className="flex w-full text-sm items-center gap-2 text-failure px-5 p-2 rounded-lg hover:outline-2 hover:outline hover:outline-failure "
-                    onClick={() => {
-                        dispatch(show("delete-user"));
-                    }}
-                >
-                    <HiOutlineTrash size={18} />
-                    Delete Account{" "}
-                    <span className="text-gray-400 text-xs">(Everything)</span>
-                </button>
             </nav>
             <div className="p-2 w-full h-auto">
                 <Outlet />
             </div>
-            <Modal name="delete-user" title="Delete Account">
-                <div className="space-y-4">
-                    <p>Are you sure you want to delete your account?</p>
-                    <div className="flex items-end justify-end">
-                        <ActionButtons
-                            className="p-5 py-2"
-                            rounded="xl"
-                            options={[
-                                {
-                                    type: "button",
-                                    bgColor: "failure",
-                                    color: "plain",
-                                    icon: HiTrash,
-                                    label: "Delete",
-                                    onClick: async () => {
-                                        await deleteUserRequest();
-                                        dispatch(hide());
-                                        navigate("/sign-in");
-                                    },
-                                },
-                            ]}
-                        />
-                    </div>
-                </div>
-            </Modal>
         </div>
     );
 };

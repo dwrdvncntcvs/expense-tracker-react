@@ -14,7 +14,17 @@ const api = createApi({
         "expense-year-analytics-cat",
         "expense-tags",
     ],
-    endpoints: () => ({}),
+    endpoints: (build) => ({
+        downloadAllData: build.mutation<any, void>({
+            query: () => ({ url: "/export/json/all", method: "post" }),
+            transformResponse: (val) => {
+                console.log(val);
+                return val;
+            },
+        }),
+    }),
 });
+
+export const { useDownloadAllDataMutation } = api;
 
 export default api;
