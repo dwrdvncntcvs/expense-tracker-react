@@ -51,6 +51,7 @@ export type Variant = "outlined" | "solid" | "none";
 export interface ActionButtonOptions {
     color?: Color;
     bgColor?: BgColor;
+    outlineColor?: OutlineColor;
     type: "submit" | "button" | "reset";
     onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
     label?: string;

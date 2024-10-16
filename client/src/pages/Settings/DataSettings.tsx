@@ -1,12 +1,16 @@
+import { parseName } from "@common/utils/str";
 import ActionButtons from "@components/ActionButtons";
+import Button from "@components/Button";
 import { Modal } from "@components/Overlays";
 import { useAppDispatch } from "@hooks/storeHooks";
+import useExportData, { ExportMethod } from "@hooks/useExportData";
 import SettingsContentLayout from "@layouts/SettingsContentLayout";
 import SettingsSection from "@layouts/SettingsSection";
 import { useDeleteUserMutation } from "@store/queries/user";
 import { hide, show } from "@store/slices/modal";
+import { capitalize } from "lodash-es";
 import { FC } from "react";
-import { HiOutlineTrash, HiTrash } from "react-icons/hi";
+import { HiOutlineTrash, HiSave, HiTrash } from "react-icons/hi";
 import {
     HiArrowDownOnSquareStack,
     HiArrowDownTray,
@@ -19,6 +23,14 @@ const DataSettings: FC = () => {
     const [deleteUserRequest] = useDeleteUserMutation();
     const navigate = useNavigate();
 
+    const {
+        buttons,
+        exportMethod,
+        includedItems,
+        unSelectMethod,
+        exportDataFn,
+    } = useExportData();
+
     return (
         <SettingsContentLayout
             title="Manage your data"
@@ -29,7 +41,24 @@ const DataSettings: FC = () => {
                 title="Export"
                 icon={HiArrowUpTray}
                 description="You can export your data in JSON format, including your user information, all expenses, monthly expenses, categories, and tags."
-            ></SettingsSection>
+            >
+                <ActionButtons
+                    className="px-4 py-1"
+                    options={Object.keys(buttons).map((key) => {
+                        const _key = key as ExportMethod;
+                        return {
+                            type: "button",
+                            label: capitalize(parseName(_key, "_")),
+                            bgColor:
+                                exportMethod === _key ? "primary" : "plain",
+                            color: exportMethod === _key ? "plain" : "primary",
+                            outlineColor: "primary",
+                            onClick: buttons[_key],
+                            id: _key,
+                        };
+                    })}
+                />
+            </SettingsSection>
             <SettingsSection
                 title="Import"
                 icon={HiArrowDownTray}
@@ -51,6 +80,46 @@ const DataSettings: FC = () => {
                     <span className="text-gray-200 text-xs">(Everything)</span>
                 </button>
             </SettingsSection>
+            {exportMethod !== "" && (
+                <Modal
+                    name="export"
+                    title={`Export ${capitalize(parseName(exportMethod))}`}
+                    options={{
+                        closeCb: () => {
+                            unSelectMethod();
+                        },
+                    }}
+                >
+                    <div className="space-y-4">
+                        <p>
+                            This will download{" "}
+                            {exportMethod === "all"
+                                ? "everything from your account"
+                                : `all of your ${parseName(exportMethod)}`}{" "}
+                            in the application.
+                        </p>
+                        <div className="flex flex-col gap-2">
+                            <p className="font-semibold text-secondary">
+                                Included Items
+                            </p>
+                            <ul>
+                                {includedItems[exportMethod].map((item) => (
+                                    <li key={item} className="list-disc ml-10">
+                                        {item}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        <Button
+                            className="p-4 py-2 w-full justify-center items-center gap-2 flex "
+                            onClick={exportDataFn}
+                        >
+                            <HiSave size={24} />
+                            Download
+                        </Button>
+                    </div>
+                </Modal>
+            )}
             <Modal name="delete-user" title="Delete Account">
                 <div className="space-y-4">
                     <p>Are you sure you want to delete your account?</p>

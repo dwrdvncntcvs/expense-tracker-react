@@ -46,3 +46,11 @@ export const generateRandomId = (length: number = 10) => {
     }
     return result;
 };
+
+export const parseName = (
+    data: string,
+    separator: string = "_",
+    joiner: string = " "
+) => {
+    return data.split(separator).join(joiner);
+};

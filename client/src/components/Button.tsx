@@ -3,6 +3,8 @@ import {
     BgColorClass,
     Color,
     ColorClass,
+    OutlineColor,
+    OutlineColorClass,
     Roundness,
     RoundnessClass,
 } from "@_types/components/button";
@@ -15,12 +17,14 @@ interface ButtonProp
     bgColor?: BgColor;
     rounded?: Roundness;
     className?: string;
+    outlineColor?: OutlineColor;
 }
 
 const Button: FC<ButtonProp> = ({
     children,
     color = "plain",
     bgColor = "primary",
+    outlineColor = "plain",
     className,
     rounded = "lg",
     ...props
@@ -55,12 +59,32 @@ const Button: FC<ButtonProp> = ({
         lg: "rounded-lg",
         md: "rounded-md",
         xl: "rounded-xl",
-        none: "rounded-none"
+        none: "rounded-none",
+    };
+
+    const outlineClass: OutlineColorClass = {
+        primary:
+            "border border-2 border-primary hover:bg-primary transition-all hover:text-white",
+        secondary:
+            "border border-2 border-secondary hover:bg-secondary transition-all hover:text-white",
+        tertiary:
+            "border border-2 border-tertiary hover:bg-tertiary transition-all hover:text-white",
+        quaternary:
+            "border border-2 border-quaternary hover:bg-quaternary transition-all hover:text-white",
+        failure:
+            "border border-2 border-failure hover:bg-failure transition-all hover:text-white",
+        success:
+            "border border-2 border-success hover:bg-success transition-all hover:text-white",
+        warning:
+            "border border-2 border-warning hover:bg-warning transition-all hover:text-white",
+        plain: "border border-2 border-white hover:bg-gray/10",
+        light: "border border-2 border-light transition-all hover:text-white",
     };
 
     return (
         <button
             className={`
+                ${outlineClass[outlineColor]}
                 ${colorClass[color]} 
                 ${bgColorClass[bgColor]} 
                 ${roundedClass[rounded]} 
