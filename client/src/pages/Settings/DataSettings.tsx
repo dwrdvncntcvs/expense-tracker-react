@@ -50,7 +50,7 @@ const DataSettings: FC = () => {
                             type: "button",
                             label: capitalize(parseName(_key, "_")),
                             bgColor:
-                                exportMethod === _key ? "primary" : "plain",
+                                exportMethod === _key ? "primary" : "quaternary",
                             color: exportMethod === _key ? "plain" : "primary",
                             outlineColor: "primary",
                             onClick: buttons[_key],
