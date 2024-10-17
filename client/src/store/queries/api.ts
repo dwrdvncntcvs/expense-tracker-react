@@ -1,3 +1,4 @@
+import { ExportMethod } from "@_types/export";
 import { axiosBaseQuery } from "@api/index";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
@@ -15,8 +16,11 @@ const api = createApi({
         "expense-tags",
     ],
     endpoints: (build) => ({
-        downloadAllData: build.mutation<any, void>({
-            query: () => ({ url: "/export/json/all", method: "post" }),
+        downloadData: build.mutation<any, { method_type: ExportMethod }>({
+            query: ({ method_type }) => ({
+                url: `/export/json/${method_type}`,
+                method: "post",
+            }),
             transformResponse: (val) => {
                 console.log(val);
                 return val;
@@ -25,6 +29,6 @@ const api = createApi({
     }),
 });
 
-export const { useDownloadAllDataMutation } = api;
+export const { useDownloadDataMutation } = api;
 
 export default api;

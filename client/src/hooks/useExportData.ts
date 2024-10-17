@@ -1,30 +1,14 @@
 import { useState } from "react";
 import { useAppDispatch } from "./storeHooks";
 import { hide, show } from "@store/slices/modal";
-import { useDownloadAllDataMutation } from "@store/queries/api";
+import { useDownloadDataMutation } from "@store/queries/api";
 import { exportData } from "@common/utils/export";
-import { generateRandomId } from "@common/utils/str";
-
-export type ExportMethod =
-    | "all"
-    | "expenses"
-    | "yearly_expenses"
-    | "monthly_expenses"
-    | "categories"
-    | "tags";
-
-export type ImportBtn = {
-    [key in ExportMethod]: () => Promise<void> | void;
-};
-
-export type IncludedItem = {
-    [key in ExportMethod]: string[];
-};
+import { ExportMethod, ImportBtn, IncludedItem } from "@_types/export";
 
 export default function useExportData() {
     const dispatch = useAppDispatch();
 
-    const [downloadAllData] = useDownloadAllDataMutation();
+    const [downloadDataMt] = useDownloadDataMutation();
 
     const [selectedExportMethod, setSelectedExportMethod] = useState<
         ExportMethod | ""
@@ -55,33 +39,41 @@ export default function useExportData() {
     };
 
     const downloadData = async () => {
-        const id = generateRandomId().toLowerCase();
-        const date = new Date().toISOString().split("T")[0];
+        if (selectedExportMethod === "") return;
+        try {
+            const { data } = await downloadDataMt({
+                method_type: selectedExportMethod,
+            });
+            const date = data.date_exported.split("T")[0];
 
-        if (selectedExportMethod === "all") {
-            const { data } = await downloadAllData();
-            exportData(data, `${id}-${date}`);
+            exportData(data, `${data.export_id}-${date}`);
+        } catch (e) {
+            console.log(e);
+        } finally {
+            unSelectExportMethod();
+            dispatch(hide());
         }
-
-        dispatch(hide());
     };
 
     const exportBtns: Partial<ImportBtn> = {
         all: () => {
             handleSelectExportMethod("all");
         },
-        // expenses: () => {
-        //     handleSelectExportMethod("expenses");
-        // },
-        // monthly_expenses: () => {
-        //     handleSelectExportMethod("monthly_expenses");
-        // },
-        // categories: () => {
-        //     handleSelectExportMethod("categories");
-        // },
-        // tags: () => {
-        //     handleSelectExportMethod("tags");
-        // },
+        expenses: () => {
+            handleSelectExportMethod("expenses");
+        },
+        yearly_expenses: () => {
+            handleSelectExportMethod("yearly_expenses");
+        },
+        monthly_expenses: () => {
+            handleSelectExportMethod("monthly_expenses");
+        },
+        categories: () => {
+            handleSelectExportMethod("categories");
+        },
+        tags: () => {
+            handleSelectExportMethod("tags");
+        },
     };
 
     return {
