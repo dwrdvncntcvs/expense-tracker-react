@@ -1,8 +1,8 @@
-import { formatData } from "../../database/mongoDb";
 import ExpenseService from "../../Expense/service";
 import CategoryService from "../../Settings/Category/service";
 import TagService from "../../Settings/Tags/service";
 import UserService from "../../User/service";
+import { v4 } from "uuid";
 
 export default class ExportService {
     constructor(
@@ -21,7 +21,12 @@ export default class ExportService {
         ]);
 
         return JSON.stringify(
-            { ...user, ...expenses, ...categories, ...tags },
+            this.includeMetaFromData({
+                ...user,
+                ...expenses,
+                ...categories,
+                ...tags,
+            }),
             null,
             4
         );
@@ -34,20 +39,34 @@ export default class ExportService {
             this._tags(userId),
         ]);
 
-        return JSON.stringify({ ...expenses, ...categories, ...tags }, null, 4);
+        return JSON.stringify(
+            this.includeMetaFromData({
+                ...expenses,
+                ...categories,
+                ...tags,
+            }),
+            null,
+            4
+        );
     };
 
     exportCategories = async (userId: string) => {
         const data = await this._categories(userId);
 
-        return JSON.stringify(data, null, 4);
+        return JSON.stringify(this.includeMetaFromData({ ...data }), null, 4);
     };
 
     exportTags = async (userId: string) => {
         const data = await this._tags(userId);
 
-        return JSON.stringify(data, null, 4);
+        return JSON.stringify(this.includeMetaFromData({ ...data }), null, 4);
     };
+
+    private includeMetaFromData = (data: object) => ({
+        export_id: v4(),
+        date_exported: new Date(),
+        ...data,
+    });
 
     private _user = async (userId: string) => {
         try {
@@ -64,6 +83,7 @@ export default class ExportService {
     ) => {
         try {
             const data = await this.expense.getRawExpenses(userId, filters);
+
             return { expenses: data };
         } catch (e) {
             return { expenses: [] };
