@@ -15,6 +15,6 @@ const exportService = new ExportService(
 );
 const exportController = new ExportController(exportService);
 
-router.createRoutes("post", "/all", exportController.exportAll, []);
+router.createRoutes("post", "/:method_type", exportController.exportData, []);
 
 export default router.routerDetails();

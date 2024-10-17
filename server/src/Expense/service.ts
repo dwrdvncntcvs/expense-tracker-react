@@ -163,7 +163,10 @@ class ExpenseService {
         );
     };
 
-    getRawExpenses = async (userId: string, filters?: { year?: number }) => {
+    getRawExpenses = async (
+        userId: string,
+        filters?: { year?: number; month?: number }
+    ) => {
         const data = await this.model.find({
             userId,
             // purchaseDate: filters?.year

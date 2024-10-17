@@ -20,19 +20,33 @@ export default class ExportService {
             this._tags(userId),
         ]);
 
-        console.log(
-            JSON.stringify(
-                { ...user, ...expenses, ...categories, ...tags },
-                null,
-                4
-            )
-        );
-
         return JSON.stringify(
             { ...user, ...expenses, ...categories, ...tags },
             null,
             4
         );
+    };
+
+    exportExpenses = async (userId: string, year?: number, month?: number) => {
+        const [expenses, categories, tags] = await Promise.all([
+            this._expenses(userId, { year, month }),
+            this._categories(userId),
+            this._tags(userId),
+        ]);
+
+        return JSON.stringify({ ...expenses, ...categories, ...tags }, null, 4);
+    };
+
+    exportCategories = async (userId: string) => {
+        const data = await this._categories(userId);
+
+        return JSON.stringify(data, null, 4);
+    };
+
+    exportTags = async (userId: string) => {
+        const data = await this._tags(userId);
+
+        return JSON.stringify(data, null, 4);
     };
 
     private _user = async (userId: string) => {
@@ -44,7 +58,10 @@ export default class ExportService {
         }
     };
 
-    private _expenses = async (userId: string, filters?: { year?: number }) => {
+    private _expenses = async (
+        userId: string,
+        filters?: { year?: number; month?: number }
+    ) => {
         try {
             const data = await this.expense.getRawExpenses(userId, filters);
             return { expenses: data };

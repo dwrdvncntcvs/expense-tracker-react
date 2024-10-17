@@ -8,6 +8,7 @@ import { generateRandomId } from "@common/utils/str";
 export type ExportMethod =
     | "all"
     | "expenses"
+    | "yearly_expenses"
     | "monthly_expenses"
     | "categories"
     | "tags";
@@ -47,6 +48,7 @@ export default function useExportData() {
             "Tags",
         ],
         expenses: ["Expenses", "Monthly Expenses", "Categories", "Tags"],
+        yearly_expenses: ["Expenses", "Monthly Expenses", "Categories", "Tags"],
         monthly_expenses: ["Monthly Expenses", "Categories", "Tags"],
         categories: ["Categories"],
         tags: ["Tags"],
