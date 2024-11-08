@@ -15,6 +15,11 @@ export default class TagService {
         return formatData(data);
     }
 
+    async addBulk(tags: ICreateTag[]) {
+        const data = await this.model.create(...tags);
+        return data.map((tag) => formatData(tag));
+    }
+
     async getAll(userId: string, search?: string) {
         const data = await this.model.find({
             userId,

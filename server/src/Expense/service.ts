@@ -25,6 +25,15 @@ class ExpenseService {
         }
     };
 
+    createExpensesBulk = async (expensesData: CreateExpense[]) => {
+        try {
+            const data = await this.model.create(...expensesData);
+            return data.map((expense) => formatData(expense));
+        } catch (err) {
+            throw handleValidationError(err as Error.ValidationError);
+        }
+    };
+
     getExpense = async (expenseId: string) => {
         const data = await this.model.findById(expenseId).populate("Tags");
         return formatData(data);

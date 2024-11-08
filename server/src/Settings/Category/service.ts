@@ -19,6 +19,11 @@ class CategoryService {
         return formatData(data);
     }
 
+    async createBulk(categories: CreateCategory[]) {
+        const data = await this.model.create(...categories);
+        return data.map((category) => formatData(category));
+    }
+
     async remove(id: string) {
         const data = await this.model.findByIdAndDelete({ _id: id });
         return formatData(data);
