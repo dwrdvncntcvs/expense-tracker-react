@@ -11,13 +11,16 @@ class RouteLogger {
     }
 
     routeName() {
-        console.log(`${this.name} ROUTES`);
+        console.log("");
+        console.log(`--- ${this.name} ROUTES ---`);
     }
 
     routesPath() {
-        this.routes.forEach(({ method, fullPath }) => {
-            console.log(`${method} - ${fullPath}`);
-        });
+        if (this.routes.length > 0)
+            this.routes.forEach(({ method, fullPath }) => {
+                console.log(`${method} - ${fullPath}`);
+            });
+        else console.log("No Routes Found");
     }
 }
 
