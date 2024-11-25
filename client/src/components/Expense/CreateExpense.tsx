@@ -31,11 +31,18 @@ const CreateExpense: FC = () => {
 
                         console.log(val);
 
-                        await createExpenseRequest(val);
+                        const response = await createExpenseRequest(val);
+
+                        if (response.error) {
+                            console.log(response.error);
+                            return;
+                        }
 
                         resetForm();
                         dispatch(
-                            success({ message: "Expense successfully added" })
+                            success({
+                                message: "Expense successfully added",
+                            })
                         );
                         dispatch(hide());
                     }}
