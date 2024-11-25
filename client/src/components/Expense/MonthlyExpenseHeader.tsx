@@ -29,7 +29,7 @@ const MonthlyExpenseHeader: FC<MonthlyExpenseHeaderProps> = ({
     const setSearchParams = searchParamsArr[1];
 
     return (
-        <div className="flex items-center justify-between h-10">
+        <div className="flex md:gap-0 gap-2 md:flex-wrap flex-col justify-between md:h-10">
             <div className="flex gap-2 items-center">
                 <button
                     onClick={() => navigate("/", { replace: true })}
@@ -43,78 +43,84 @@ const MonthlyExpenseHeader: FC<MonthlyExpenseHeaderProps> = ({
                     </h2>
                 )}
             </div>
-            <div className="flex gap-4 items-center">
+            <div className="flex gap-4 items-center md:justify-end justify-between">
                 {totalAmount && (
                     <span className="text-sm ml-2 text-gray-600 font-normal">
                         Total: {formatCurrency(totalAmount, "PHP")}
                     </span>
                 )}
-                <ActionButtons
-                    rounded="full"
-                    className="h-10 w-10 flex justify-center items-center"
-                    options={[
-                        {
-                            type: "button",
-                            bgColor: "secondary",
-                            color: "plain",
-                            icon: HiFunnel,
-                            onClick: () => {
-                                dispatch(show("expense-filter"));
-                            },
-                        },
-                        {
-                            type: "button",
-                            bgColor: "secondary",
-                            color: "plain",
-                            icon: HiTrendingUp,
-                            onClick: () => {
-                                navigate(`analytics`);
-                            },
-                        },
-                    ]}
-                />
-                {(pagination.hasNext || pagination.hasPrev) && (
+                <div className="flex md:gap-4 gap-2">
                     <ActionButtons
-                        className="h-10 w-10 flex justify-center items-center"
                         rounded="full"
+                        className="h-10 w-10 flex justify-center items-center"
                         options={[
                             {
                                 type: "button",
-                                bgColor: "primary",
+                                bgColor: "secondary",
                                 color: "plain",
-                                icon: HiArrowLeft,
-                                disabled: !pagination.hasPrev,
+                                icon: HiFunnel,
                                 onClick: () => {
-                                    if (pagination.hasPrev)
-                                        setSearchParams((val) => {
-                                            val.set(
-                                                "page",
-                                                (pagination.page - 1).toString()
-                                            );
-                                            return val;
-                                        });
+                                    dispatch(show("expense-filter"));
                                 },
                             },
                             {
                                 type: "button",
-                                bgColor: "primary",
+                                bgColor: "secondary",
                                 color: "plain",
-                                icon: HiArrowRight,
-                                disabled: !pagination.hasNext,
+                                icon: HiTrendingUp,
                                 onClick: () => {
-                                    if (pagination.hasNext)
-                                        setSearchParams((val) => {
-                                            val.set(
-                                                "page",
-                                                (pagination.page + 1).toString()
-                                            );
-                                            return val;
-                                        });
+                                    navigate(`analytics`);
                                 },
                             },
                         ]}
                     />
-                )}
+                    {(pagination.hasNext || pagination.hasPrev) && (
+                        <ActionButtons
+                            className="h-10 w-10 md:flex justify-center items-center hidden"
+                            rounded="full"
+                            options={[
+                                {
+                                    type: "button",
+                                    bgColor: "primary",
+                                    color: "plain",
+                                    icon: HiArrowLeft,
+                                    disabled: !pagination.hasPrev,
+                                    onClick: () => {
+                                        if (pagination.hasPrev)
+                                            setSearchParams((val) => {
+                                                val.set(
+                                                    "page",
+                                                    (
+                                                        pagination.page - 1
+                                                    ).toString()
+                                                );
+                                                return val;
+                                            });
+                                    },
+                                },
+                                {
+                                    type: "button",
+                                    bgColor: "primary",
+                                    color: "plain",
+                                    icon: HiArrowRight,
+                                    disabled: !pagination.hasNext,
+                                    onClick: () => {
+                                        if (pagination.hasNext)
+                                            setSearchParams((val) => {
+                                                val.set(
+                                                    "page",
+                                                    (
+                                                        pagination.page + 1
+                                                    ).toString()
+                                                );
+                                                return val;
+                                            });
+                                    },
+                                },
+                            ]}
+                        />
+                    )}
+                </div>
             </div>
         </div>
     );

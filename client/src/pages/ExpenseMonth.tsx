@@ -1,5 +1,6 @@
 import { IExpense } from "@_types/expense";
 import { MONTHS } from "@common/constants";
+import ActionButtons from "@components/ActionButtons";
 import {
     MonthlyExpenseHeader,
     MonthlyExpenseItem,
@@ -11,6 +12,7 @@ import { useAppDispatch } from "@hooks/storeHooks";
 import api from "@store/queries/api";
 import { useGetExpensesByMonthQuery } from "@store/queries/expense";
 import { FC, useEffect } from "react";
+import { HiArrowLeft, HiArrowRight } from "react-icons/hi";
 import {
     Outlet,
     useNavigate,
@@ -22,7 +24,7 @@ const ExpenseMonth: FC = () => {
     const dispatch = useAppDispatch();
     const params = useParams();
     const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     searchParams.set("limit", "16");
 
@@ -75,6 +77,48 @@ const ExpenseMonth: FC = () => {
             </div>
             <ExpenseFilterModal />
             <Outlet />
+            <div className="flex justify-center items-center p-4 pt-0">
+                <ActionButtons
+                    className="h-10 w-10 md:hidden justify-center items-center flex"
+                    rounded="full"
+                    options={[
+                        {
+                            type: "button",
+                            bgColor: "primary",
+                            color: "plain",
+                            icon: HiArrowLeft,
+                            disabled: !metaData.hasPrev,
+                            onClick: () => {
+                                if (metaData.hasPrev)
+                                    setSearchParams((val) => {
+                                        val.set(
+                                            "page",
+                                            (metaData.page - 1).toString()
+                                        );
+                                        return val;
+                                    });
+                            },
+                        },
+                        {
+                            type: "button",
+                            bgColor: "primary",
+                            color: "plain",
+                            icon: HiArrowRight,
+                            disabled: !metaData.hasNext,
+                            onClick: () => {
+                                if (metaData.hasNext)
+                                    setSearchParams((val) => {
+                                        val.set(
+                                            "page",
+                                            (metaData.page + 1).toString()
+                                        );
+                                        return val;
+                                    });
+                            },
+                        },
+                    ]}
+                />
+            </div>
         </div>
     );
 };
