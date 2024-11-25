@@ -272,6 +272,7 @@ class ExpenseService {
                                                     },
                                                 },
                                             },
+                                            type: "$$expense.type",
                                             amount: "$$expense.amount",
                                             imageUrl: "$$expense.imageUrl",
                                             purchaseDate:
