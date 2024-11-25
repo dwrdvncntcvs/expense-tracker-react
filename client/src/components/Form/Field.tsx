@@ -16,6 +16,8 @@ const Field: FC<InputProps> = ({ icon, ...props }) => {
     const { name, onBlur, onChange, value } = p1;
     const { error, touched } = p2;
 
+    if (props.hidden) return;
+
     return (
         <div className="flex flex-col w-full items-end">
             <div

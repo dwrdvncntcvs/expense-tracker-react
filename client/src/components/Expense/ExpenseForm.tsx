@@ -1,6 +1,12 @@
 import { Option } from "@_types/elements";
-import { ICreateExpense } from "@_types/expense";
-import { ComboBox, Field, Form, ImageField } from "@components/Form";
+import { ICreateExpense, IExpense } from "@_types/expense";
+import {
+    ComboBox,
+    Field,
+    Form,
+    ImageField,
+    SelectButton,
+} from "@components/Form";
 import Select from "@components/Form/Select";
 import Textarea from "@components/Form/Textarea";
 import { useAppDispatch } from "@hooks/storeHooks";
@@ -19,14 +25,15 @@ import {
     useState,
 } from "react";
 import { Tag } from "@components/common";
+import { capitalize } from "lodash-es";
 
-type OnSubmit = (
-    val: any,
-    resetForm: (nextState?: Partial<FormikState<any>> | undefined) => void
+type OnSubmit<T> = (
+    val: Partial<T>,
+    resetForm: (nextState?: Partial<FormikState<T>> | undefined) => void
 ) => void;
 
 interface ExpenseFormProps {
-    onSubmit: OnSubmit;
+    onSubmit: OnSubmit<any>;
     initialValues?: ICreateExpense;
     isLoading: boolean;
     editMode?: boolean;
@@ -58,6 +65,7 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
         }, 200);
 
         return () => clearTimeout(timeout);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tagText]);
 
     const handleTagChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -85,7 +93,7 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
 
             if (!data.data) return;
 
-            console.log(data.data)
+            console.log(data.data);
 
             setSelectedOptions((opts) => [...opts, data.data.id]);
             setTagText("");
@@ -110,6 +118,11 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
         };
     });
 
+    const selectOptions: Option[] = ["incoming", "outgoing"].map((_type) => ({
+        label: capitalize(_type),
+        value: _type,
+    }));
+
     const removeTag = (id: string) => {
         setSelectedOptions((val) => val.filter((opt) => opt !== id));
     };
@@ -125,6 +138,7 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
                     amount: "",
                     description: "",
                     tags: [],
+                    type: "",
                 }
             }
             validationSchema={expenseValidation}
@@ -175,6 +189,15 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
                 />
             </div>
             <div className="flex flex-col gap-2 w-full">
+                <label className="text-sm text-tertiary" htmlFor="type">
+                    Type
+                </label>
+                <SelectButton
+                    name="type"
+                    options={selectOptions}
+                ></SelectButton>
+            </div>
+            <div className="flex flex-col col-span-2 gap-2 w-full">
                 <label className="text-sm text-tertiary" htmlFor="tag">
                     Tag
                 </label>

@@ -95,7 +95,7 @@ const MonthlyExpenseItem: FC<MonthlyExpenseItemProps> = ({
                     </div>
                     <div className="flex gap-1 px-3">
                         {expense.tagList?.map((tag) => (
-                            <Tag id={tag.id}>{tag.name}</Tag>
+                            <Tag key={tag.id} id={tag.id}>{tag.name}</Tag>
                         ))}
                     </div>
                     <div className="flex gap-4 p-4 justify-between items-end">
@@ -171,6 +171,7 @@ const MonthlyExpenseItem: FC<MonthlyExpenseItemProps> = ({
                     initialValues={{
                         ...expense,
                         purchaseDate: formatDate(date).split("/").join("-"),
+                        type: expense.type
                     }}
                     isLoading={isUpdateLoading}
                     imageUrl={expense.imageUrl}
