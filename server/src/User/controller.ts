@@ -50,8 +50,17 @@ class UserController implements IUserController {
         const { id } = req.user;
 
         await this.service.removeRefreshToken(id);
-        res.clearCookie("refreshToken");
-        res.clearCookie("accessToken");
+        res.clearCookie("refreshToken", {
+            httpOnly: true,
+            secure: IS_PROD,
+            sameSite: IS_PROD ? "none" : "lax",
+            maxAge: 24 * 60 * 60 * 1000,
+        });
+        res.clearCookie("accessToken", {
+            httpOnly: true,
+            secure: IS_PROD,
+            sameSite: IS_PROD ? "none" : "lax",
+        });
 
         return res.send({ data: { message: "Signed out successfully" } });
     };
