@@ -1,13 +1,12 @@
-import { Error } from "mongoose";
+import { Error, Types } from "mongoose";
 import { formatData } from "../database/mongoDb";
 import { ExpenseMonths } from "../types/Expense/controller";
 import { CreateExpense, UpdateExpense } from "../types/Expense/model";
 import { Pagination } from "../types/Pagination/pagination";
 import { handleValidationError } from "../utils/error/mongo";
 import { monthLookUp } from "../utils/helpers/lookup";
-import { Types } from "mongoose";
+import { MONTHS_OBJ } from "../variables";
 import ExpenseModel from "./model";
-import { MONTHS, MONTHS_OBJ } from "../variables";
 
 class ExpenseService {
     private model: typeof ExpenseModel;

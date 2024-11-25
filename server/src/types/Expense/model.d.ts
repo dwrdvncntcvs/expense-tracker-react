@@ -1,3 +1,4 @@
+export type ExpenseType = "incoming" | "outgoing";
 export interface Expense {
     id: string;
     userId: string;
@@ -5,12 +6,13 @@ export interface Expense {
     label: string;
     imageUrl?: string;
     purchaseDate: Date;
+    type: ExpenseType;
     month: number;
     amount: number;
     createdAt: string;
     updatedAt: string;
     description: string;
-    tags: string[]
+    tags: string[];
 }
 
 export type OmitExpenseMeta = "id" | "createdAt" | "updatedAt";

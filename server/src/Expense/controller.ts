@@ -71,6 +71,7 @@ class ExpenseController implements IExpenseController {
             categoryId,
             userId,
             label,
+            type: req.body.type,
             month,
             purchaseDate,
             description,
@@ -116,6 +117,7 @@ class ExpenseController implements IExpenseController {
         const updatedBody: UpdateExpense = {
             amount,
             label,
+            type: req.body.type,
             description,
             categoryId,
             tags,
