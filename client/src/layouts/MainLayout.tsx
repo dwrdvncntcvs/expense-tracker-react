@@ -19,20 +19,29 @@ const MainLayout: FC<PropsWithChildren> = ({ children }) => {
 
     return (
         <div
-            className={`${name} w-screen h-screen relative overflow-auto bg-quaternary`}
+            className={`${name} w-screen h-screen overflow-auto bg-quaternary relative`}
         >
             {!shouldExclude && (
-                <div id="header" className="absolute top-0 left-0 w-full h-24">
-                    <nav className={contentAndHeaderClassName}>
+                <div
+                    id="header"
+                    className="md:absolute fixed md:top-0 bottom-0 left-0 w-full md:h-24 md:p-0 h-16 bg-quaternary z-30"
+                >
+                    <nav
+                        className={`${contentAndHeaderClassName}  md:border-none border-t-[1px]`}
+                    >
                         <Navigation />
                     </nav>
                 </div>
             )}
             <div
                 id="content"
-                className={`${!shouldExclude ? "pt-24" : ""} h-full`}
+                className={`${
+                    !shouldExclude ? "md:pt-24 pb-16 pt-4 overflow-auto" : ""
+                } h-full`}
             >
-                <main className={contentAndHeaderClassName}>{children}</main>
+                <main className={`${contentAndHeaderClassName} `}>
+                    {children}
+                </main>
             </div>
         </div>
     );

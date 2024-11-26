@@ -34,14 +34,14 @@ const Navigation: FC = () => {
     ];
 
     return (
-        <div className="flex items-center justify-between h-full">
-            <div>
+        <div className="flex items-center justify-between h-full bg-quaternary">
+            <div className='md:block hidden'>
                 <NavLink to="/" className="!text-primary">
                     <Logo size="navigation" />
                 </NavLink>
             </div>
             {isAuthenticated && (
-                <ul className="flex gap-2">
+                <ul className="flex gap-2 md:w-auto w-full md:justify-normal justify-evenly">
                     {links.map((link) => (
                         <li
                             key={link.name}

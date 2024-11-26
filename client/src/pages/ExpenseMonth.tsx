@@ -77,48 +77,50 @@ const ExpenseMonth: FC = () => {
             </div>
             <ExpenseFilterModal />
             <Outlet />
-            <div className="flex justify-center items-center p-4 pt-0">
-                <ActionButtons
-                    className="h-10 w-10 md:hidden justify-center items-center flex"
-                    rounded="full"
-                    options={[
-                        {
-                            type: "button",
-                            bgColor: "primary",
-                            color: "plain",
-                            icon: HiArrowLeft,
-                            disabled: !metaData.hasPrev,
-                            onClick: () => {
-                                if (metaData.hasPrev)
-                                    setSearchParams((val) => {
-                                        val.set(
-                                            "page",
-                                            (metaData.page - 1).toString()
-                                        );
-                                        return val;
-                                    });
+            {(metaData.hasNext || metaData.hasPrev) && (
+                <div className="flex justify-center items-center p-4 pt-0">
+                    <ActionButtons
+                        className="h-10 w-10 md:hidden justify-center items-center flex"
+                        rounded="full"
+                        options={[
+                            {
+                                type: "button",
+                                bgColor: "primary",
+                                color: "plain",
+                                icon: HiArrowLeft,
+                                disabled: !metaData.hasPrev,
+                                onClick: () => {
+                                    if (metaData.hasPrev)
+                                        setSearchParams((val) => {
+                                            val.set(
+                                                "page",
+                                                (metaData.page - 1).toString()
+                                            );
+                                            return val;
+                                        });
+                                },
                             },
-                        },
-                        {
-                            type: "button",
-                            bgColor: "primary",
-                            color: "plain",
-                            icon: HiArrowRight,
-                            disabled: !metaData.hasNext,
-                            onClick: () => {
-                                if (metaData.hasNext)
-                                    setSearchParams((val) => {
-                                        val.set(
-                                            "page",
-                                            (metaData.page + 1).toString()
-                                        );
-                                        return val;
-                                    });
+                            {
+                                type: "button",
+                                bgColor: "primary",
+                                color: "plain",
+                                icon: HiArrowRight,
+                                disabled: !metaData.hasNext,
+                                onClick: () => {
+                                    if (metaData.hasNext)
+                                        setSearchParams((val) => {
+                                            val.set(
+                                                "page",
+                                                (metaData.page + 1).toString()
+                                            );
+                                            return val;
+                                        });
+                                },
                             },
-                        },
-                    ]}
-                />
-            </div>
+                        ]}
+                    />
+                </div>
+            )}
         </div>
     );
 };
