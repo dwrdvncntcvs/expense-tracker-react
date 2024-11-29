@@ -1,5 +1,6 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import {
+    HiCog8Tooth,
     HiLockClosed,
     HiOutlineTrash,
     HiPaintBrush,
@@ -15,6 +16,7 @@ import { Modal } from "@components/Overlays";
 import { useAppDispatch } from "@hooks/storeHooks";
 import { hide, show } from "@store/slices/modal";
 import ActionButtons from "@components/ActionButtons";
+import { HiMenu, HiX } from "react-icons/hi";
 
 const SettingsLayout: FC = () => {
     const dispatch = useAppDispatch();
@@ -22,6 +24,7 @@ const SettingsLayout: FC = () => {
     const navigate = useNavigate();
 
     const [deleteUserRequest] = useDeleteUserMutation();
+    const [showNav, setShowNav] = useState(false);
 
     useEffect(() => {
         const listOfUrlToTriggerNavigate = ["/settings", "/settings/"];
@@ -65,13 +68,43 @@ const SettingsLayout: FC = () => {
     ];
 
     return (
-        <div className="flex">
-            <nav className="w-[500px] p-2 space-y-2">
-                <h1 className="font-bold text-3xl text-primary">Settings</h1>
+        <div className="flex md:flex-row flex-col box-border">
+            <div className="md:hidden flex p-2 py-4 flex-row-reverse sticky -top-4 bg-quaternary">
+                <button
+                    className="flex text-black/80"
+                    onClick={() => {
+                        setShowNav(true);
+                    }}
+                >
+                    <HiMenu size={24} />
+                    <HiCog8Tooth size={24} />
+                </button>
+            </div>
+            <nav
+                className={`md:w-[500px] w-full md:p-2 ${
+                    !showNav ? "hidden" : ""
+                } p-4 space-y-2 md:flex md:flex-col md:relative fixed right-0 top-0 md:h-auto h-screen bg-quaternary`}
+            >
+                <div className="flex items-center justify-between">
+                    <h1 className="font-bold text-3xl text-primary">
+                        Settings
+                    </h1>
+                    <button
+                        className="md:hidden flex p-2 text-black/80"
+                        onClick={() => {
+                            setShowNav(false);
+                        }}
+                    >
+                        <HiX size={24} />
+                    </button>
+                </div>
                 <ul className="space-y-1">
                     {settingsNavList.map((settingsNav) => (
                         <li key={settingsNav.path}>
                             <NavLink
+                                onClick={() => {
+                                    setShowNav(false);
+                                }}
                                 to={settingsNav.path}
                                 className={({ isActive }) =>
                                     `flex items-center gap-2 px-5 p-2 transition-all duration-75 rounded-lg hover:bg-tertiary hover:text-white ${

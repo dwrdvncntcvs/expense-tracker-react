@@ -17,7 +17,7 @@ const UserSettings: FC = () => {
     return (
         <SettingsContentLayout icon={HiUser} title="User Information">
             <Form
-                className="flex flex-wrap gap-4"
+                className="flex flex-wrap md:flex-row flex-col gap-4"
                 initialValues={{
                     first_name: user?.first_name,
                     last_name: user?.last_name,
@@ -37,11 +37,11 @@ const UserSettings: FC = () => {
                     }
                 }}
             >
-                <div className="flex-1 w-1/2">
+                <div className="flex-1 md:w-1/2  w-full">
                     <label htmlFor="first_name">First Name</label>
                     <Field name="first_name" id="first_name" />
                 </div>
-                <div className="flex-1 w-1/2">
+                <div className="flex-1 md:w-1/2  w-full">
                     <label htmlFor="last_name">Last Name</label>
                     <Field name="last_name" id="last_name" />
                 </div>
