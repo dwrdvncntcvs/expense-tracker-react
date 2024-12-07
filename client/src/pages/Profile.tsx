@@ -74,7 +74,7 @@ const Profile: FC = () => {
     return (
         <>
             <div className="flex h-full flex-col">
-                <div className="flex gap-4 justify-between items-center">
+                <div className="flex gap-4 justify-between md:flex-row flex-col items-center">
                     <div className="flex items-center gap-4">
                         <button
                             className="w-14 h-14 rounded-full flex items-center justify-center hover:opacity-80 transition-all bg-primary overflow-auto p-[2px] font-bold text-2xl text-white"
