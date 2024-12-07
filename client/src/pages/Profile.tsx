@@ -75,7 +75,7 @@ const Profile: FC = () => {
         <>
             <div className="flex h-full flex-col">
                 <div className="flex gap-4 justify-between md:flex-row flex-col items-center">
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center md:justify-normal justify-between gap-4 w-full">
                         <button
                             className="w-14 h-14 rounded-full flex items-center justify-center hover:opacity-80 transition-all bg-primary overflow-auto p-[2px] font-bold text-2xl text-white"
                             onClick={() => {
@@ -96,10 +96,10 @@ const Profile: FC = () => {
                             )}
                         </button>
                         <div className="flex flex-col gap-2">
-                            <p className="text-2xl font-bold text-primary">
+                            <p className="md:text-2xl text-lg font-bold text-primary">
                                 Expenses Overview
                             </p>
-                            <div>
+                            <div className="md:self-start self-end">
                                 <p className="text-sm font-semibold italic text-secondary">
                                     {user?.first_name} {user?.last_name}
                                 </p>
