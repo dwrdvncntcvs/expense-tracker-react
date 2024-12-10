@@ -2,8 +2,13 @@ import { FC, PropsWithChildren } from "react";
 import Navigation from "@components/Navigation";
 import { useLocation } from "react-router-dom";
 import { useTheme } from "@store/slices/theme";
+import { MainLoading } from "@components/LoadingScreen";
 
-const MainLayout: FC<PropsWithChildren> = ({ children }) => {
+interface MainLayoutProps extends PropsWithChildren {
+    isLoading: boolean;
+}
+
+const MainLayout: FC<MainLayoutProps> = ({ children, isLoading }) => {
     const location = useLocation();
     const { name } = useTheme();
 
@@ -21,28 +26,36 @@ const MainLayout: FC<PropsWithChildren> = ({ children }) => {
         <div
             className={`${name} flex md:flex-col flex-col-reverse h-screen w-screen`}
         >
-            {!shouldExclude && (
-                <div
-                    id="header"
-                    className="md:h-22 h-16 w-full bg-quaternary z-30"
-                >
-                    <nav
-                        className={`${contentAndHeaderClassName}  md:border-none border-t-[1px]`}
+            {isLoading ? (
+                <MainLoading />
+            ) : (
+                <>
+                    {!shouldExclude && (
+                        <div
+                            id="header"
+                            className="md:h-22 h-16 w-full bg-quaternary z-30"
+                        >
+                            <nav
+                                className={`${contentAndHeaderClassName}  md:border-none border-t-[1px]`}
+                            >
+                                <Navigation />
+                            </nav>
+                        </div>
+                    )}
+                    <div
+                        id="content"
+                        className={` bg-quaternary ${
+                            !shouldExclude
+                                ? "h-full w-full overflow-auto py-4"
+                                : ""
+                        } h-full`}
                     >
-                        <Navigation />
-                    </nav>
-                </div>
+                        <main className={`${contentAndHeaderClassName}s`}>
+                            {children}
+                        </main>
+                    </div>
+                </>
             )}
-            <div
-                id="content"
-                className={` bg-quaternary ${
-                    !shouldExclude ? "h-full w-full overflow-auto py-4" : ""
-                } h-full`}
-            >
-                <main className={`${contentAndHeaderClassName}s`}>
-                    {children}
-                </main>
-            </div>
         </div>
     );
 };
