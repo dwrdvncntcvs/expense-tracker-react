@@ -28,6 +28,7 @@ const Toast: FC = () => {
                 timeouts.forEach((timeout) => clearTimeout(timeout));
             }
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [toasts]);
 
     const toastTypeClass = {
@@ -48,7 +49,7 @@ const Toast: FC = () => {
 
     return (
         toasts.length > 0 && (
-            <div className="fixed max-h-screen w-96 outline- flex flex-col gap-4 left-0 bottom-0 p-4">
+            <div className="fixed max-h-screen w-96 outline- flex flex-col gap-4 left-0 md:bottom-0 bottom-16 p-4">
                 {toasts.map((toast, i) => {
                     const Icon = toastIconByType[toast.type];
                     return (
@@ -56,7 +57,7 @@ const Toast: FC = () => {
                             id={`${toast.type}-toast`}
                             className={`toast-item p-4 rounded border-1 flex gap-4 items-center relative ${
                                 toastTypeClass[toast.type]
-                            } ${i === toasts.length -1 ? "w-full" : "w-80"}`}
+                            } ${i === toasts.length -1 ? "w-full" : "md:w-80 w-full"}`}
                             key={toast.id}
                         >
                             <Icon size={30} />

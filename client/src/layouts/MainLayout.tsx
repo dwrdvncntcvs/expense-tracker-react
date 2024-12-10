@@ -35,11 +35,11 @@ const MainLayout: FC<PropsWithChildren> = ({ children }) => {
             )}
             <div
                 id="content"
-                className={`${
+                className={` bg-quaternary ${
                     !shouldExclude ? "h-full w-full overflow-auto py-4" : ""
                 } h-full`}
             >
-                <main className={`${contentAndHeaderClassName} `}>
+                <main className={`${contentAndHeaderClassName}s`}>
                     {children}
                 </main>
             </div>
