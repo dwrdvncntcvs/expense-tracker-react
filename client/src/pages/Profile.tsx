@@ -1,6 +1,6 @@
 import { MONTHS } from "@common/constants";
-import { generateAccents } from "@common/utils/color";
 import { abbreviate, capitalize, formatCurrency } from "@common/utils/str";
+import { Dropdown } from "@components/common";
 import { AnalyticsLoading } from "@components/LoadingScreen";
 import { UploadProfileImage } from "@components/Modal";
 import { useAppDispatch } from "@hooks/storeHooks";
@@ -74,8 +74,8 @@ const Profile: FC = () => {
     return (
         <>
             <div className="flex h-full flex-col">
-                <div className="flex gap-4 justify-between items-center">
-                    <div className="flex items-center gap-4">
+                <div className="flex gap-4 justify-between md:flex-row flex-col items-center">
+                    <div className="flex items-center md:justify-normal justify-between gap-4 w-full">
                         <button
                             className="w-14 h-14 rounded-full flex items-center justify-center hover:opacity-80 transition-all bg-primary overflow-auto p-[2px] font-bold text-2xl text-white"
                             onClick={() => {
@@ -96,10 +96,10 @@ const Profile: FC = () => {
                             )}
                         </button>
                         <div className="flex flex-col gap-2">
-                            <p className="text-2xl font-bold text-primary">
+                            <p className="md:text-2xl text-lg font-bold text-primary">
                                 Expenses Overview
                             </p>
-                            <div>
+                            <div className="md:self-start self-end">
                                 <p className="text-sm font-semibold italic text-secondary">
                                     {user?.first_name} {user?.last_name}
                                 </p>
@@ -109,36 +109,25 @@ const Profile: FC = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="flex gap-2 items-center">
-                        <select
-                            className="bg-quaternary font-bold text-3xl w-auto text-primary text-end appearance-none p-2"
-                            name="year"
-                            id="year"
-                            value={params.year}
-                            onChange={(e) => {
-                                setMonth("");
-                                navigate(`/user/${e.target.value}`);
+                    <div className="flex justify-end gap-2 w-full items-center">
+                        <Dropdown
+                            value={params.year || ""}
+                            className="md:w-auto w-full"
+                            buttonClassName="md:w-auto w-full"
+                            label={params.year || "Select year"}
+                            options={Object.keys(expenses).map((key) => ({
+                                label: key,
+                                value: key,
+                            }))}
+                            shouldUpdateLabel
+                            canClear
+                            selectCb={(value) => {
+                                navigate(`/user/${value}`);
                             }}
-                        >
-                            <option
-                                value=""
-                                className="text-sm p-2 text-center"
-                            >
-                                Select Year
-                            </option>
-                            {Object.keys(expenses).map((key) => (
-                                <option
-                                    key={key}
-                                    value={key}
-                                    className="text-sm p-2 text-center"
-                                >
-                                    {key}
-                                </option>
-                            ))}
-                        </select>
+                        />
                     </div>
                 </div>
-                {!params.year ? (
+                {/* {!params.year ? (
                     <div className="flex flex-col justify-center items-center h-full gap-4">
                         <div className="flex items-center text-5xl text-primary font-bold">
                             Expenses Analytics
@@ -245,34 +234,25 @@ const Profile: FC = () => {
                                         Monthly Expenses / Category
                                     </h1>
                                     {params?.year && (
-                                        <select
-                                            name="month"
-                                            id="month"
-                                            className="bg-quaternary appearance-none p-2 text-center text-secondary"
+                                        <Dropdown
                                             value={month}
-                                            onChange={(e) => {
-                                                setMonth(e.target.value);
+                                            className="md:w-auto w-full"
+                                            buttonClassName="md:w-auto w-full"
+                                            label="Select month"
+                                            options={expenses[params.year]?.map(
+                                                (month) => ({
+                                                    label: capitalize(month),
+                                                    value: MONTHS[
+                                                        month.toUpperCase() as keyof typeof MONTHS
+                                                    ],
+                                                })
+                                            )}
+                                            shouldUpdateLabel
+                                            canClear
+                                            selectCb={(value) => {
+                                                setMonth(value);
                                             }}
-                                        >
-                                            <option value={""}>
-                                                {"Select Month"}
-                                            </option>
-                                            {expenses[params.year] &&
-                                                expenses[params.year].map(
-                                                    (month) => (
-                                                        <option
-                                                            key={month}
-                                                            value={
-                                                                MONTHS[
-                                                                    month.toUpperCase() as keyof typeof MONTHS
-                                                                ]
-                                                            }
-                                                        >
-                                                            {capitalize(month)}
-                                                        </option>
-                                                    )
-                                                )}
-                                        </select>
+                                        />
                                     )}
                                 </div>
                                 <div className="flex w-full h-full justify-center items-center">
@@ -378,7 +358,7 @@ const Profile: FC = () => {
                             </div>
                         )}
                     </div>
-                )}
+                )} */}
             </div>
             <UploadProfileImage />
         </>

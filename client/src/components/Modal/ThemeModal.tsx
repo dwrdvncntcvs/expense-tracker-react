@@ -39,11 +39,37 @@ const ThemeModal: FC<ThemModalProps> = ({ color, themeType }) => {
         warning: HiExclamationTriangle,
     };
 
+    const handleSelectTheme = async () => {
+        if (!color?.name || !themeType) return;
+
+        const response = await updateUserTheme(themeType);
+
+        dispatch(hide());
+
+        dispatch(hideAll());
+        if (response?.error) {
+            dispatch(
+                success({
+                    message: `${capitalize(
+                        themeType,
+                        "-"
+                    )} theme cannot be selected`,
+                })
+            );
+        }
+
+        dispatch(
+            success({
+                message: `${capitalize(themeType, "-")} theme selected`,
+            })
+        );
+    };
+
     return (
         <Modal title="Sample" name="theme" options={{ isCustom: true }}>
             <div
                 style={{ backgroundColor: color?.quaternary }}
-                className="w-[800px] h-[400px] rounded-xl overflow-hidden relative"
+                className="md:w-[800px] w-screen md:h-[400px] h-auto  md:rounded-xl overflow-hidden relative"
             >
                 {/* Browser */}
                 <div className="bg-tertiary h-12 w-full flex-col ">
@@ -80,10 +106,10 @@ const ThemeModal: FC<ThemModalProps> = ({ color, themeType }) => {
                 </div>
 
                 {/* Navigation Bar */}
-                <div className="h-12 w-1/2 mx-auto flex items-center justify-between">
+                <div className="md:h-12 h-9 w-1/2 mx-auto flex items-center justify-between">
                     <div
                         style={{ backgroundColor: color?.primary }}
-                        className="h-6 w-6 rounded-full"
+                        className="md:h-6 md:w-6 h-5 w-5 rounded-full"
                     ></div>
                     <div className="flex items-center gap-1">
                         {Array.from(Array(4)).map((_, i) => (
@@ -97,7 +123,9 @@ const ThemeModal: FC<ThemModalProps> = ({ color, themeType }) => {
                                 key={i}
                                 id={i.toString()}
                                 className={`${
-                                    i === 1 ? "h-5 w-5" : "h-4 w-4"
+                                    i === 1
+                                        ? "md:h-5 md:w-5 h-4 w-4"
+                                        : "md:h-4 md:w-4 h-3 w-3"
                                 } rounded-full`}
                             ></div>
                         ))}
@@ -111,7 +139,7 @@ const ThemeModal: FC<ThemModalProps> = ({ color, themeType }) => {
                             <div className="flex h-4 w-full justify-between items-center">
                                 <div
                                     style={{ backgroundColor: color?.primary }}
-                                    className="w-16 h-4 rounded-xl"
+                                    className="md:w-16 w-14 md:h-4 h-3 rounded-xl"
                                 ></div>
                                 <div className="flex items-center gap-1">
                                     {Array.from(Array(2)).map((_, i) => (
@@ -122,12 +150,14 @@ const ThemeModal: FC<ThemModalProps> = ({ color, themeType }) => {
                                             }}
                                             key={i}
                                             id={i.toString()}
-                                            className={" h-4 w-4 rounded-full"}
+                                            className={
+                                                " md:h-4 md:w-4 h-2 w-2 rounded-full"
+                                            }
                                         ></div>
                                     ))}
                                 </div>
                             </div>
-                            <div className="flex gap-1 items-center justify-center p-2 w-full">
+                            <div className="flex gap-1 items-center justify-center p-2 w-full flex-wrap">
                                 {Array.from(Array(12)).map((_, i) => (
                                     <div
                                         style={{
@@ -135,7 +165,9 @@ const ThemeModal: FC<ThemModalProps> = ({ color, themeType }) => {
                                         }}
                                         key={i}
                                         id={i.toString()}
-                                        className={" h-7 w-7 rounded-full"}
+                                        className={
+                                            " md:h-7 md:w-7 w-4 h-4 rounded-full"
+                                        }
                                     ></div>
                                 ))}
                             </div>
@@ -146,11 +178,11 @@ const ThemeModal: FC<ThemModalProps> = ({ color, themeType }) => {
                 {/* Create Btn */}
                 <div
                     style={{ backgroundColor: color?.primary }}
-                    className="absolute w-12 h-12 bottom-4 right-4 rounded-full"
+                    className="absolute md:w-12 md:h-12 w-7 h-7 bottom-4 right-4 rounded-full"
                 ></div>
 
-                {/* Expenses */}
-                <div className="absolute w-40 max-h-full flex flex-col gap-3 bottom-0 left-0 p-4">
+                {/* Toast */}
+                <div className="absolute md:w-40 w-[100px] max-h-full flex flex-col md:gap-3 gap-2 bottom-0 left-0 md:p-4 p-2">
                     {toasts.map((toastType) => {
                         const Icon =
                             toastIcons[toastType as keyof typeof toastIcons];
@@ -161,7 +193,7 @@ const ThemeModal: FC<ThemModalProps> = ({ color, themeType }) => {
                                 style={{
                                     backgroundColor: color?.tertiary,
                                 }}
-                                className={`bg-primary flex items-center justify-between px-2 w-full h-6 rounded-md outline outline-1 outline-offset-2 ${
+                                className={`bg-primary flex items-center justify-between px-2 w-full md:h-6 h-3 md:rounded-md rounded-sm outline outline-1 outline-offset-2 ${
                                     toastOutlineColors[
                                         toastType as keyof typeof toastOutlineColors
                                     ]
@@ -177,8 +209,8 @@ const ThemeModal: FC<ThemModalProps> = ({ color, themeType }) => {
                     })}
                 </div>
             </div>
-            <div className="p-4 px-4 flex items-center justify-between bg-primary mt-4 rounded-xl">
-                <p className="font-bold text-xl text-plain">
+            <div className="p-4 px-4 flex items-center justify-between bg-primary mt-4 md:rounded-xl">
+                <p className="font-bold md:text-xl text-sm text-plain">
                     {color?.name
                         ? `${capitalize(
                               color?.name.replace("theme-", ""),
@@ -187,7 +219,7 @@ const ThemeModal: FC<ThemModalProps> = ({ color, themeType }) => {
                         : null}
                 </p>
                 <ActionButtons
-                    className="p-2 px-4"
+                    className="p-2 px-4 md:text-auto text-sm"
                     options={[
                         {
                             type: "button",
@@ -203,36 +235,7 @@ const ThemeModal: FC<ThemModalProps> = ({ color, themeType }) => {
                             bgColor: "secondary",
                             color: "plain",
                             label: "Apply Theme",
-                            onClick: async () => {
-                                if (!color?.name || !themeType) return;
-
-                                const response = await updateUserTheme(
-                                    themeType
-                                );
-
-                                dispatch(hide());
-
-                                dispatch(hideAll());
-                                if (response?.error) {
-                                    dispatch(
-                                        success({
-                                            message: `${capitalize(
-                                                themeType,
-                                                "-"
-                                            )} theme cannot be selected`,
-                                        })
-                                    );
-                                }
-
-                                dispatch(
-                                    success({
-                                        message: `${capitalize(
-                                            themeType,
-                                            "-"
-                                        )} theme selected`,
-                                    })
-                                );
-                            },
+                            onClick: handleSelectTheme,
                         },
                     ]}
                 />

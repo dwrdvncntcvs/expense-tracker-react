@@ -24,7 +24,7 @@ const PreferenceSettings: FC = () => {
     return (
         <SettingsContentLayout icon={HiPaintBrush} title="Preferences">
             <SettingsSection title="Color Theme" icon={HiSwatch}>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid md:grid-cols-3 grid-cols-2 gap-4">
                     {Object.keys(themes).map((key) => {
                         const theme = themes[key as ThemeType];
 
@@ -48,16 +48,16 @@ const PreferenceSettings: FC = () => {
                                     dispatch(show("theme"));
                                 }}
                             >
-                                <div className="flex justify-center gap-2 items-center">
+                                <div className="flex justify-center flex-wrap md:pt-0 pt-3 md:gap-2 items-center md:rounded-none rounded-lg overflow-auto">
                                     {Object.keys(theme)
                                         .filter((key) => key !== "name")
                                         .map((_key, i) => (
                                             <div
                                                 key={`${_key}-${key}`}
-                                                className={`rounded-full  ${
+                                                className={`md:rounded-full  ${
                                                     i < 1
-                                                        ? "border-4 border-plain h-14 w-14"
-                                                        : "h-10 w-10"
+                                                        ? "md:border-4 border-plain h-14 w-14"
+                                                        : "md:h-10 md:w-10 h-14 w-14"
                                                 }`}
                                                 style={{
                                                     background:

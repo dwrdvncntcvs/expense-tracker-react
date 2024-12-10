@@ -9,7 +9,7 @@ interface ExpenseMonthListProps {
 export const ExpenseMonthList: FC<ExpenseMonthListProps> = ({ data, year }) => {
     return (
         <ul
-            className="month-list flex items-center justify-center gap-2"
+            className="month-list flex flex-wrap items-center justify-center gap-2"
             id={year}
         >
             {data.map((month: string) => (
@@ -17,7 +17,7 @@ export const ExpenseMonthList: FC<ExpenseMonthListProps> = ({ data, year }) => {
                     <Link
                         to={`/${month}/${year}`}
                         id={`${month}-${year}`}
-                        className="uppercase rounded-full bg-tertiary text-white text-xl w-20 h-20 flex items-center justify-center hover:bg-secondary transition-all"
+                        className="uppercase rounded-full bg-tertiary text-white md:text-xl text-sm md:w-20 md:h-20 w-14 h-14 flex items-center justify-center hover:bg-secondary transition-all"
                     >
                         {month.slice(0, 3)}
                     </Link>

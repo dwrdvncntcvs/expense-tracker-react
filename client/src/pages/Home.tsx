@@ -17,7 +17,7 @@ const Home: FC = () => {
 
     return (
         <>
-            <ul className="year-list flex flex-col gap-5 divide-y divide-secondary">
+            <ul className="year-list flex flex-col gap-5 divide-y divide-secondary overflow-y-auto">
                 {Object.keys(data.months).map((key) => (
                     <li key={key} className="year-item space-y-6 py-3">
                         <div className="space-y-3">

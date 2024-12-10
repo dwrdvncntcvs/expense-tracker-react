@@ -46,7 +46,8 @@ const userSlice = createSlice({
                 }
             )
             .addMatcher(userApi.endpoints.signOut.matchFulfilled, (state) => {
-                (state.isAuthenticated = false), (state.user = null);
+                state.isAuthenticated = false;
+                state.user = null;
             });
     },
 });

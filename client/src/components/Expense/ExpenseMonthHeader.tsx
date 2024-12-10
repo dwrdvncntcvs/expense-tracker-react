@@ -43,12 +43,12 @@ const ExpenseMonthHeader: FC<ExpenseMonthHeaderProps> = ({ year }) => {
         : [];
 
     return (
-        <div className="h-14 flex justify-between items-center text-2xl px-6 font-bold text-primary">
-            <h2 className="text-3xl" id={year}>
+        <div className="md:h-14 flex justify-between items-center text-2xl px-6 font-bold text-primary">
+            <h2 className="md:text-3xl text-xl" id={year}>
                 {year}
             </h2>
             <ActionButtons
-                className="p-2 h-10 w-10 flex justify-center items-center"
+                className="p-2 md:h-10 md:w-10 w-8 h-8 flex justify-center items-center"
                 rounded="full"
                 options={[...analyticOptions, ...importOptions]}
             />
