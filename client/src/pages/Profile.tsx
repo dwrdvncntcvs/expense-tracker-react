@@ -127,7 +127,7 @@ const Profile: FC = () => {
                         />
                     </div>
                 </div>
-                {/* {!params.year ? (
+                {!params.year ? (
                     <div className="flex flex-col justify-center items-center h-full gap-4">
                         <div className="flex items-center text-5xl text-primary font-bold">
                             Expenses Analytics
@@ -325,14 +325,14 @@ const Profile: FC = () => {
                                                 (category) => {
                                                     const dataSet = Object.keys(
                                                         MONTHS
-                                                    ).map((key) => {
+                                                    )?.map((key) => {
                                                         const month =
                                                             +MONTHS[
                                                                 key as keyof typeof MONTHS
                                                             ];
 
                                                         const totalAmount =
-                                                            category.months.find(
+                                                            category?.months.find(
                                                                 (val) =>
                                                                     val.month ===
                                                                     month
@@ -358,7 +358,7 @@ const Profile: FC = () => {
                             </div>
                         )}
                     </div>
-                )} */}
+                )}
             </div>
             <UploadProfileImage />
         </>
