@@ -1,5 +1,4 @@
 import { MONTHS } from "@common/constants";
-import { generateAccents } from "@common/utils/color";
 import { abbreviate, capitalize, formatCurrency } from "@common/utils/str";
 import { Dropdown } from "@components/common";
 import { AnalyticsLoading } from "@components/LoadingScreen";
