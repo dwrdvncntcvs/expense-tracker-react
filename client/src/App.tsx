@@ -56,7 +56,7 @@ function App() {
         data?.data?.length > 0;
 
     return (
-        <MainLayout>
+        <MainLayout isLoading={isLoading}>
             <Routes>
                 <Route element={<Public loading={isLoading} />}>
                     <Route path="/sign-in" element={<SignIn />} />
