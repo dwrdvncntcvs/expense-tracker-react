@@ -18,11 +18,11 @@ interface BarChartProps {
 
 const BarChart: FC<BarChartProps> = ({ data, height = 400, width = 350 }) => {
     return (
-        <div className="flex items-end w-full h-auto justify-end">
+        <div className="flex items-end w-full h-44 justify-end">
             <_BarChart
                 slotProps={{ legend: { hidden: true } }}
-                height={height}
-                width={width}
+                // height={height}
+                // width={width}
                 dataset={data.map((val) => ({
                     totalAmount: val.totalAmount,
                     label: val.label,
