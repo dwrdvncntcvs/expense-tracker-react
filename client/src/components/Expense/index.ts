@@ -6,3 +6,4 @@ export { default as MonthlyExpenseHeader } from "./MonthlyExpenseHeader";
 export { default as NoMonthlyExpense } from "./NoMonthlyExpense";
 export { default as MonthlyExpenseItem } from "./MonthlyExpenseItem";
 export { default as NoExpenses } from "./NoExpenses";
+export { default as NoExpenseYear } from "./NoExpenseYear";

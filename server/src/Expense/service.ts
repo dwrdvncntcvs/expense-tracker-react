@@ -118,8 +118,8 @@ class ExpenseService {
         });
 
         return {
-            expenseAnalytics: totalData,
-            categoriesExpenseAnalytics: categoryDataWithPercentage,
+            meta: totalData,
+            data: categoryDataWithPercentage,
         };
     };
 

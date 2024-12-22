@@ -1,16 +1,9 @@
+import { PieChartData } from "@_types/chart";
 import { generateAccents } from "@common/utils/color";
 import { formatCurrency } from "@common/utils/str";
 import usePieChartResize from "@hooks/usePieChartResize";
 import { PieChart as _PieChart } from "@mui/x-charts/PieChart";
 import { FC } from "react";
-
-interface PieChartData {
-    id: string;
-    value: number;
-    label: string;
-    percentage: number;
-    totalAmount: string;
-}
 
 interface PieChartProps {
     data: PieChartData[];
