@@ -23,13 +23,13 @@ export type ExpenseReportByCategoryMonthly = {
 export type ExpenseReportByCategoryData = {
     categoryName: string;
     id: string;
-    months: ExpenseReportByCategoryMonthly;
+    months: ExpenseReportByCategoryMonthly[];
 };
 
 export type ExpenseReportByMonthData = {
     id: number;
     totalAmount: number;
-    label: string;
+    name: string;
     percentage: number;
 };
 

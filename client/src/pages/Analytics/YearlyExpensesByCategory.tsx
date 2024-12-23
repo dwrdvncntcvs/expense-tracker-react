@@ -1,3 +1,4 @@
+import { ExpenseReportByCategoryData } from "@_types/reports";
 import { MONTHS } from "@common/constants";
 import { AnalyticsLoading } from "@components/LoadingScreen";
 import { LineChart } from "@mui/x-charts";
@@ -20,21 +21,23 @@ const YearlyExpensesByCategory: FC = () => {
         }
     );
 
+    const _yearlyExpenseCatData = yearlyExpenseCatData?.data.data as ExpenseReportByCategoryData[]
+
     if (isYearlyExpenseCatFetching ||
         isYearlyExpenseCatLoading)
         return <div className="rounded-lg p-2 px-4">
             <AnalyticsLoading />
         </div>
 
-    return <div className="flex items-center w-full h-60 justify-center">
+    return <div className="p-4 flex items-center w-full h-60 justify-center rounded-lg shadow-lg">
         <LineChart
             xAxis={[
                 {
                     scaleType: "point",
-                    data: Object.keys(MONTHS),
+                    data: Object.keys(MONTHS).map(key => MONTHS[key as keyof typeof MONTHS]),
                 },
             ]}
-            series={yearlyExpenseCatData.data.data.map(
+            series={_yearlyExpenseCatData.map(
                 (category) => {
                     const dataSet = Object.keys(
                         MONTHS
@@ -60,6 +63,7 @@ const YearlyExpensesByCategory: FC = () => {
                     return {
                         label: category.categoryName,
                         data: dataSet,
+                        showMark: false
                     };
                 }
             )}

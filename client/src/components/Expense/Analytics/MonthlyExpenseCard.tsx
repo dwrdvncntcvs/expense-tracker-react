@@ -20,14 +20,16 @@ const MonthlyExpenseCard: FC<MonthlyExpenseCardProps> = ({ month, setMonth, data
 
     const chartData: PieChartData[] = data.map((_reportByMonth) => ({
         id: _reportByMonth.id,
-        label: _reportByMonth.label,
+        label: _reportByMonth.name,
         percentage: _reportByMonth.percentage,
         totalAmount: _reportByMonth.totalAmount,
         value: _reportByMonth.percentage
     }))
 
+    console.log(chartData)
 
-    return <div className=" h-full  p-2 px-4 rounded-lg">
+
+    return <div className=" h-full p-2 px-4 rounded-lg shadow-lg">
         <div className="flex md:flex-row flex-col items-center justify-between">
             <h1 className="text-xl font-bold text-primary py-2">
                 Monthly Expenses / Category

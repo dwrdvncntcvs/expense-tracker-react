@@ -10,7 +10,7 @@ interface BarChartProps {
 
 const BarChart: FC<BarChartProps> = ({ data }) => {
     return (
-        <div className="flex items-end w-full h-96 justify-end">
+        <div className="flex items-end w-full md:h-96 h-56 justify-end">
             <_BarChart
                 slotProps={{ legend: { hidden: true }, }}
                 dataset={data.map((val) => ({

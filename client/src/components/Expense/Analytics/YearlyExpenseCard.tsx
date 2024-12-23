@@ -15,7 +15,8 @@ const YearlyExpenseCard: FC<YearlyExpenseCardProps> = ({ data }) => {
         percentage: _yearlyReport.percentage
     }))
 
-    return <div className=" p-2 px-4 rounded-lg shadow-lg">
+
+    return <div className="p-2 px-4 rounded-lg shadow-lg">
         <div className="w-full">
             <h1 className="text-xl font-bold text-primary py-2">
                 Yearly Expenses

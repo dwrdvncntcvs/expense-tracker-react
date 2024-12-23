@@ -88,10 +88,10 @@ const Profile: FC = () => {
                         <div className="md:p-4 py-2 rounded-xl md:w-1/2 w-full">
                             <YearlyExpenses />
                         </div>
-                        <div className="p-4 md:w-1/2 w-full h-full  md:p-4 py-2 shadow-lg">
+                        <div className="md:w-1/2 w-full h-full  md:p-4 py-2 ">
                             <MonthlyExpenses />
                         </div>
-                        <div className="p-4 bg-quaternary w-full md:p-4 py-2 shadow-lg">
+                        <div className="bg-quaternary w-full md:p-4 py-2 ">
                             <YearlyExpensesByCategory />
                         </div>
                     </div>
