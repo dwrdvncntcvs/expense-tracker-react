@@ -51,7 +51,6 @@ const Dropdown: FC<DropdownProps> = ({
     };
 
     const handleSelect = (_option: Option) => () => {
-        console.log(_option);
         if (shouldUpdateLabel) {
             setCurrentLabel(_option.label);
         }
@@ -68,16 +67,15 @@ const Dropdown: FC<DropdownProps> = ({
         setIsDropdownOpen(false);
     };
 
+
     return (
         <div className={`relative ${className || ""}`} ref={ref}>
             <Button
                 color="plain"
                 bgColor="primary"
-                className={`${
-                    buttonClassName || ""
-                } p-2 px-4 flex gap-2 items-center justify-between ${
-                    !isDropdownOpen || "rounded-b-none"
-                }`}
+                className={`${buttonClassName || ""
+                    } p-2 px-4 flex gap-2 items-center justify-between ${!isDropdownOpen || "rounded-b-none"
+                    }`}
                 rounded="lg"
                 onClick={handleDropdown}
             >
@@ -94,11 +92,10 @@ const Dropdown: FC<DropdownProps> = ({
                         {options.map((_option) => (
                             <li key={_option.value} className="w-full">
                                 <button
-                                    className={`w-full text-center p-1 text-quaternary hover:bg-secondary ${
-                                        _option.value.toString() === selectedValue
-                                            ? "pointer-events-none bg-secondary"
-                                            : ""
-                                    }`}
+                                    className={`w-full text-center p-1 text-quaternary hover:bg-secondary ${_option.value.toString() === selectedValue
+                                        ? "pointer-events-none bg-secondary"
+                                        : ""
+                                        }`}
                                     onClick={handleSelect(_option)}
                                 >
                                     {_option.label}
