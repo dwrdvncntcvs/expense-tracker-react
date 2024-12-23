@@ -1,27 +1,22 @@
-import { MONTHS } from "@common/constants";
 import { abbreviate } from "@common/utils/str";
 import { Dropdown } from "@components/common";
 import { NoExpenseYear } from "@components/Expense";
-import { MonthlyExpenseCard, YearlyExpenseCard } from "@components/Expense/Analytics";
-import { AnalyticsLoading } from "@components/LoadingScreen";
 import { UploadProfileImage } from "@components/Modal";
 import { useAppDispatch } from "@hooks/storeHooks";
-import { LineChart, } from "@mui/x-charts";
 import {
-    useGetExpensesByMonthAnalyticsQuery,
-    useGetExpensesQuery,
-    useGetExpensesYearlyAnalyticsPerCategoryQuery,
-    useGetExpensesYearlyAnalyticsQuery,
+    useGetExpensesQuery
 } from "@store/queries/expense";
 import { useExpense } from "@store/slices/expense";
 import { show } from "@store/slices/modal";
 import { useUser } from "@store/slices/user";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { YearlyExpenses, YearlyExpensesByCategory } from "./Analytics";
+import MonthlyExpenses from "./Analytics/MonthlyExpenses";
 
 const Profile: FC = () => {
-    const params = useParams();
     const navigate = useNavigate();
+    const params = useParams();
 
     const dispatch = useAppDispatch();
     const { user } = useUser();
@@ -29,49 +24,6 @@ const Profile: FC = () => {
     const { expenses } = useExpense();
 
     useGetExpensesQuery();
-
-    const [month, setMonth] = useState<string>("");
-
-    const {
-        data: yearlyExpenseData,
-        isLoading: isYearlyExpenseLoading,
-        isFetching: isYearlyExpenseFetching,
-    } = useGetExpensesYearlyAnalyticsQuery(
-        {
-            year: params.year ? +params.year : 0,
-        },
-        {
-            skip: !params.year,
-        }
-    );
-
-    const {
-        data: yearlyExpenseCatData,
-        isLoading: isYearlyExpenseCatLoading,
-        isFetching: isYearlyExpenseCatFetching,
-    } = useGetExpensesYearlyAnalyticsPerCategoryQuery(
-        {
-            year: params.year || "",
-        },
-        {
-            skip: !params.year,
-        }
-    );
-
-    const {
-        data: monthlyExpenseData,
-        isLoading: isMonthlyExpenseLoading,
-        isFetching: isMonthlyExpenseFetching,
-    } = useGetExpensesByMonthAnalyticsQuery(
-        {
-            month: month,
-            year: params.year || "",
-        },
-        { skip: !month || !params.year }
-    );
-
-    const yearlyExpensesDataDetails = yearlyExpenseData?.data?.data;
-    const monthlyExpenseDataDetails = monthlyExpenseData?.data?.data
 
     return (
         <>
@@ -134,78 +86,13 @@ const Profile: FC = () => {
                 ) : (
                     <div className="flex h-full flex-wrap p-4 px-0">
                         <div className="md:p-4 py-2 rounded-xl md:w-1/2 w-full">
-                            {isYearlyExpenseLoading || isYearlyExpenseFetching ? (
-                                <div className="w-full p-2 px-4 rounded-lg">
-                                    <AnalyticsLoading />
-                                </div>
-                            ) : (
-                                <YearlyExpenseCard data={yearlyExpensesDataDetails} />
-                            )}
+                            <YearlyExpenses />
                         </div>
                         <div className="p-4 md:w-1/2 w-full h-full  md:p-4 py-2 shadow-lg">
-                            {isMonthlyExpenseFetching || isMonthlyExpenseLoading ? (
-                                <div className=" p-2 px-4 rounded-lg">
-                                    <AnalyticsLoading />
-                                </div>
-                            ) : (
-                                <MonthlyExpenseCard month={month} setMonth={setMonth} data={monthlyExpenseDataDetails || []} />
-                            )}
+                            <MonthlyExpenses />
                         </div>
-                        <div className="p-4 bg-quaternary w-full md:p-4 py-2  shadow-lg">
-
-                            {isYearlyExpenseCatFetching ||
-                                isYearlyExpenseCatLoading ? (
-                                <div className="rounded-lg p-2 px-4">
-                                    <AnalyticsLoading />
-                                </div>
-                            ) : (
-                                <div className="w-full rounded-lg p-2 px-4 ">
-                                    <h1 className="text-xl font-bold text-primary py-2">
-                                        Yearly Expenses / Category
-                                    </h1>
-                                    <div className="flex items-center w-full h-60 justify-center">
-                                        {yearlyExpenseCatData?.data?.data && (
-                                            <LineChart
-                                                xAxis={[
-                                                    {
-                                                        scaleType: "point",
-                                                        data: Object.keys(MONTHS),
-                                                    },
-                                                ]}
-                                                series={yearlyExpenseCatData.data.data.map(
-                                                    (category) => {
-                                                        const dataSet = Object.keys(
-                                                            MONTHS
-                                                        )?.map((key) => {
-                                                            const month =
-                                                                +MONTHS[
-                                                                key as keyof typeof MONTHS
-                                                                ];
-
-                                                            const totalAmount =
-                                                                category?.months.find(
-                                                                    (val) =>
-                                                                        val.month ===
-                                                                        month
-                                                                )?.totalAmount ||
-                                                                undefined;
-
-                                                            return totalAmount
-                                                                ? totalAmount
-                                                                : 0;
-                                                        });
-
-                                                        return {
-                                                            label: category.categoryName,
-                                                            data: dataSet,
-                                                        };
-                                                    }
-                                                )}
-                                            />
-                                        )}
-                                    </div>
-                                </div>
-                            )}
+                        <div className="p-4 bg-quaternary w-full md:p-4 py-2 shadow-lg">
+                            <YearlyExpensesByCategory />
                         </div>
                     </div>
                 )}

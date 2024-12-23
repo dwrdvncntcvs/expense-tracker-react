@@ -44,7 +44,7 @@ const PieChart: FC<PieChartProps> = ({ data }) => {
                                     - {analytic.percentage}%
                                 </span>
                             </p>
-                            <p>{formatCurrency(analytic.totalAmount, "PHP")}</p>
+                            <p>{formatCurrency(typeof analytic.totalAmount === "number" ? analytic.totalAmount.toString() : analytic.totalAmount, "PHP")}</p>
                         </div>
                     </div>
                 ))}
