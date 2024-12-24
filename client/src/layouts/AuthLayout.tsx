@@ -6,7 +6,7 @@ const AuthLayout: FC<PropsWithChildren> = ({ children }) => {
     const { pathname } = useLocation();
 
     return (
-        <div className="flex justify-center flex-col items-center h-full">
+        <div className="flex justify-center flex-col items-center h-screen">
             {/* <img src={logo} alt="Expense Tracker Logo" /> */}
             <Logo />
             {children}

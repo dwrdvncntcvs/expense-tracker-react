@@ -20,12 +20,17 @@ import {
 import { useGetCategoriesQuery } from "@store/queries/categories";
 import { useGetTagsQuery } from "@store/queries/tags";
 import { useIsAuthenticatedQuery } from "@store/queries/user";
+import { useUser } from "@store/slices/user";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 function App() {
+    const { isAuthenticated } = useUser();
+
     const { isLoading } = useIsAuthenticatedQuery();
-    const { data } = useGetCategoriesQuery();
-    useGetTagsQuery();
+    const { data } = useGetCategoriesQuery(undefined, {
+        skip: !isAuthenticated,
+    });
+    useGetTagsQuery(undefined, { skip: !isAuthenticated });
 
     const { pathname } = useLocation();
 
@@ -51,7 +56,7 @@ function App() {
         data?.data?.length > 0;
 
     return (
-        <MainLayout>
+        <MainLayout isLoading={isLoading}>
             <Routes>
                 <Route element={<Public loading={isLoading} />}>
                     <Route path="/sign-in" element={<SignIn />} />

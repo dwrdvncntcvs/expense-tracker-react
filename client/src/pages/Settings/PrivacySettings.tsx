@@ -19,7 +19,7 @@ const PrivacySettings: FC = () => {
         <SettingsContentLayout icon={HiLockClosed} title="Privacy Settings">
             <SettingsSection title="Change Password">
                 <Form
-                    className="flex flex-wrap gap-4"
+                    className="flex md:flex-row flex-col flex-wrap gap-4"
                     onSubmit={async (val, resetForm) => {
                         const response = await updatePasswordRequest(val);
 
