@@ -51,7 +51,8 @@ const ExpenseMonth: FC = () => {
     if (isLoading || isFetching) return <MonthlyExpenseLoading />;
 
     const metaData = data.data.expenses.metadata;
-    const totalAmount = data.data.expenses.totalAmount;
+    const outgoingTotal = data.data.expenses.outgoingTotal;
+    const incomingTotal = data.data.expenses.incomingTotal;
     const expenses = data.data.expenses.data as IExpense[];
 
     return (
@@ -59,7 +60,8 @@ const ExpenseMonth: FC = () => {
             <MonthlyExpenseHeader
                 month={params?.month || ""}
                 pagination={metaData}
-                totalAmount={totalAmount}
+                outgoingTotal={outgoingTotal}
+                incomingTotal={incomingTotal}
             />
 
             {!expenses && searchParams.get("categoryId") && (

@@ -1,5 +1,6 @@
 import { capitalize, formatCurrency } from "@common/utils/str";
 import ActionButtons from "@components/ActionButtons";
+import { Tag } from "@components/common";
 import { useAppDispatch } from "@hooks/storeHooks";
 import { show } from "@store/slices/modal";
 import { FC } from "react";
@@ -9,7 +10,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 
 interface MonthlyExpenseHeaderProps {
     month: string;
-    totalAmount: string;
+    outgoingTotal: string;
+    incomingTotal: string;
     pagination: {
         hasPrev: boolean;
         hasNext: boolean;
@@ -19,7 +21,8 @@ interface MonthlyExpenseHeaderProps {
 
 const MonthlyExpenseHeader: FC<MonthlyExpenseHeaderProps> = ({
     month,
-    totalAmount,
+    outgoingTotal,
+    incomingTotal,
     pagination,
 }) => {
     const dispatch = useAppDispatch();
@@ -27,6 +30,9 @@ const MonthlyExpenseHeader: FC<MonthlyExpenseHeaderProps> = ({
     const searchParamsArr = useSearchParams();
 
     const setSearchParams = searchParamsArr[1];
+
+    const isOverSpend = parseFloat(outgoingTotal) > parseFloat(incomingTotal);
+    const totalSaved = parseFloat(incomingTotal) - parseFloat(outgoingTotal);
 
     return (
         <div className="flex md:gap-0 gap-2 md:flex-wrap flex-col justify-between md:h-10">
@@ -42,13 +48,22 @@ const MonthlyExpenseHeader: FC<MonthlyExpenseHeaderProps> = ({
                         {capitalize(month)}{" "}
                     </h2>
                 )}
+                {isOverSpend && <Tag id='overbudget' bgColor="failure">Overbudget</Tag>}
+                {totalSaved > 0 && <Tag id="savings">Savings: {formatCurrency(totalSaved.toString(), "PHP")}</Tag>}
             </div>
             <div className="flex gap-4 items-center md:justify-end justify-between">
-                {totalAmount && (
-                    <span className="text-sm ml-2 text-gray-600 font-normal">
-                        Total: {formatCurrency(totalAmount, "PHP")}
-                    </span>
-                )}
+                <div className="flex flex-col items-end">
+                    {incomingTotal && (
+                        <span className="text-sm text-success ml-2 flex gap-2 items-center font-normal">
+                            <span className="font-bold text-xs">IN</span> {formatCurrency(incomingTotal, "PHP")}
+                        </span>
+                    )}
+                    {outgoingTotal && (
+                        <span className="text-sm ml-2 text-failure flex gap-2 items-center font-normal">
+                            <span className="font-bold text-xs">OUT</span> {formatCurrency(outgoingTotal, "PHP")}
+                        </span>
+                    )}
+                </div>
                 <div className="flex md:gap-4 gap-2">
                     <ActionButtons
                         rounded="full"

@@ -53,6 +53,7 @@ export interface IExpenseContext extends ExpenseState {
 }
 
 export interface ExpenseMonthDetails extends PaginationData {
-    totalAmount: number;
+    incomingTotal: number;
+    outgoingTotal: number;
     data: IExpense[];
 }
