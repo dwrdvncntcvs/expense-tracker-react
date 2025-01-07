@@ -11,7 +11,13 @@
         "build": "tsc",
         "build:w": "tsc --w",
         "start": "node ./dist",
-        "seed:default-acc": "set NODE_ENV=test&& tsc && node ./dist/seed/defaultAccount.js"
+        "seed:default-acc": "set NODE_ENV=test&& tsc && node ./dist/seed/defaultAccount.js",
+        "migrate:up:test": "set NODE_ENV=test&& migrate-mongo up",
+        "migrate:up:dev": "set NODE_ENV=dev&& migrate-mongo up",
+        "migrate:up:prod": "set NODE_ENV=prod&& migrate-mongo up",
+        "migrate:down:test": "set NODE_ENV=test&& migrate-mongo down",
+        "migrate:down:dev": "set NODE_ENV=dev&& migrate-mongo down",
+        "migrate:down:prod": "set NODE_ENV=prod&& migrate-mongo down"
     },
     "author": "Edward Vincent Cuevas",
     "license": "ISC",
@@ -33,8 +39,11 @@
     },
     "devDependencies": {
         "@faker-js/faker": "^8.4.1",
+        "@types/migrate-mongo": "^10.0.5",
         "@types/multer": "^1.4.11",
         "concurrently": "^8.2.0",
+        "cross-env": "^7.0.3",
+        "migrate-mongo": "^11.0.0",
         "nodemon": "^3.0.1",
         "typescript": "^5.1.6"
     }
