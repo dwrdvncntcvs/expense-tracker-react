@@ -38,7 +38,8 @@ const ExpenseMonth: FC = () => {
 
     useEffect(() => {
         if (
-            !searchParams.get("categoryId") &&
+            !(searchParams.get("categoryId") ||
+                searchParams.get("type")) &&
             !data?.data?.expenses?.data &&
             !isLoading
         ) {
@@ -64,7 +65,7 @@ const ExpenseMonth: FC = () => {
                 incomingTotal={incomingTotal}
             />
 
-            {!expenses && searchParams.get("categoryId") && (
+            {!expenses && (searchParams.get("categoryId") || searchParams.get("type")) && (
                 <NoMonthlyExpense />
             )}
             <div className="flex flex-wrap">

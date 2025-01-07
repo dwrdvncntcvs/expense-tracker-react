@@ -1,7 +1,11 @@
 import { Error, Types } from "mongoose";
 import { formatData } from "../database/mongoDb";
 import { ExpenseMonths } from "../types/Expense/controller";
-import { CreateExpense, UpdateExpense } from "../types/Expense/model";
+import {
+    CreateExpense,
+    ExpenseType,
+    UpdateExpense,
+} from "../types/Expense/model";
 import { Pagination } from "../types/Pagination/pagination";
 import { handleValidationError } from "../utils/error/mongo";
 import { monthLookUp } from "../utils/helpers/lookup";
@@ -167,8 +171,11 @@ class ExpenseService {
         month: number,
         year: number,
         categoryId?: string,
-        pagination?: Pagination
+        pagination?: Pagination,
+        expenseType: ExpenseType | undefined = undefined
     ) => {
+        console.log(expenseType);
+
         const filters: any = {
             userId: userId, // Convert userId to ObjectId
             month: month,
@@ -180,6 +187,10 @@ class ExpenseService {
 
         if (typeof categoryId !== "undefined") {
             filters["categoryId"] = new Types.ObjectId(categoryId);
+        }
+
+        if (expenseType) {
+            filters["type"] = expenseType;
         }
 
         if (pagination?.page && pagination?.limit) {
