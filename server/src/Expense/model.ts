@@ -1,8 +1,9 @@
 import mongoose, { Schema, model } from "mongoose";
 import { required } from "../utils";
-import { Expense } from "../types/Expense/model";
+import { Expense, ExpenseType } from "../types/Expense/model";
 import { MONTHS } from "../variables";
-import { TagSchema } from "../Settings/Tags/model";
+
+export const expenseTypeEnum: ExpenseType[] = ["incoming", "outgoing"];
 
 const ExpenseSchema = new Schema(
     {
@@ -19,6 +20,11 @@ const ExpenseSchema = new Schema(
             type: Schema.Types.ObjectId,
             required: [true, required("Category")],
             ref: "Category",
+        },
+        type: {
+            type: String,
+            enum: expenseTypeEnum,
+            required: [true, required("Expense Type")],
         },
         amount: {
             type: Number,

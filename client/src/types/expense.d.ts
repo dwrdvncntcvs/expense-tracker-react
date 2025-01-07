@@ -2,12 +2,15 @@ import { PaginationData } from "./pagination";
 import { IExpenseCategory } from "./Settings/category";
 import { ITag } from "./Settings/tag";
 
+export type ExpenseType = "incoming" | "outgoing";
+
 export interface IExpense {
     id: string;
     userId: string;
     categoryId: string;
     label: string;
     purchaseDate: string;
+    type: ExpenseType;
     month: number;
     amount: number;
     createdAt: string;
@@ -50,6 +53,7 @@ export interface IExpenseContext extends ExpenseState {
 }
 
 export interface ExpenseMonthDetails extends PaginationData {
-    totalAmount: number;
+    incomingTotal: number;
+    outgoingTotal: number;
     data: IExpense[];
 }

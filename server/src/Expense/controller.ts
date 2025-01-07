@@ -1,6 +1,10 @@
 import { RequestHandler } from "express";
 import { IExpenseController } from "../types/Expense/controller";
-import { CreateExpense, UpdateExpense } from "../types/Expense/model";
+import {
+    CreateExpense,
+    ExpenseType,
+    UpdateExpense,
+} from "../types/Expense/model";
 import ErrorService from "../utils/error";
 import ExpenseService from "./service";
 import FirebaseStorage from "../services/firebaseStorage";
@@ -18,13 +22,16 @@ class ExpenseController implements IExpenseController {
         req.query.page = req?.query?.page || "1";
         req.query.limit = req?.query?.limit || "10";
 
+        console.log(req.query);
+
         try {
             const data = await this.service.getExpenses(
                 userId,
                 +month,
                 +year,
                 req?.query?.categoryId as string,
-                req.query
+                req.query,
+                req?.query?.type as ExpenseType
             );
 
             return res.status(200).send({ data });
@@ -71,6 +78,7 @@ class ExpenseController implements IExpenseController {
             categoryId,
             userId,
             label,
+            type: req.body.type,
             month,
             purchaseDate,
             description,
@@ -116,6 +124,7 @@ class ExpenseController implements IExpenseController {
         const updatedBody: UpdateExpense = {
             amount,
             label,
+            type: req.body.type,
             description,
             categoryId,
             tags,

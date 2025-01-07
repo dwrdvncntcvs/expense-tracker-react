@@ -29,11 +29,20 @@ const CreateExpense: FC = () => {
 
                         val["month"] = month.getMonth() + 1;
 
-                        await createExpenseRequest(val);
+                        console.log(val);
+
+                        const response = await createExpenseRequest(val);
+
+                        if (response.error) {
+                            console.log(response.error);
+                            return;
+                        }
 
                         resetForm();
                         dispatch(
-                            success({ message: "Expense successfully added" })
+                            success({
+                                message: "Expense successfully added",
+                            })
                         );
                         dispatch(hide());
                     }}

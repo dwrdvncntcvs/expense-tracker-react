@@ -1,13 +1,16 @@
-import { Error } from "mongoose";
+import { Error, Types } from "mongoose";
 import { formatData } from "../database/mongoDb";
 import { ExpenseMonths } from "../types/Expense/controller";
-import { CreateExpense, UpdateExpense } from "../types/Expense/model";
+import {
+    CreateExpense,
+    ExpenseType,
+    UpdateExpense,
+} from "../types/Expense/model";
 import { Pagination } from "../types/Pagination/pagination";
 import { handleValidationError } from "../utils/error/mongo";
 import { monthLookUp } from "../utils/helpers/lookup";
-import { Types } from "mongoose";
+import { MONTHS_OBJ } from "../variables";
 import ExpenseModel from "./model";
-import { MONTHS, MONTHS_OBJ } from "../variables";
 
 class ExpenseService {
     private model: typeof ExpenseModel;
@@ -168,8 +171,11 @@ class ExpenseService {
         month: number,
         year: number,
         categoryId?: string,
-        pagination?: Pagination
+        pagination?: Pagination,
+        expenseType: ExpenseType | undefined = undefined
     ) => {
+        console.log(expenseType);
+
         const filters: any = {
             userId: userId, // Convert userId to ObjectId
             month: month,
@@ -183,6 +189,10 @@ class ExpenseService {
             filters["categoryId"] = new Types.ObjectId(categoryId);
         }
 
+        if (expenseType) {
+            filters["type"] = expenseType;
+        }
+
         if (pagination?.page && pagination?.limit) {
             pagination.page = +pagination.page;
             pagination.limit = +pagination.limit;
@@ -191,7 +201,6 @@ class ExpenseService {
 
         let data = await this.model.aggregate([
             { $match: filters },
-
             {
                 $facet: {
                     metadata: [
@@ -202,8 +211,12 @@ class ExpenseService {
                             },
                         },
                     ],
-
-                    totalAmount: [
+                    incomingTotal: [
+                        {
+                            $match: {
+                                type: "incoming",
+                            },
+                        },
                         {
                             $group: {
                                 _id: null,
@@ -211,7 +224,19 @@ class ExpenseService {
                             },
                         },
                     ],
-
+                    outgoingTotal: [
+                        {
+                            $match: {
+                                type: "outgoing",
+                            },
+                        },
+                        {
+                            $group: {
+                                _id: null,
+                                totalAmount: { $sum: "$amount" },
+                            },
+                        },
+                    ],
                     data: [
                         { $skip: pagination?.offset || 0 },
                         { $limit: pagination?.limit || 10 },
@@ -273,6 +298,7 @@ class ExpenseService {
                                                     },
                                                 },
                                             },
+                                            type: "$$expense.type",
                                             amount: "$$expense.amount",
                                             imageUrl: "$$expense.imageUrl",
                                             purchaseDate:
@@ -291,8 +317,11 @@ class ExpenseService {
             {
                 $project: {
                     metadata: { $arrayElemAt: ["$metadata", 0] },
-                    totalAmount: {
-                        $arrayElemAt: ["$totalAmount.totalAmount", 0],
+                    incomingTotal: {
+                        $arrayElemAt: ["$incomingTotal.totalAmount", 0],
+                    },
+                    outgoingTotal: {
+                        $arrayElemAt: ["$outgoingTotal.totalAmount", 0],
                     },
                     data: { $arrayElemAt: ["$data.expenses", 0] },
                 },
