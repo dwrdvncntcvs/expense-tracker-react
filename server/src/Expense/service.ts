@@ -190,7 +190,6 @@ class ExpenseService {
 
         let data = await this.model.aggregate([
             { $match: filters },
-
             {
                 $facet: {
                     metadata: [
@@ -201,8 +200,12 @@ class ExpenseService {
                             },
                         },
                     ],
-
-                    totalAmount: [
+                    incomingTotal: [
+                        {
+                            $match: {
+                                type: "incoming",
+                            },
+                        },
                         {
                             $group: {
                                 _id: null,
@@ -210,7 +213,19 @@ class ExpenseService {
                             },
                         },
                     ],
-
+                    outgoingTotal: [
+                        {
+                            $match: {
+                                type: "outgoing",
+                            },
+                        },
+                        {
+                            $group: {
+                                _id: null,
+                                totalAmount: { $sum: "$amount" },
+                            },
+                        },
+                    ],
                     data: [
                         { $skip: pagination?.offset || 0 },
                         { $limit: pagination?.limit || 10 },
@@ -291,8 +306,11 @@ class ExpenseService {
             {
                 $project: {
                     metadata: { $arrayElemAt: ["$metadata", 0] },
-                    totalAmount: {
-                        $arrayElemAt: ["$totalAmount.totalAmount", 0],
+                    incomingTotal: {
+                        $arrayElemAt: ["$incomingTotal.totalAmount", 0],
+                    },
+                    outgoingTotal: {
+                        $arrayElemAt: ["$outgoingTotal.totalAmount", 0],
                     },
                     data: { $arrayElemAt: ["$data.expenses", 0] },
                 },
