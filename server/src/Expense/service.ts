@@ -333,7 +333,7 @@ class ExpenseService {
                             {
                                 $and: [
                                     {
-                                        $lt: [
+                                        $lte: [
                                             "$metadata.total",
                                             (pagination?.limit || 10) *
                                                 (pagination?.page || 1),
@@ -349,7 +349,7 @@ class ExpenseService {
                     "metadata.hasNext": {
                         $cond: [
                             {
-                                $gt: [
+                                $gte: [
                                     "$metadata.total",
                                     (pagination?.limit || 10) *
                                         (pagination?.page || 1),
