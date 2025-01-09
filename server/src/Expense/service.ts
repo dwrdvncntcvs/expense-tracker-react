@@ -11,6 +11,7 @@ import { handleValidationError } from "../utils/error/mongo";
 import { monthLookUp } from "../utils/helpers/lookup";
 import { MONTHS_OBJ } from "../variables";
 import ExpenseModel from "./model";
+import { generateCategoryDataAggregate } from "./aggregate";
 
 class ExpenseService {
     private model: typeof ExpenseModel;
@@ -38,7 +39,15 @@ class ExpenseService {
         year: number,
         userId: string
     ) => {
-        const categoryData = await this.model.aggregate([
+        const incomingCategoryData = await this.model.aggregate(
+            generateCategoryDataAggregate(userId, month, year, "incoming")
+        );
+
+        const outgoingCategoryData = await this.model.aggregate(
+            generateCategoryDataAggregate(userId, month, year, "outgoing")
+        );
+
+        const generateAggregateTotalByType = (type: ExpenseType) => [
             {
                 $match: {
                     userId: userId,
@@ -47,47 +56,7 @@ class ExpenseService {
                         $gte: new Date(year, month - 1, 1), // Start of the selected month
                         $lt: new Date(year, month, 1), // Start of the next month
                     },
-                },
-            },
-            {
-                $lookup: {
-                    from: "categories",
-                    localField: "categoryId",
-                    foreignField: "_id",
-                    as: "categoryInfo",
-                },
-            },
-            {
-                $unwind: "$categoryInfo",
-            },
-            {
-                $group: {
-                    _id: "$categoryId",
-                    id: { $first: "$categoryId" },
-                    name: { $first: "$categoryInfo.name" },
-                    totalAmount: { $sum: "$amount" },
-                    count: { $sum: 1 },
-                },
-            },
-            {
-                $project: {
-                    _id: 0,
-                    id: 1,
-                    name: 1,
-                    totalAmount: 1,
-                    count: 1,
-                },
-            },
-        ]);
-        const total = await this.model.aggregate([
-            {
-                $match: {
-                    userId: userId,
-                    month: month,
-                    purchaseDate: {
-                        $gte: new Date(year, month - 1, 1), // Start of the selected month
-                        $lt: new Date(year, month, 1), // Start of the next month
-                    },
+                    type,
                 },
             },
             {
@@ -105,24 +74,44 @@ class ExpenseService {
                     count: 1,
                 },
             },
-        ]);
+        ];
 
-        const totalData = total[0];
+        const outgoingTotal = await this.model.aggregate(
+            generateAggregateTotalByType("outgoing")
+        );
+        const incomingTotal = await this.model.aggregate(
+            generateAggregateTotalByType("incoming")
+        );
 
-        const categoryDataWithPercentage = categoryData.map((category) => {
+        const percentageMapping = (totalObject: any) => (category: any) => {
             return {
                 ...category,
-                percentage: totalData.totalAmount
+                percentage: totalObject.totalAmount
                     ? Math.round(
-                          (category.totalAmount / totalData.totalAmount) * 10000
+                          (category.totalAmount / totalObject.totalAmount) *
+                              10000
                       ) / 100
                     : 0,
             };
-        });
+        };
+
+        const incomingCategoryDataWithPercentage = incomingCategoryData.map(
+            percentageMapping(incomingTotal[0])
+        );
+
+        const outgoingCategoryDataWithPercentage = outgoingCategoryData.map(
+            percentageMapping(outgoingTotal[0])
+        );
 
         return {
-            meta: totalData,
-            data: categoryDataWithPercentage,
+            meta: {
+                incoming: incomingTotal[0],
+                outgoing: outgoingTotal[0],
+            },
+            data: {
+                incoming: incomingCategoryDataWithPercentage,
+                outgoing: outgoingCategoryDataWithPercentage,
+            },
         };
     };
 
