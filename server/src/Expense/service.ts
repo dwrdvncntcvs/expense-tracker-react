@@ -11,7 +11,7 @@ import { handleValidationError } from "../utils/error/mongo";
 import { monthLookUp } from "../utils/helpers/lookup";
 import { MONTHS_OBJ } from "../variables";
 import ExpenseModel from "./model";
-import { generateCategoryDataAggregate } from "./aggregate";
+import { GenerateCategoryAggregate } from "./aggregate";
 
 class ExpenseService {
     private model: typeof ExpenseModel;
@@ -39,48 +39,25 @@ class ExpenseService {
         year: number,
         userId: string
     ) => {
+        const { categoryData, categoryTotal } = new GenerateCategoryAggregate(
+            userId,
+            month,
+            year
+        );
+
         const incomingCategoryData = await this.model.aggregate(
-            generateCategoryDataAggregate(userId, month, year, "incoming")
+            categoryData("incoming")
         );
 
         const outgoingCategoryData = await this.model.aggregate(
-            generateCategoryDataAggregate(userId, month, year, "outgoing")
+            categoryData("outgoing")
         );
-
-        const generateAggregateTotalByType = (type: ExpenseType) => [
-            {
-                $match: {
-                    userId: userId,
-                    month: month,
-                    purchaseDate: {
-                        $gte: new Date(year, month - 1, 1), // Start of the selected month
-                        $lt: new Date(year, month, 1), // Start of the next month
-                    },
-                    type,
-                },
-            },
-            {
-                $group: {
-                    _id: null,
-                    totalAmount: { $sum: "$amount" },
-                    count: { $sum: 1 },
-                },
-            },
-            {
-                $project: {
-                    _id: 0,
-                    name: 1,
-                    totalAmount: 1,
-                    count: 1,
-                },
-            },
-        ];
 
         const outgoingTotal = await this.model.aggregate(
-            generateAggregateTotalByType("outgoing")
+            categoryTotal("outgoing")
         );
         const incomingTotal = await this.model.aggregate(
-            generateAggregateTotalByType("incoming")
+            categoryTotal("incoming")
         );
 
         const percentageMapping = (totalObject: any) => (category: any) => {
@@ -163,8 +140,6 @@ class ExpenseService {
         pagination?: Pagination,
         expenseType: ExpenseType | undefined = undefined
     ) => {
-        console.log(expenseType);
-
         const filters: any = {
             userId: userId, // Convert userId to ObjectId
             month: month,
