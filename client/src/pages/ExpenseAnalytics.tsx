@@ -44,13 +44,13 @@ export const ExpenseAnalytics: FC = () => {
             ) : (
                 <>
                     <ChartLayout
-                        amount={data.data.expenseAnalytics.totalAmount}
+                        amount={data?.data.data.meta?.totalAmount}
                     >
                         {(chart) => (
                             <>
                                 {chart === "pie" && (
                                     <PieChart
-                                        data={data.data.categoriesExpenseAnalytics.map(
+                                        data={data?.data.data?.map(
                                             (analytic) => ({
                                                 id: analytic.id,
                                                 value: analytic.percentage,
@@ -64,7 +64,7 @@ export const ExpenseAnalytics: FC = () => {
                                 )}
                                 {chart === "bar" && (
                                     <BarChart
-                                        data={data.data.categoriesExpenseAnalytics.map(
+                                        data={data?.data.data?.map(
                                             (val) => ({
                                                 ...val,
                                                 id: val.id,
