@@ -1,5 +1,6 @@
 import { ICreateExpense, IExpense } from "@_types/expense";
 import api from "./api";
+import { ExpenseReportByMonth, ExpenseReportByYear } from "@_types/reports";
 
 export interface ExpenseByMonthParams {
     month: string;
@@ -70,14 +71,20 @@ const expenseApi = api.injectEndpoints({
                 "expense-year-analytics-cat",
             ],
         }),
-        getExpensesByMonthAnalytics: build.query<any, ExpenseByMonthParams>({
+        getExpensesByMonthAnalytics: build.query<
+            { data: ExpenseReportByMonth },
+            ExpenseByMonthParams
+        >({
             query: (val) => ({
                 url: `/expenses/${val.month}/${val.year}/analytics`,
                 method: "GET",
             }),
             providesTags: ["expense-month-analytics"],
         }),
-        getExpensesYearlyAnalytics: build.query<any, YearlyExpensesParams>({
+        getExpensesYearlyAnalytics: build.query<
+            { data: ExpenseReportByYear },
+            YearlyExpensesParams
+        >({
             query: (val) => ({
                 url: `/expenses/all/year/${val.year}/analytics`,
                 method: "GET",

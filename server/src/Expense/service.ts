@@ -11,7 +11,10 @@ import { handleValidationError } from "../utils/error/mongo";
 import { monthLookUp } from "../utils/helpers/lookup";
 import { MONTHS_OBJ } from "../variables";
 import ExpenseModel from "./model";
-import { GenerateCategoryAggregate } from "./aggregate";
+import {
+    GenerateCategoryAggregate,
+    GenerateExpenseAggregate,
+} from "../aggregates";
 
 class ExpenseService {
     private model: typeof ExpenseModel;
@@ -487,69 +490,13 @@ class ExpenseService {
         const startDate = new Date(`${year}-01-01T00:00:00.000Z`);
         const endDate = new Date(`${year + 1}-01-01T00:00:00.000Z`);
 
-        const mappedSwitchCaseMonth = Object.keys(MONTHS_OBJ).map((key) => {
-            const label = key.toLowerCase();
-            const monthValue = MONTHS_OBJ[key as keyof typeof MONTHS_OBJ];
-            return {
-                case: { $eq: ["$id", +monthValue] },
-                then: `${label.charAt(0).toUpperCase()}${label.slice(1)}`,
-            };
-        });
+        const { expenseYearlyAnalytics } = new GenerateExpenseAggregate(
+            userId,
+            startDate,
+            endDate
+        );
 
-        const data = await this.model.aggregate([
-            {
-                $match: {
-                    userId: userId,
-                    purchaseDate: {
-                        $gte: startDate,
-                        $lt: endDate,
-                    },
-                },
-            },
-            {
-                $facet: {
-                    totalAmount: [
-                        {
-                            $group: {
-                                _id: null,
-                                totalAmount: { $sum: "$amount" },
-                                year: { $first: year },
-                            },
-                        },
-                        {
-                            $project: {
-                                _id: 0,
-                                totalAmount: 1,
-                                year: 1,
-                            },
-                        },
-                    ],
-                    monthlyTotalExpenses: [
-                        {
-                            $group: {
-                                _id: "$month",
-                                id: { $first: "$month" },
-                                label: { $first: "$month" },
-                                totalAmount: { $sum: "$amount" },
-                            },
-                        },
-                        {
-                            $project: {
-                                _id: 0,
-                                id: 1,
-                                totalAmount: 1,
-                                label: {
-                                    $switch: {
-                                        branches: mappedSwitchCaseMonth,
-                                        default: "Unknown",
-                                    },
-                                },
-                            },
-                        },
-                    ],
-                },
-            },
-        ]);
+        const data = await this.model.aggregate(expenseYearlyAnalytics(year));
 
         const totalYearlyObject = data[0].totalAmount[0];
         const monthlyTotalExpenseArr = data[0].monthlyTotalExpenses;
@@ -567,7 +514,7 @@ class ExpenseService {
         ) as {
             id: number;
             totalAmount: number;
-            label: string;
+            name: string;
             percentage: number;
         }[];
 

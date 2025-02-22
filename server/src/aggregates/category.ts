@@ -1,6 +1,6 @@
 import { type ExpenseType } from "../types/Expense/model";
 
-export class GenerateCategoryAggregate {
+export default class GenerateCategoryAggregate {
     constructor(
         private userId: string,
         private month: number,

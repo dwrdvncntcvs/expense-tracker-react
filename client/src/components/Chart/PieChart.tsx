@@ -1,40 +1,56 @@
 import { PieChartData } from "@_types/chart";
 import { generateAccents } from "@common/utils/color";
-import { formatCurrency } from "@common/utils/str";
 import usePieChartResize from "@hooks/usePieChartResize";
 import { PieChart as _PieChart } from "@mui/x-charts/PieChart";
 import { FC } from "react";
 
+type ChartObjectData = {
+    [key: string]: PieChartData[];
+}
 interface PieChartProps {
-    data: PieChartData[];
+    data: ChartObjectData;
 }
 
 const PieChart: FC<PieChartProps> = ({ data }) => {
     const { ref, resizeData } = usePieChartResize();
 
+    type ColorObject = {
+        [key in keyof typeof data]: string;
+    }
+
+    const colors: ColorObject = {
+        "outgoing": "#eb445a",
+        "incoming": "#2dd36f",
+    }
+
     return (
         <>
             <div className="md:h-52 h-44 w-full" ref={ref}>
                 <_PieChart
-                    colors={generateAccents("#427D9D", data.length, true)}
                     slotProps={{ legend: { hidden: true } }}
-                    series={[
-                        {
-                            data,
+                    series={Object.keys(data).map((key, i) => {
+                        const _data = data[key];
+                        const index = i + 1
+
+                        return {
+                            data: _data.map((_d, j) => {
+                                const accentColors = generateAccents(colors[key], _data.length, true)
+                                return ({ ..._d, color: accentColors[j] })
+                            }),
                             valueFormatter: (val) => `${val.value}%`,
-                            innerRadius: 20,
-                            outerRadius: resizeData?.outerRadius,
+                            innerRadius: 50,
+                            outerRadius: resizeData?.outerRadius * index - resizeData?.subtractOuterRadiusVal,
                             paddingAngle: 2,
-                            cornerRadius: 4,
+                            cornerRadius: 6,
                             startAngle: -180,
                             endAngle: 180,
                             cx: resizeData?.cx,
                             cy: resizeData?.cy,
-                        },
-                    ]}
+                        }
+                    })}
                 />
             </div>
-            <div className="flex flex-wrap">
+            {/* <div className="flex flex-wrap">
                 {data.map((analytic) => (
                     <div className="w-1/2" key={analytic.id}>
                         <div className="m-1  p-2">
@@ -48,7 +64,7 @@ const PieChart: FC<PieChartProps> = ({ data }) => {
                         </div>
                     </div>
                 ))}
-            </div>
+            </div> */}
         </>
     );
 };
