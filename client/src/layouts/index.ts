@@ -7,3 +7,4 @@ export { default as Toast } from "@layouts/Toast";
 export { default as SettingsContentLayout } from "@layouts/SettingsContentLayout";
 export { default as ChartLayout } from "@layouts/ChartLayout";
 export { default as SettingsSection } from "@layouts/SettingsSection";
+export { default as ReportsLayout } from "@layouts/ReportsLayout";

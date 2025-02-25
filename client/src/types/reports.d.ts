@@ -6,7 +6,7 @@ export type ExpenseReportByYearMeta = {
 export type ExpenseReportByYearData = {
     id: number;
     totalAmount: number;
-    label: string;
+    name: string;
     percentage: number;
 };
 
@@ -27,7 +27,8 @@ export type ExpenseReportByCategoryData = {
 };
 
 export type ExpenseReportByMonthData = {
-    id: number;
+    count: number;
+    id: string;
     totalAmount: number;
     name: string;
     percentage: number;
@@ -38,9 +39,21 @@ export type ExpenseReportByMonthMeta = {
     count: number;
 };
 
+export type IncomingMeta = ExpenseReportByMonthMeta;
+export type IncomingData = ExpenseReportByMonthData;
+
+export type OutgoingMeta = ExpenseReportByMonthMeta;
+export type OutgoingData = ExpenseReportByMonthData;
+
 export type ExpenseReportByMonth = {
-    meta: ExpenseReportByMonthMeta;
-    data: ExpenseReportByMonthData[];
+    meta: {
+        incoming: IncomingMeta;
+        outgoing: OutgoingMeta;
+    };
+    data: {
+        incoming: IncomingData[];
+        outgoing: OutgoingData[];
+    };
 };
 
 export type ExpenseReportByYear = {

@@ -1,19 +1,21 @@
+import { ExpenseType } from "@_types/expense";
 import { MONTHS } from "@common/constants";
 import { capitalize } from "@common/utils/str";
-import { BarChart, PieChart } from "@components/Chart";
+import { AnalyticsCard } from "@components/Analytics";
 import { AnalyticsModalLoading } from "@components/LoadingScreen";
 import { Modal } from "@components/Overlays";
 import { useAppDispatch } from "@hooks/storeHooks";
-import ChartLayout from "@layouts/ChartLayout";
+import { ReportsLayout } from "@layouts";
 import { useGetExpensesByMonthAnalyticsQuery } from "@store/queries/expense";
 import { hide, show } from "@store/slices/modal";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 export const ExpenseAnalytics: FC = () => {
     const params = useParams();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const [option, setOption] = useState<ExpenseType>("incoming");
 
     const { data, isLoading, isFetching } = useGetExpensesByMonthAnalyticsQuery(
         {
@@ -26,11 +28,16 @@ export const ExpenseAnalytics: FC = () => {
 
     useEffect(() => {
         dispatch(show("expense-analytics"));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const meta = data?.data?.meta[option]
+    const reportData = data?.data?.data[option]
+
 
     return (
         <Modal
-            title={`${capitalize(params.month || "")}'s Expenses Analytics`}
+            title={`${capitalize(params.month || "")}'s Expenses Reports`}
             name="expense-analytics"
             options={{
                 closeCb: () => {
@@ -43,39 +50,24 @@ export const ExpenseAnalytics: FC = () => {
                 <AnalyticsModalLoading />
             ) : (
                 <>
-                    <ChartLayout
-                        amount={data.data.expenseAnalytics.totalAmount}
+                    <ReportsLayout
+                        selectOption={(option) => {
+                            console.log("Option Selected: ", option)
+                            setOption(option)
+                        }}
+                        totalAmount={meta?.totalAmount}
                     >
-                        {(chart) => (
-                            <>
-                                {chart === "pie" && (
-                                    <PieChart
-                                        data={data.data.categoriesExpenseAnalytics.map(
-                                            (analytic) => ({
-                                                id: analytic.id,
-                                                value: analytic.percentage,
-                                                label: `${analytic.name} `,
-                                                totalAmount:
-                                                    analytic.totalAmount,
-                                                percentage: analytic.percentage,
-                                            })
-                                        )}
-                                    />
-                                )}
-                                {chart === "bar" && (
-                                    <BarChart
-                                        data={data.data.categoriesExpenseAnalytics.map(
-                                            (val) => ({
-                                                ...val,
-                                                id: val.id,
-                                                label: val.name,
-                                            })
-                                        )}
-                                    />
-                                )}
-                            </>
+                        {reportData?.map((data) => (
+                            <AnalyticsCard key={data.id} {...data} />
+                        ))}
+                        {reportData?.length === 0 && (
+                            <div className="py-2">
+                                <p className="text-start text-secondary">
+                                    No data available
+                                </p>
+                            </div>
                         )}
-                    </ChartLayout>
+                    </ReportsLayout>
                 </>
             )}
         </Modal>

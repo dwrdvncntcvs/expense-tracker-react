@@ -1,12 +1,16 @@
 import { ExpenseReportByCategoryData } from "@_types/reports";
 import { MONTHS } from "@common/constants";
+import { generateAccents } from "@common/utils/color";
 import { AnalyticsLoading } from "@components/LoadingScreen";
 import { LineChart } from "@mui/x-charts";
 import { useGetExpensesYearlyAnalyticsPerCategoryQuery } from "@store/queries/expense";
+import { useTheme } from "@store/slices/theme";
+import { capitalize } from "lodash-es";
 import { FC } from "react";
 import { useParams } from "react-router-dom";
 
 const YearlyExpensesByCategory: FC = () => {
+    const theme = useTheme()
     const params = useParams();
     const {
         data: yearlyExpenseCatData,
@@ -29,12 +33,22 @@ const YearlyExpensesByCategory: FC = () => {
             <AnalyticsLoading />
         </div>
 
-    return <div className="p-4 flex items-center w-full h-60 justify-center rounded-lg shadow-lg">
+    return <div className="p-4 flex flex-col items-start w-full h-72 justify-center rounded-lg shadow-lg">
+        <h1 className="text-xl font-bold text-primary py-2">
+            Expenses Flow by Category
+        </h1>
         <LineChart
+            desc="Yearly Expenses by Category"
+            slotProps={{ legend: { hidden: true } }}
+            margin={{ top: 15, right: 20, bottom: 15, left: 20 }}
+            height={200}
+            colors={generateAccents(theme.color.primary, 100, true)}
+            leftAxis={{ disableLine: true, disableTicks: true, tickLabelStyle: { display: "none" }, }}
+            bottomAxis={{ disableLine: true, disableTicks: true, tickLabelStyle: { display: "none" } }}
             xAxis={[
                 {
                     scaleType: "point",
-                    data: Object.keys(MONTHS).map(key => MONTHS[key as keyof typeof MONTHS]),
+                    data: Object.keys(MONTHS).map(key => capitalize(key)),
                 },
             ]}
             series={_yearlyExpenseCatData.map(

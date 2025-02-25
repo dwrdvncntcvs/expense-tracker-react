@@ -24,7 +24,7 @@ import { useUser } from "@store/slices/user";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 function App() {
-    const { isAuthenticated } = useUser();
+    const { isAuthenticated,  } = useUser();
 
     const { isLoading } = useIsAuthenticatedQuery();
     const { data } = useGetCategoriesQuery(undefined, {
