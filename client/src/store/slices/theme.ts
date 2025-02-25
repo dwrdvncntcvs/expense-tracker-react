@@ -1,4 +1,4 @@
-import { ColorWay, Theme } from "@_types/theme";
+import { ColorWay, Theme, ThemeType } from "@_types/theme";
 import { useAppSelector } from "@hooks/storeHooks";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { userApi } from "@store/queries/user";
@@ -65,7 +65,7 @@ const themeSlice = createSlice({
     initialState,
     reducers: {
         setTheme: (state, actions: PayloadAction<string>) => {
-            state.name = actions.payload;
+            state.name = `theme-${actions.payload}`;
         },
     },
     extraReducers: (builder) => {
@@ -73,7 +73,9 @@ const themeSlice = createSlice({
             .addMatcher(
                 userApi.endpoints.isAuthenticated.matchFulfilled,
                 (state, action) => {
-                    state.name = `theme-${action.payload.user.themeType}`;
+                    const themeType = action.payload.user.themeType;
+                    state.name = `theme-${themeType}`;
+                    state.color = themes[themeType as ThemeType];
                 }
             )
             .addMatcher(userApi.endpoints.signOut.matchFulfilled, (state) => {

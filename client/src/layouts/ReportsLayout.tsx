@@ -7,16 +7,19 @@ import { HiArrowTrendingDown, HiArrowTrendingUp } from "react-icons/hi2";
 
 export type ReportLayoutProps = PropsWithChildren<{
     selectOption?: (option: ExpenseType) => void
-    totalAmount?: number
+    totalAmount?: number,
+    col?: number
 }>
 
-const ReportLayout: FC<ReportLayoutProps> = ({ children, selectOption, totalAmount }) => {
+const ReportLayout: FC<ReportLayoutProps> = ({ children, selectOption, totalAmount, col }) => {
     type ExpenseTypeOptionObject = {
         [key in ExpenseType]: {
             icon: IconType,
             color: string
         };
     }
+
+    if (!col) col = 2
 
     const options: ExpenseType[] = ["incoming", "outgoing"]
     const optionsObject: ExpenseTypeOptionObject = {
@@ -30,10 +33,25 @@ const ReportLayout: FC<ReportLayoutProps> = ({ children, selectOption, totalAmou
         }
     }
 
+    const column: string[] = [
+        "grid-cols-1",
+        "grid-cols-2",
+        "grid-cols-3",
+        "grid-cols-4",
+        "grid-cols-5",
+        "grid-cols-6",
+        "grid-cols-7",
+        "grid-cols-8",
+        "grid-cols-9",
+        "grid-cols-10",
+        "grid-cols-11",
+        "grid-cols-12",
+    ]
+
     const [selectedOption, setSelectedOption] = useState<ExpenseType>("incoming")
 
     return <div className="flex flex-col gap-2">
-        <div className={`flex ${selectOption ? "justify-between" : "justify-end"} items-center py-2`}>
+        <div className={`flex transition-all ${selectOption ? "justify-between" : "justify-end"} items-center py-2`}>
             {selectOption &&
                 <div className="flex overflow-auto">
                     {options.map((option) => {
@@ -63,7 +81,9 @@ const ReportLayout: FC<ReportLayoutProps> = ({ children, selectOption, totalAmou
                 Total: {formatCurrency(`${totalAmount}`, "PHP")}
             </p>}
         </div>
-        {children}
+        <div className={`grid ${column[col - 1]} gap-2 flex-wrap`}>
+            {children}
+        </div>
     </div>
 }
 

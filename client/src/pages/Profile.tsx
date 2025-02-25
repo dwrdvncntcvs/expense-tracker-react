@@ -74,7 +74,6 @@ const Profile: FC = () => {
                                 value: key,
                             }))}
                             shouldUpdateLabel
-                            canClear
                             selectCb={(value) => {
                                 navigate(`/user/${value}`);
                             }}
@@ -84,15 +83,13 @@ const Profile: FC = () => {
                 {!params.year ? (
                     <NoExpenseYear />
                 ) : (
-                    <div className="flex h-full flex-wrap p-4 px-0">
-                        <div className="md:p-4 py-2 rounded-xl md:w-1/2 w-full">
+                    <div className="grid grid-cols-5 gap-4 h-full flex-wrap p-4 px-0">
+                        <div className="md:col-span-2 col-span-5 space-y-4">
                             <YearlyExpenses />
                         </div>
-                        <div className="md:w-1/2 w-full h-full  md:p-4 py-2 ">
-                            <MonthlyExpenses />
-                        </div>
-                        <div className="bg-quaternary w-full md:p-4 py-2 ">
+                        <div className="md:col-span-3 col-span-5 space-y-4">
                             <YearlyExpensesByCategory />
+                            <MonthlyExpenses />
                         </div>
                     </div>
                 )}

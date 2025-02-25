@@ -43,11 +43,9 @@ const ExpenseYearlyAnalytics: FC = () => {
                 <AnalyticsModalLoading />
             ) : (
                 <ReportsLayout totalAmount={meta?.totalAmount}>
-                    <div className="grid grid-cols-2 gap-2 flex-wrap">
-                        {reportData?.map((data) => (
-                            <AnalyticsCard key={data.id} {...data} />
-                        ))}
-                    </div>
+                    {reportData?.map((data) => (
+                        <AnalyticsCard key={data.id} {...data} />
+                    ))}
                 </ReportsLayout>
             )}
         </Modal>

@@ -1,3 +1,5 @@
+import { ThemeType } from "./theme";
+
 export interface SignInData {
     email: string;
     password: string;
@@ -11,6 +13,7 @@ export interface User {
     email: string;
     password: string;
     profileImage?: string;
+    themeType: ThemeType
 }
 
 export type SignUpData = Omit<User, "id">;

@@ -1,7 +1,9 @@
+import { ExpenseType } from "@_types/expense";
 import { MONTHS } from "@common/constants";
+import { AnalyticsCard } from "@components/Analytics";
 import { Dropdown } from "@components/common";
-import { MonthlyExpenseCard } from "@components/Expense/Analytics";
 import { AnalyticsLoading } from "@components/LoadingScreen";
+import ReportLayout from "@layouts/ReportsLayout";
 import { useGetExpensesByMonthAnalyticsQuery } from "@store/queries/expense";
 import { useExpense } from "@store/slices/expense";
 import { capitalize } from "lodash-es";
@@ -10,6 +12,7 @@ import { useParams } from "react-router-dom";
 
 const MonthlyExpenses: FC = () => {
     const [month, setMonth] = useState<string>("");
+    const [selectedType, setSelectedType] = useState<ExpenseType>("incoming");
 
     const params = useParams();
     const { expenses } = useExpense();
@@ -26,10 +29,9 @@ const MonthlyExpenses: FC = () => {
         { skip: !month || !params.year }
     );
 
-    const monthlyExpenseDataDetails = monthlyExpenseData?.data?.data
+    const monthlyExpenseDataDetails = monthlyExpenseData?.data?.data[selectedType];
 
-
-    return <div className=" h-full p-2 px-4 rounded-lg shadow-lg">
+    return <div className="p-4 rounded-lg shadow-lg">
         <div className="flex md:flex-row flex-col items-center justify-between">
             <h1 className="text-xl font-bold text-primary py-2">
                 Monthly Expenses / Category
@@ -49,17 +51,37 @@ const MonthlyExpenses: FC = () => {
                         })
                     )}
                     shouldUpdateLabel
-                    canClear
+                    clear={() => {
+                        setMonth("");
+                        setSelectedType("incoming");
+                    }}
                     selectCb={(value) => {
                         setMonth(value);
+                        setSelectedType("incoming")
                     }}
                 />
             )}
         </div>
-        {isMonthlyExpenseFetching || isMonthlyExpenseLoading ?
+        {!month && <div className="flex items-center justify-center py-2">
+            <p className="text-sm italic">
+                Select{" "}
+                <span className="font-bold text-primary text-lg">
+                    Month
+                </span>{" "}
+                to generate monthly analytics
+            </p>
+        </div>}
+        {(isMonthlyExpenseFetching || isMonthlyExpenseLoading) ?
             <AnalyticsLoading />
             :
-            <MonthlyExpenseCard month={month} data={monthlyExpenseDataDetails || []} />
+            month && <ReportLayout selectOption={(option) => setSelectedType(option)} totalAmount={monthlyExpenseData?.data?.meta[selectedType]?.totalAmount}>
+                {!monthlyExpenseDataDetails?.length && <div className="py-4">
+                    <p className="text-light">No data found.</p>
+                </div>}
+                {monthlyExpenseDataDetails?.map((data) => (
+                    <AnalyticsCard key={data.id} {...data} />
+                ))}
+            </ReportLayout>
         }
     </div>
 

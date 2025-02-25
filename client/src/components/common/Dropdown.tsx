@@ -10,7 +10,7 @@ export type DropdownProps = {
     className?: string;
     buttonClassName?: string;
     shouldUpdateLabel?: boolean;
-    canClear?: boolean;
+    clear?: () => void;
     selectCb?: (value: string) => void;
 };
 
@@ -21,7 +21,7 @@ const Dropdown: FC<DropdownProps> = ({
     buttonClassName,
     options,
     shouldUpdateLabel,
-    canClear,
+    clear,
     selectCb,
 }) => {
     const [currentLabel, setCurrentLabel] = useState(label);
@@ -65,6 +65,7 @@ const Dropdown: FC<DropdownProps> = ({
         setCurrentLabel(label);
         setSelectedValue("");
         setIsDropdownOpen(false);
+        if (clear) clear();
     };
 
 
@@ -103,7 +104,7 @@ const Dropdown: FC<DropdownProps> = ({
                             </li>
                         ))}
                     </ul>
-                    {canClear && selectedValue && (
+                    {clear && selectedValue && (
                         <Button
                             className="mt-1 w-full text-sm p-1"
                             color="plain"
