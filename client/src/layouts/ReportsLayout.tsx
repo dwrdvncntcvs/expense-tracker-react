@@ -1,17 +1,18 @@
 import { ExpenseType } from "@_types/expense";
 import { formatCurrency } from "@common/utils/str";
 import { capitalize } from "lodash-es";
-import { FC, PropsWithChildren, useState } from "react";
+import { FC, PropsWithChildren } from "react";
 import { IconType } from "react-icons";
 import { HiArrowTrendingDown, HiArrowTrendingUp } from "react-icons/hi2";
 
 export type ReportLayoutProps = PropsWithChildren<{
-    selectOption?: (option: ExpenseType) => void
+    selectType?: (option: ExpenseType) => void
     totalAmount?: number,
-    col?: number
+    col?: number,
+    selectedType?: ExpenseType
 }>
 
-const ReportLayout: FC<ReportLayoutProps> = ({ children, selectOption, totalAmount, col }) => {
+const ReportLayout: FC<ReportLayoutProps> = ({ children, selectType, totalAmount, col, selectedType }) => {
     type ExpenseTypeOptionObject = {
         [key in ExpenseType]: {
             icon: IconType,
@@ -48,25 +49,22 @@ const ReportLayout: FC<ReportLayoutProps> = ({ children, selectOption, totalAmou
         "grid-cols-12",
     ]
 
-    const [selectedOption, setSelectedOption] = useState<ExpenseType>("incoming")
-
     return <div className="flex flex-col gap-2">
-        <div className={`flex transition-all ${selectOption ? "justify-between" : "justify-end"} items-center py-2`}>
-            {selectOption &&
+        <div className={`flex transition-all ${selectType ? "justify-between" : "justify-end"} items-center py-2`}>
+            {selectType &&
                 <div className="flex overflow-auto">
                     {options.map((option) => {
                         const optionObject = optionsObject[option]
                         return (
                             <button
                                 key={option}
-                                className={`${selectedOption === option
+                                className={`${selectedType === option
                                     ? "bg-primary text-white"
                                     : " text-gray-800"
                                     } px-4 py-2 flex items-center gap-2 rounded-lg`}
                                 onClick={() => {
-                                    setSelectedOption(option)
-                                    if (selectOption)
-                                        selectOption(option)
+                                    if (selectType)
+                                        selectType(option)
                                 }}
                             >
                                 <p className="text-sm">
@@ -77,7 +75,7 @@ const ReportLayout: FC<ReportLayoutProps> = ({ children, selectOption, totalAmou
                         )
                     })}
                 </div>}
-            {totalAmount && <p className="text-sm">
+            {!!totalAmount && <p className="text-sm">
                 Total: {formatCurrency(`${totalAmount}`, "PHP")}
             </p>}
         </div>

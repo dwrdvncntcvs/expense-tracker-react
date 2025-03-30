@@ -19,11 +19,11 @@ const YearlyExpenseCard: FC<YearlyExpenseCardProps> = ({ data }) => {
                 Yearly Expenses
             </h1>
         </div>
-        <ReportsLayout totalAmount={totalAmount} col={2}>
+        <ReportsLayout totalAmount={totalAmount} col={2} >
             {!data || !data?.length && <div className="p-2">
                 <p className="text-center text-gray-500">No data available</p>
             </div>}
-            {data?.map(item => <AnalyticsCard  key={item.id} {...item} />)}
+            {data?.map(item => <AnalyticsCard key={item.id} {...item} />)}
         </ReportsLayout>
     </div>
 }

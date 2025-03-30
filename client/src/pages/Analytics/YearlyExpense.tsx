@@ -1,11 +1,17 @@
+import { ExpenseType } from "@_types/expense";
 import { YearlyExpenseCard } from "@components/Expense/Analytics";
 import { AnalyticsLoading } from "@components/LoadingScreen";
 import { useGetExpensesYearlyAnalyticsQuery } from "@store/queries/expense";
 import { FC } from "react";
 import { useParams } from "react-router-dom";
 
-const YearlyExpenses: FC = () => {
+type YearlyExpensesProps = {
+    expenseType: ExpenseType
+}
+
+const YearlyExpenses: FC<YearlyExpensesProps> = ({ expenseType }) => {
     const params = useParams();
+
 
     const {
         data: yearlyExpenseData,
@@ -14,11 +20,13 @@ const YearlyExpenses: FC = () => {
     } = useGetExpensesYearlyAnalyticsQuery(
         {
             year: params.year ? +params.year : 0,
+            expenseType
         },
         {
             skip: !params.year,
         }
     );
+
 
     const yearlyExpensesDataDetails = yearlyExpenseData?.data?.data;
 

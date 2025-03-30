@@ -10,9 +10,12 @@ import { capitalize } from "lodash-es";
 import { FC, useState } from "react";
 import { useParams } from "react-router-dom";
 
-const MonthlyExpenses: FC = () => {
+type MonthlyExpensesProps = {
+    expenseType: ExpenseType
+}
+
+const MonthlyExpenses: FC<MonthlyExpensesProps> = ({ expenseType }) => {
     const [month, setMonth] = useState<string>("");
-    const [selectedType, setSelectedType] = useState<ExpenseType>("incoming");
 
     const params = useParams();
     const { expenses } = useExpense();
@@ -25,11 +28,12 @@ const MonthlyExpenses: FC = () => {
         {
             month: month,
             year: params.year || "",
+            expenseType
         },
         { skip: !month || !params.year }
     );
 
-    const monthlyExpenseDataDetails = monthlyExpenseData?.data?.data[selectedType];
+    const monthlyExpenseDataDetails = monthlyExpenseData?.data?.data;
 
     return <div className="p-4 rounded-lg shadow-lg">
         <div className="flex md:flex-row flex-col items-center justify-between">
@@ -53,11 +57,9 @@ const MonthlyExpenses: FC = () => {
                     shouldUpdateLabel
                     clear={() => {
                         setMonth("");
-                        setSelectedType("incoming");
                     }}
                     selectCb={(value) => {
                         setMonth(value);
-                        setSelectedType("incoming")
                     }}
                 />
             )}
@@ -74,14 +76,17 @@ const MonthlyExpenses: FC = () => {
         {(isMonthlyExpenseFetching || isMonthlyExpenseLoading) ?
             <AnalyticsLoading />
             :
-            month && <ReportLayout selectOption={(option) => setSelectedType(option)} totalAmount={monthlyExpenseData?.data?.meta[selectedType]?.totalAmount}>
-                {!monthlyExpenseDataDetails?.length && <div className="py-4">
-                    <p className="text-light">No data found.</p>
-                </div>}
-                {monthlyExpenseDataDetails?.map((data) => (
-                    <AnalyticsCard key={data.id} {...data} />
-                ))}
-            </ReportLayout>
+            month &&
+            <>
+                <ReportLayout selectedType={expenseType}>
+                    {!monthlyExpenseDataDetails?.length && <div className="py-4">
+                        <p className="text-light">No data found.</p>
+                    </div>}
+                    {monthlyExpenseDataDetails?.map((data) => (
+                        <AnalyticsCard key={data.id} {...data} />
+                    ))}
+                </ReportLayout>
+            </>
         }
     </div>
 

@@ -1,4 +1,8 @@
-import { Error, Types } from "mongoose";
+import { Error } from "mongoose";
+import {
+    GenerateCategoryAggregate,
+    GenerateExpenseAggregate,
+} from "../aggregates";
 import { formatData } from "../database/mongoDb";
 import { ExpenseMonths } from "../types/Expense/controller";
 import {
@@ -9,12 +13,7 @@ import {
 import { Pagination } from "../types/Pagination/pagination";
 import { handleValidationError } from "../utils/error/mongo";
 import { monthLookUp } from "../utils/helpers/lookup";
-import { MONTHS_OBJ } from "../variables";
 import ExpenseModel from "./model";
-import {
-    GenerateCategoryAggregate,
-    GenerateExpenseAggregate,
-} from "../aggregates";
 
 class ExpenseService {
     private model: typeof ExpenseModel;
@@ -40,7 +39,8 @@ class ExpenseService {
     getAnalyticsByMonth = async (
         month: number,
         year: number,
-        userId: string
+        userId: string,
+        expenseType: ExpenseType = "incoming"
     ) => {
         const { categoryData, categoryTotal } = new GenerateCategoryAggregate(
             userId,
@@ -48,19 +48,12 @@ class ExpenseService {
             year
         );
 
-        const incomingCategoryData = await this.model.aggregate(
-            categoryData("incoming")
+        const aggregatedCategoryData = await this.model.aggregate(
+            categoryData(expenseType)
         );
 
-        const outgoingCategoryData = await this.model.aggregate(
-            categoryData("outgoing")
-        );
-
-        const outgoingTotal = await this.model.aggregate(
-            categoryTotal("outgoing")
-        );
-        const incomingTotal = await this.model.aggregate(
-            categoryTotal("incoming")
+        const aggregatedCategoryDataTotal = await this.model.aggregate(
+            categoryTotal(expenseType)
         );
 
         const percentageMapping = (totalObject: any) => (category: any) => {
@@ -75,23 +68,13 @@ class ExpenseService {
             };
         };
 
-        const incomingCategoryDataWithPercentage = incomingCategoryData.map(
-            percentageMapping(incomingTotal[0])
-        );
-
-        const outgoingCategoryDataWithPercentage = outgoingCategoryData.map(
-            percentageMapping(outgoingTotal[0])
+        const categoryDataWithPercentage = aggregatedCategoryData.map(
+            percentageMapping(aggregatedCategoryDataTotal[0])
         );
 
         return {
-            meta: {
-                incoming: incomingTotal[0],
-                outgoing: outgoingTotal[0],
-            },
-            data: {
-                incoming: incomingCategoryDataWithPercentage,
-                outgoing: outgoingCategoryDataWithPercentage,
-            },
+            meta: aggregatedCategoryDataTotal[0],
+            data: categoryDataWithPercentage,
         };
     };
 
@@ -203,9 +186,11 @@ class ExpenseService {
     getYearlyExpenseAnalyticsPerCategories = async ({
         year,
         userId,
+        expenseType,
     }: {
         year: number;
         userId: string;
+        expenseType: ExpenseType;
     }) => {
         const startDate = new Date(`${year}-01-01T00:00:00.000Z`);
         const endDate = new Date(`${year + 1}-01-01T00:00:00.000Z`);
@@ -216,9 +201,11 @@ class ExpenseService {
             endDate
         );
 
-        const data = await this.model.aggregate(expensesReportPerCategories());
+        const data = await this.model.aggregate(
+            expensesReportPerCategories(expenseType)
+        );
 
-        const totalAmount = data[0].totalAmount[0].totalAmount;
+        const totalAmount = data[0].totalAmount[0]?.totalAmount || 0;
         const analyticsData = data[0].monthlyExpensesPerCategory;
 
         return {
@@ -232,9 +219,11 @@ class ExpenseService {
     getYearlyExpenseAnalytics = async ({
         year,
         userId,
+        expenseType,
     }: {
         year: number;
         userId: string;
+        expenseType: ExpenseType;
     }) => {
         const startDate = new Date(`${year}-01-01T00:00:00.000Z`);
         const endDate = new Date(`${year + 1}-01-01T00:00:00.000Z`);
@@ -245,32 +234,30 @@ class ExpenseService {
             endDate
         );
 
-        const data = await this.model.aggregate(expenseYearlyAnalytics(year));
+        const data = await this.model.aggregate(
+            expenseYearlyAnalytics(year, expenseType)
+        );
 
-        const totalYearlyObject = data[0].totalAmount[0];
-        const monthlyTotalExpenseArr = data[0].monthlyTotalExpenses;
-        const monthlyExpensesPerCategory = data[0].monthlyExpensesPerCategory;
+        const totalYearlyAmount = data[0].totalAmount[0]?.totalAmount || 0;
+        const monthlyExpenses = data[0].monthlyTotalExpenses;
 
-        const monthlyTotalExpensesWithPercentage = monthlyTotalExpenseArr.map(
-            (val: { id: number; totalAmount: number; label: string }) => ({
-                ...val,
-                percentage:
-                    Math.round(
-                        (val.totalAmount / totalYearlyObject.totalAmount) *
-                            10000
-                    ) / 100,
+        const monthlyExpensesWithPercentage = monthlyExpenses.map(
+            (expense: { id: number; totalAmount: number; label: string }) => ({
+                id: expense.id,
+                totalAmount: expense.totalAmount,
+                name: expense.label,
+                percentage: totalYearlyAmount
+                    ? Math.round(
+                          (expense.totalAmount / totalYearlyAmount) * 10000
+                      ) / 100
+                    : 0,
             })
-        ) as {
-            id: number;
-            totalAmount: number;
-            name: string;
-            percentage: number;
-        }[];
+        );
 
         return {
-            meta: totalYearlyObject,
-            data: monthlyTotalExpensesWithPercentage.sort(
-                (a, b) => a.id - b.id
+            meta: { totalAmount: totalYearlyAmount },
+            data: monthlyExpensesWithPercentage.sort(
+                (a: { id: number }, b: { id: number }) => a.id - b.id
             ),
         };
     };
