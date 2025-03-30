@@ -6,3 +6,11 @@ export interface ILink {
     icon: IconType;
     name: string;
 }
+
+export interface IActionButton {
+    icon: IconType;
+    label: string;
+    name: string;
+    onClick: () => void;
+}
+

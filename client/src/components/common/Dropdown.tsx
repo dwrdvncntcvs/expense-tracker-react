@@ -1,6 +1,7 @@
 import { Option } from "@_types/elements";
 import Button from "@components/Button";
-import { FC, useEffect, useRef, useState } from "react";
+import useClickOutside from "@hooks/useClickOutside";
+import { FC, useRef, useState } from "react";
 import { HiChevronDown, HiChevronUp } from "react-icons/hi";
 
 export type DropdownProps = {
@@ -29,29 +30,8 @@ const Dropdown: FC<DropdownProps> = ({
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const ref = useRef<HTMLDivElement>(null);
+    useClickOutside(ref, () => setIsDropdownOpen(false));
 
-    const handleClickOutside = (event: MouseEvent) => {
-        const target = event.target;
-
-        if (target instanceof Node)
-            if (ref.current && target && !ref.current.contains(target)) {
-                setIsDropdownOpen(false);
-            }
-    };
-
-    useEffect(() => {
-        if (shouldUpdateLabel && value) {
-            const option = options.find((option) => option.value === value);
-            if (option) {
-                setCurrentLabel(option.label);
-            }
-        }
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
 
     const handleDropdown = () => {
         setIsDropdownOpen((val) => !val);

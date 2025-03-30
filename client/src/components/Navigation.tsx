@@ -1,14 +1,15 @@
 import { ILink } from "@_types/navigation";
 import { useSignOutMutation } from "@store/queries/user";
+import { useUser } from "@store/slices/user";
 import { FC } from "react";
-import { HiLogout } from "react-icons/hi";
 import { HiCog8Tooth, HiHome, HiUser } from "react-icons/hi2";
 import { NavLink } from "react-router-dom";
-import { useUser } from "@store/slices/user";
 import { Logo } from "./Svgs";
+import { ActionDropdown } from "./common";
+import { ActionDropdownOption } from "./common/ActionDropdown";
 
 const Navigation: FC = () => {
-    const { isAuthenticated } = useUser();
+    const { isAuthenticated, user } = useUser();
 
     const [signOutRequest] = useSignOutMutation();
 
@@ -25,12 +26,21 @@ const Navigation: FC = () => {
             path: "/settings",
             name: "settings",
         },
+    ];
+
+    const actionDropdownOptions: ActionDropdownOption[] = [
         {
-            icon: HiUser,
-            label: "User",
-            path: "/user",
-            name: "user",
+            label: `${user?.first_name || ""} ${user?.last_name || ""}`,
+            href: "/user",
+            type: "link"
         },
+        {
+            label: "Sign out",
+            onClick: async () => {
+                await signOutRequest();
+            },
+            type: "button"
+        }
     ];
 
     return (
@@ -51,10 +61,9 @@ const Navigation: FC = () => {
                                 to={link.path}
                                 id={link.name}
                                 className={({ isActive }) =>
-                                    `w-10 h-10 rounded-full flex justify-center items-center hover:border-2  hover:border-primary ${
-                                        isActive
-                                            ? "text-plain bg-primary pointer-events-none"
-                                            : "text-secondary"
+                                    `w-10 h-10 rounded-full flex justify-center items-center hover:border-2  hover:border-primary ${isActive
+                                        ? "text-plain bg-primary pointer-events-none"
+                                        : "text-secondary"
                                     }`
                                 }
                             >
@@ -62,18 +71,11 @@ const Navigation: FC = () => {
                             </NavLink>
                         </li>
                     ))}
-                    <li className="flex items-center justify-center h-10 ">
-                        <button
-                            id="logout"
-                            name="logout-btn"
-                            className="w-10 h-10 rounded-lg  flex justify-center items-center  border-primary text-primary hover:border-failure hover:text-failure "
-                            type="button"
-                            onClick={async () => {
-                                await signOutRequest();
-                            }}
-                        >
-                            <HiLogout size={22} />
-                        </button>
+                    <li>
+                        <ActionDropdown
+                            Icon={HiUser}
+                            options={actionDropdownOptions}
+                        />
                     </li>
                 </ul>
             )}
