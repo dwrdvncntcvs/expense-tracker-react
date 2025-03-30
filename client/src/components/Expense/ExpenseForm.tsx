@@ -59,6 +59,13 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
     const [tagMutation] = useCreateTagMutation();
 
     useEffect(() => {
+        setSelectedOptions(tags
+            .filter(val => initialValues?.tags?.includes(val.id))
+            .map((val) => val.id)
+        );
+    }, []);
+
+    useEffect(() => {
         const timeout = setTimeout(() => {
             dispatch(tagsApi.util.invalidateTags(["expense-tags"]));
             set_TagText(tagText);
@@ -215,20 +222,22 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
                         setSelectedOptions(values);
                         setTagText("");
                     }}
-                />
+                >
+                    {selectedOptions.length > 0 && (
+                        <div className="flex w-full gap-2 rounded-xl p-2 flex-wrap">
+                            {selectedOptions.map((val) => {
+                                const tag = getTag(val)!;
+                                return (
+                                    <Tag key={tag.id} id={tag.id} onRemove={removeTag}>
+                                        {tag.name}
+                                    </Tag>
+                                );
+                            })}
+                        </div>
+                    )}
+                </ComboBox>
             </div>
-            {selectedOptions.length > 0 && (
-                <div className="flex gap-2 border border-primary col-span-2 rounded-xl p-3 flex-wrap">
-                    {selectedOptions.map((val) => {
-                        const tag = getTag(val)!;
-                        return (
-                            <Tag key={tag.id} id={tag.id} onRemove={removeTag}>
-                                {tag.name}
-                            </Tag>
-                        );
-                    })}
-                </div>
-            )}
+
             <div className="col-span-2">
                 <ImageField
                     name="expense-image"

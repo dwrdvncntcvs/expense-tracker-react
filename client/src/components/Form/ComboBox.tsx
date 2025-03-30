@@ -1,9 +1,9 @@
 import { Option } from "@_types/elements";
 import Button from "@components/Button";
 import { useField } from "formik";
-import { FC, InputHTMLAttributes, useEffect } from "react";
+import { FC, InputHTMLAttributes, PropsWithChildren, useEffect } from "react";
 
-interface ComboBoxProps {
+interface ComboBoxProps extends PropsWithChildren {
     inputProps: InputHTMLAttributes<HTMLInputElement>;
     name: string;
     options: Option[];
@@ -17,6 +17,7 @@ const ComboBox: FC<ComboBoxProps> = ({
     options,
     setSelectedValues,
     selectedValues,
+    children
 }) => {
     const field = useField(name);
 
@@ -28,7 +29,7 @@ const ComboBox: FC<ComboBoxProps> = ({
         <div className="flex flex-col gap-1 relative">
             <div
                 id={`${name}-form-group`}
-                className={`border rounded-xl w-full overflow-auto flex items-center border-primary`}
+                className={`border rounded-xl flex flex-col w-full overflow-auto items-center border-primary`}
             >
                 <input
                     {...inputProps}
@@ -37,6 +38,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                     onChange={inputProps.onChange}
                     onKeyDown={inputProps.onKeyDown}
                 />
+                {children}
             </div>
             {inputProps.value && !!options.length && (
                 <div className="w-full max-h-36 overflow-y-auto flex flex-col absolute top-12 bg-quaternary border-primary shadow-sm rounded-xl border overflow-auto">
