@@ -24,7 +24,7 @@ import { useUser } from "@store/slices/user";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 function App() {
-    const { isAuthenticated,  } = useUser();
+    const { isAuthenticated, } = useUser();
 
     const { isLoading } = useIsAuthenticatedQuery();
     const { data } = useGetCategoriesQuery(undefined, {
@@ -42,17 +42,20 @@ function App() {
         "/settings/tags",
         "/sign-in",
         "/sign-up",
+        "/user/:year?"
     ];
+
+    const checkRoute = (route: string) => {
+        return new RegExp(`^${route.replace(/:[^\s/]+/g, "[^/]+")}$`).test(
+            pathname
+        );
+    };
 
     const shouldDisplayCreateExpense = ["/", "/:month/:year"];
 
     const shouldDisplay =
-        shouldDisplayCreateExpense.some((route) =>
-            new RegExp(`^${route.replace(/:[^\s/]+/g, "[^/]+")}$`).test(
-                pathname
-            )
-        ) &&
-        !shouldNotDisplayCreateExpense.includes(pathname) &&
+        shouldDisplayCreateExpense.some(checkRoute) &&
+        !shouldNotDisplayCreateExpense.some(checkRoute) &&
         data?.data?.length > 0;
 
     return (
