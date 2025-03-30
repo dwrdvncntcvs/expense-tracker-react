@@ -1,11 +1,12 @@
-import { ICreateExpense, IExpense } from "@_types/expense";
+import { ExpenseType, ICreateExpense, IExpense, ExpenseMonthDetails } from "@_types/expense";
 import api from "./api";
-import { ExpenseReportByMonth, ExpenseReportByYear } from "@_types/reports";
+import { ExpenseReportByMonth, ExpenseReportByYear, ExpenseReportByCategory } from "@_types/reports";
 
 export interface ExpenseByMonthParams {
     month: string;
     year: string;
     query?: string;
+    expenseType?: ExpenseType;
 }
 
 export interface YearlyExpensesParams {
@@ -14,20 +15,22 @@ export interface YearlyExpensesParams {
 
 const expenseApi = api.injectEndpoints({
     endpoints: (build) => ({
-        getExpenses: build.query<any, void>({
+        getExpenses: build.query<ExpenseMonthDetails, void>({
             query: () => ({ url: "/expenses", method: "get" }),
             providesTags: ["expense-months"],
         }),
-        getExpensesByMonth: build.query<any, ExpenseByMonthParams>({
-            query: (params) => ({
-                url: `/expenses/${params.month}/${params.year}${
-                    params.query ? `?${params.query}` : ""
-                }`,
-                method: "get",
-            }),
+        getExpensesByMonth: build.query<ExpenseMonthDetails, ExpenseByMonthParams>({
+            query: (params) => {
+                return {
+                    url: `/expenses/${params.month}/${params.year}${
+                        params.query ? `?${params.query}` : ""
+                    }`,
+                    method: "get",
+                };
+            },
             providesTags: ["expense-months-details"],
         }),
-        createExpense: build.mutation<any, ICreateExpense>({
+        createExpense: build.mutation<IExpense, ICreateExpense>({
             query: (val) => {
                 return {
                     url: "/expenses",
@@ -49,7 +52,7 @@ const expenseApi = api.injectEndpoints({
                 "expense-year-analytics-cat",
             ],
         }),
-        updateExpense: build.mutation<any, IExpense>({
+        updateExpense: build.mutation<IExpense, IExpense>({
             query: (val) => ({
                 url: `/expenses/${val.id}`,
                 method: "PUT",
@@ -62,7 +65,7 @@ const expenseApi = api.injectEndpoints({
                 "expense-year-analytics-cat",
             ],
         }),
-        deleteExpense: build.mutation<any, string>({
+        deleteExpense: build.mutation<void, string>({
             query: (val) => ({ url: `/expenses/${val}`, method: "DELETE" }),
             invalidatesTags: [
                 "expense-months-details",
@@ -76,7 +79,7 @@ const expenseApi = api.injectEndpoints({
             ExpenseByMonthParams
         >({
             query: (val) => ({
-                url: `/expenses/${val.month}/${val.year}/analytics`,
+                url: `/expenses/${val.month}/${val.year}/analytics?expenseType=${val.expenseType}`,
                 method: "GET",
             }),
             providesTags: ["expense-month-analytics"],
@@ -92,7 +95,7 @@ const expenseApi = api.injectEndpoints({
             providesTags: ["expense-year-analytics"],
         }),
         getExpensesYearlyAnalyticsPerCategory: build.query<
-            any,
+            { data: ExpenseReportByCategory },
             { year: string }
         >({
             query: (val) => ({

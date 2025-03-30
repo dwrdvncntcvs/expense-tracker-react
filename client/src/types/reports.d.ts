@@ -39,21 +39,9 @@ export type ExpenseReportByMonthMeta = {
     count: number;
 };
 
-export type IncomingMeta = ExpenseReportByMonthMeta;
-export type IncomingData = ExpenseReportByMonthData;
-
-export type OutgoingMeta = ExpenseReportByMonthMeta;
-export type OutgoingData = ExpenseReportByMonthData;
-
 export type ExpenseReportByMonth = {
-    meta: {
-        incoming: IncomingMeta;
-        outgoing: OutgoingMeta;
-    };
-    data: {
-        incoming: IncomingData[];
-        outgoing: OutgoingData[];
-    };
+    meta: ExpenseReportByMonthMeta;
+    data: ExpenseReportByMonthData[];
 };
 
 export type ExpenseReportByYear = {

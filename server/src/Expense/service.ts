@@ -1,4 +1,8 @@
-import { Error, Types } from "mongoose";
+import { Error } from "mongoose";
+import {
+    GenerateCategoryAggregate,
+    GenerateExpenseAggregate,
+} from "../aggregates";
 import { formatData } from "../database/mongoDb";
 import { ExpenseMonths } from "../types/Expense/controller";
 import {
@@ -9,12 +13,7 @@ import {
 import { Pagination } from "../types/Pagination/pagination";
 import { handleValidationError } from "../utils/error/mongo";
 import { monthLookUp } from "../utils/helpers/lookup";
-import { MONTHS_OBJ } from "../variables";
 import ExpenseModel from "./model";
-import {
-    GenerateCategoryAggregate,
-    GenerateExpenseAggregate,
-} from "../aggregates";
 
 class ExpenseService {
     private model: typeof ExpenseModel;
@@ -40,7 +39,8 @@ class ExpenseService {
     getAnalyticsByMonth = async (
         month: number,
         year: number,
-        userId: string
+        userId: string,
+        expenseType: ExpenseType = "incoming"
     ) => {
         const { categoryData, categoryTotal } = new GenerateCategoryAggregate(
             userId,
@@ -48,19 +48,12 @@ class ExpenseService {
             year
         );
 
-        const incomingCategoryData = await this.model.aggregate(
-            categoryData("incoming")
+        const aggregatedCategoryData = await this.model.aggregate(
+            categoryData(expenseType)
         );
 
-        const outgoingCategoryData = await this.model.aggregate(
-            categoryData("outgoing")
-        );
-
-        const outgoingTotal = await this.model.aggregate(
-            categoryTotal("outgoing")
-        );
-        const incomingTotal = await this.model.aggregate(
-            categoryTotal("incoming")
+        const aggregatedCategoryDataTotal = await this.model.aggregate(
+            categoryTotal(expenseType)
         );
 
         const percentageMapping = (totalObject: any) => (category: any) => {
@@ -75,23 +68,13 @@ class ExpenseService {
             };
         };
 
-        const incomingCategoryDataWithPercentage = incomingCategoryData.map(
-            percentageMapping(incomingTotal[0])
-        );
-
-        const outgoingCategoryDataWithPercentage = outgoingCategoryData.map(
-            percentageMapping(outgoingTotal[0])
+        const categoryDataWithPercentage = aggregatedCategoryData.map(
+            percentageMapping(aggregatedCategoryDataTotal[0])
         );
 
         return {
-            meta: {
-                incoming: incomingTotal[0],
-                outgoing: outgoingTotal[0],
-            },
-            data: {
-                incoming: incomingCategoryDataWithPercentage,
-                outgoing: outgoingCategoryDataWithPercentage,
-            },
+            meta: aggregatedCategoryDataTotal[0],
+            data: categoryDataWithPercentage,
         };
     };
 

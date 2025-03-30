@@ -25,11 +25,12 @@ const MonthlyExpenses: FC = () => {
         {
             month: month,
             year: params.year || "",
+            expenseType: selectedType
         },
         { skip: !month || !params.year }
     );
 
-    const monthlyExpenseDataDetails = monthlyExpenseData?.data?.data[selectedType];
+    const monthlyExpenseDataDetails = monthlyExpenseData?.data?.data;
 
     return <div className="p-4 rounded-lg shadow-lg">
         <div className="flex md:flex-row flex-col items-center justify-between">
@@ -74,7 +75,11 @@ const MonthlyExpenses: FC = () => {
         {(isMonthlyExpenseFetching || isMonthlyExpenseLoading) ?
             <AnalyticsLoading />
             :
-            month && <ReportLayout selectOption={(option) => setSelectedType(option)} totalAmount={monthlyExpenseData?.data?.meta[selectedType]?.totalAmount}>
+            month && <ReportLayout
+                selectType={(option) => setSelectedType(option)}
+                totalAmount={monthlyExpenseData?.data?.meta?.totalAmount}
+                selectedType={selectedType}
+            >
                 {!monthlyExpenseDataDetails?.length && <div className="py-4">
                     <p className="text-light">No data found.</p>
                 </div>}

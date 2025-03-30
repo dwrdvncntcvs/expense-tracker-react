@@ -22,8 +22,6 @@ class ExpenseController implements IExpenseController {
         req.query.page = req?.query?.page || "1";
         req.query.limit = req?.query?.limit || "10";
 
-        console.log(req.query);
-
         try {
             const data = await this.service.getExpenses(
                 userId,
@@ -108,13 +106,17 @@ class ExpenseController implements IExpenseController {
         const { id } = req.user;
         const { expenseType, month } = req.params;
 
-        const data = await this.service.getExpensesByType(
-            id,
-            expenseType,
-            month
-        );
+        try {
+            const data = await this.service.getExpensesByType(
+                id,
+                expenseType,
+                month
+            );
 
-        return res.status(200).send({ data });
+            return res.status(200).send({ data });
+        } catch (e) {
+            next(ErrorService.BAD_REQUEST(e as any));
+        }
     };
 
     putExpense: RequestHandler = async (req, res, next) => {
@@ -144,36 +146,49 @@ class ExpenseController implements IExpenseController {
     deleteExpense: RequestHandler = async (req, res, next) => {
         const { expenseId } = req.params;
 
-        await this.service.removeExpense(expenseId);
-
-        return res
-            .status(200)
-            .send({ message: "Expense successfully deleted" });
+        try {
+            await this.service.removeExpense(expenseId);
+            return res
+                .status(200)
+                .send({ message: "Expense successfully deleted" });
+        } catch (e) {
+            next(ErrorService.BAD_REQUEST(e as any));
+        }
     };
 
     getExpenseMonthAnalytics: RequestHandler = async (req, res, next) => {
         const user = req.user;
         const { month, year } = req.params;
+        const { expenseType } = req.query;
 
-        const data = await this.service.getAnalyticsByMonth(
-            +month,
-            +year,
-            user.id
-        );
+        try {
+            const data = await this.service.getAnalyticsByMonth(
+                +month,
+                +year,
+                user.id,
+                expenseType as ExpenseType
+            );
 
-        return res.status(200).send({ data });
+            return res.status(200).send({ data });
+        } catch (e) {
+            next(ErrorService.BAD_REQUEST(e as any));
+        }
     };
 
     getExpenseYearlyAnalytics: RequestHandler = async (req, res, next) => {
         const user = req.user;
         const { year } = req.params;
 
-        const data = await this.service.getYearlyExpenseAnalytics({
-            year: +year,
-            userId: user.id,
-        });
+        try {
+            const data = await this.service.getYearlyExpenseAnalytics({
+                year: +year,
+                userId: user.id,
+            });
 
-        return res.status(200).send({ data });
+            return res.status(200).send({ data });
+        } catch (e) {
+            next(ErrorService.BAD_REQUEST(e as any));
+        }
     };
 
     getExpenseYearlyAnalyticsPerCategories: RequestHandler = async (
@@ -184,20 +199,27 @@ class ExpenseController implements IExpenseController {
         const user = req.user;
         const { year } = req.params;
 
-        const data = await this.service.getYearlyExpenseAnalyticsPerCategories({
-            year: +year,
-            userId: user.id,
-        });
+        try {
+            const data = await this.service.getYearlyExpenseAnalyticsPerCategories({
+                year: +year,
+                userId: user.id,
+            });
 
-        return res.status(200).send({ data });
+            return res.status(200).send({ data });
+        } catch (e) {
+            next(ErrorService.BAD_REQUEST(e as any));
+        }
     };
 
     getExpense: RequestHandler = async (req, res, next) => {
         const { id } = req.params;
 
-        const data = await this.service.getExpense(id);
-
-        return res.status(200).send({ data });
+        try {
+            const data = await this.service.getExpense(id);
+            return res.status(200).send({ data });
+        } catch (e) {
+            next(ErrorService.BAD_REQUEST(e as any));
+        }
     };
 }
 
