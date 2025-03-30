@@ -178,15 +178,18 @@ class ExpenseController implements IExpenseController {
     getExpenseYearlyAnalytics: RequestHandler = async (req, res, next) => {
         const user = req.user;
         const { year } = req.params;
+        const { expenseType } = req.query;
 
         try {
             const data = await this.service.getYearlyExpenseAnalytics({
                 year: +year,
                 userId: user.id,
+                expenseType: expenseType as ExpenseType,
             });
 
             return res.status(200).send({ data });
         } catch (e) {
+            console.log("Error", e);
             next(ErrorService.BAD_REQUEST(e as any));
         }
     };
@@ -198,12 +201,15 @@ class ExpenseController implements IExpenseController {
     ) => {
         const user = req.user;
         const { year } = req.params;
+        const { expenseType } = req.query;
 
         try {
-            const data = await this.service.getYearlyExpenseAnalyticsPerCategories({
-                year: +year,
-                userId: user.id,
-            });
+            const data =
+                await this.service.getYearlyExpenseAnalyticsPerCategories({
+                    year: +year,
+                    userId: user.id,
+                    expenseType: expenseType as ExpenseType,
+                });
 
             return res.status(200).send({ data });
         } catch (e) {

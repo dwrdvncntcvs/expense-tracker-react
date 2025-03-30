@@ -10,7 +10,7 @@ export default class GenerateExpenseAggregate {
         private endDate: Date
     ) {}
 
-    expensesReportPerCategories = () => {
+    expensesReportPerCategories = (expenseType: ExpenseType = "incoming") => {
         return [
             {
                 $match: {
@@ -19,6 +19,7 @@ export default class GenerateExpenseAggregate {
                         $gte: this.startDate,
                         $lt: this.endDate,
                     },
+                    type: expenseType,
                 },
             },
             {
@@ -33,7 +34,7 @@ export default class GenerateExpenseAggregate {
                         {
                             $project: {
                                 _id: 0,
-                                totalAmount: 1,
+                                totalAmount: { $ifNull: ["$totalAmount", 0] },
                             },
                         },
                     ],
@@ -194,7 +195,6 @@ export default class GenerateExpenseAggregate {
                         {
                             $project: {
                                 _id: 0,
-                                totalAmount: 1,
                                 expenses: {
                                     $map: {
                                         input: "$expenses",
@@ -213,11 +213,11 @@ export default class GenerateExpenseAggregate {
                                             tags: "$$expense.tags",
                                             tagList: {
                                                 $map: {
-                                                    input: "$$expense.matchedTags", // Directly map matched tags
+                                                    input: "$$expense.matchedTags",
                                                     as: "tag",
                                                     in: {
-                                                        id: "$$tag._id", // Get the _id of each tag
-                                                        name: "$$tag.name", // Get the name of each tag
+                                                        id: "$$tag._id",
+                                                        name: "$$tag.name",
                                                     },
                                                 },
                                             },
@@ -228,7 +228,7 @@ export default class GenerateExpenseAggregate {
                                                 "$$expense.purchaseDate",
                                             month: "$$expense.month",
                                             createdAt: "$$expense.createdAt",
-                                            updatedAt: "$$expense.updatedAt", // Fixed field name
+                                            updatedAt: "$$expense.updatedAt",
                                         },
                                     },
                                 },
@@ -241,12 +241,23 @@ export default class GenerateExpenseAggregate {
                 $project: {
                     metadata: { $arrayElemAt: ["$metadata", 0] },
                     incomingTotal: {
-                        $arrayElemAt: ["$incomingTotal.totalAmount", 0],
+                        $ifNull: [
+                            { $arrayElemAt: ["$incomingTotal.totalAmount", 0] },
+                            0
+                        ]
                     },
                     outgoingTotal: {
-                        $arrayElemAt: ["$outgoingTotal.totalAmount", 0],
+                        $ifNull: [
+                            { $arrayElemAt: ["$outgoingTotal.totalAmount", 0] },
+                            0
+                        ]
                     },
-                    data: { $arrayElemAt: ["$data.expenses", 0] },
+                    data: {
+                        $ifNull: [
+                            { $arrayElemAt: ["$data.expenses", 0] },
+                            []
+                        ]
+                    },
                 },
             },
             {
@@ -287,7 +298,7 @@ export default class GenerateExpenseAggregate {
         ];
     };
 
-    expenseYearlyAnalytics = (year: number) => {
+    expenseYearlyAnalytics = (year: number, expenseType: ExpenseType = "incoming") => {
         const mappedSwitchCaseMonth = Object.keys(MONTHS_OBJ).map((key) => {
             const label = key.toLowerCase();
             const monthValue = MONTHS_OBJ[key as keyof typeof MONTHS_OBJ];
@@ -304,6 +315,7 @@ export default class GenerateExpenseAggregate {
                         $gte: this.startDate,
                         $lt: this.endDate,
                     },
+                    type: expenseType,
                 },
             },
             {
@@ -319,7 +331,7 @@ export default class GenerateExpenseAggregate {
                         {
                             $project: {
                                 _id: 0,
-                                totalAmount: 1,
+                                totalAmount: { $ifNull: ["$totalAmount", 0] },
                                 year: 1,
                             },
                         },

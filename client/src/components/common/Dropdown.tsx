@@ -40,6 +40,13 @@ const Dropdown: FC<DropdownProps> = ({
     };
 
     useEffect(() => {
+        if (shouldUpdateLabel && value) {
+            const option = options.find((option) => option.value === value);
+            if (option) {
+                setCurrentLabel(option.label);
+            }
+        }
+
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
@@ -93,12 +100,13 @@ const Dropdown: FC<DropdownProps> = ({
                         {options.map((_option) => (
                             <li key={_option.value} className="w-full">
                                 <button
-                                    className={`w-full text-center p-1 text-quaternary hover:bg-secondary ${_option.value.toString() === selectedValue
+                                    className={`w-full flex gap-2 items-center justify-center text-center p-1 text-quaternary hover:bg-secondary ${_option.value.toString() === selectedValue
                                         ? "pointer-events-none bg-secondary"
                                         : ""
                                         }`}
                                     onClick={handleSelect(_option)}
                                 >
+                                    {_option.icon && <_option.icon size={20} color={_option.iconColor} />}
                                     {_option.label}
                                 </button>
                             </li>

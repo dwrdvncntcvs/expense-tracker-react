@@ -11,6 +11,7 @@ export interface ExpenseByMonthParams {
 
 export interface YearlyExpensesParams {
     year: number;
+    expenseType?: ExpenseType;  
 }
 
 const expenseApi = api.injectEndpoints({
@@ -89,17 +90,17 @@ const expenseApi = api.injectEndpoints({
             YearlyExpensesParams
         >({
             query: (val) => ({
-                url: `/expenses/all/year/${val.year}/analytics`,
+                url: `/expenses/all/year/${val.year}/analytics?expenseType=${val.expenseType}`,
                 method: "GET",
             }),
             providesTags: ["expense-year-analytics"],
         }),
         getExpensesYearlyAnalyticsPerCategory: build.query<
             { data: ExpenseReportByCategory },
-            { year: string }
+            { year: string, expenseType: ExpenseType }
         >({
             query: (val) => ({
-                url: `/expenses/per-categories/year/${val.year}/analytics`,
+                url: `/expenses/per-categories/year/${val.year}/analytics?expenseType=${val.expenseType}`,
                 method: "get",
             }),
             providesTags: ["expense-year-analytics-cat"],

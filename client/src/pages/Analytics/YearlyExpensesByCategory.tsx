@@ -1,3 +1,4 @@
+import { ExpenseType } from "@_types/expense";
 import { ExpenseReportByCategoryData } from "@_types/reports";
 import { MONTHS } from "@common/constants";
 import { generateAccents } from "@common/utils/color";
@@ -9,7 +10,11 @@ import { capitalize } from "lodash-es";
 import { FC } from "react";
 import { useParams } from "react-router-dom";
 
-const YearlyExpensesByCategory: FC = () => {
+type YearlyExpensesByCategoryProps = {
+    expenseType: ExpenseType
+}
+
+const YearlyExpensesByCategory: FC<YearlyExpensesByCategoryProps> = ({ expenseType }) => {
     const theme = useTheme()
     const params = useParams();
     const {
@@ -19,6 +24,7 @@ const YearlyExpensesByCategory: FC = () => {
     } = useGetExpensesYearlyAnalyticsPerCategoryQuery(
         {
             year: params.year || "",
+            expenseType
         },
         {
             skip: !params.year,

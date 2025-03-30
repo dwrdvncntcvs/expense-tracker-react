@@ -9,7 +9,7 @@ export type ReportLayoutProps = PropsWithChildren<{
     selectType?: (option: ExpenseType) => void
     totalAmount?: number,
     col?: number,
-    selectedType: ExpenseType
+    selectedType?: ExpenseType
 }>
 
 const ReportLayout: FC<ReportLayoutProps> = ({ children, selectType, totalAmount, col, selectedType }) => {
@@ -75,7 +75,7 @@ const ReportLayout: FC<ReportLayoutProps> = ({ children, selectType, totalAmount
                         )
                     })}
                 </div>}
-            {totalAmount && <p className="text-sm">
+            {!!totalAmount && <p className="text-sm">
                 Total: {formatCurrency(`${totalAmount}`, "PHP")}
             </p>}
         </div>
