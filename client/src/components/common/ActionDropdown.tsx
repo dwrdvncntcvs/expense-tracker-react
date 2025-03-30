@@ -45,14 +45,14 @@ export const ActionDropdown: FC<ActionDropdownProps> = ({ label, Icon, options }
     return (
         <div className="relative" ref={ref}>
             <button
-                className={`w-10 h-10 rounded-full flex justify-center items-center hover:border-2  hover:border-primary text-secondary`}
+                className={`w-10 h-10 rounded-full flex justify-center items-center hover:border-2  hover:border-primary ${isOptionsOpen ? "bg-primary text-quaternary" : "text-secondary"}`}
                 onClick={handleShowOptions}
             >
                 {Icon && <Icon size={22} className="text-inherit" />}
                 {label && label}
             </button>
             {isOptionsOpen && (
-                <div className="absolute top-[calc(100%+5px)] right-0 w-40 flex flex-col bg-tertiary shadow-lg rounded-lg overflow-auto">
+                <div className="absolute md:top-[calc(100%+5px)] right-0 w-40 flex flex-col bg-tertiary shadow-lg rounded-lg overflow-auto">
                     {options.map((option) => (
                         <div key={option.label} className="w-full flex">
                             {renderOption(option)}

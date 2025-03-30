@@ -7,6 +7,7 @@ import { NavLink } from "react-router-dom";
 import { Logo } from "./Svgs";
 import { ActionDropdown } from "./common";
 import { ActionDropdownOption } from "./common/ActionDropdown";
+import { HiLogout } from "react-icons/hi";
 
 const Navigation: FC = () => {
     const { isAuthenticated, user } = useUser();
@@ -25,6 +26,13 @@ const Navigation: FC = () => {
             label: "Settings",
             path: "/settings",
             name: "settings",
+        },
+        {
+            icon: HiUser,
+            label: "User",
+            path: "/user",
+            name: "user",
+            className: "md:hidden block",
         },
     ];
 
@@ -55,7 +63,7 @@ const Navigation: FC = () => {
                     {links.map((link) => (
                         <li
                             key={link.name}
-                            className="flex items-center justify-center w-10 h-10 "
+                            className={`flex items-center justify-center w-10 h-10 ${link?.className || ""}`}
                         >
                             <NavLink
                                 to={link.path}
@@ -71,11 +79,16 @@ const Navigation: FC = () => {
                             </NavLink>
                         </li>
                     ))}
-                    <li>
+                    <li className="md:flex hidden h-full">
                         <ActionDropdown
                             Icon={HiUser}
                             options={actionDropdownOptions}
                         />
+                    </li>
+                    <li className="md:hidden block">
+                        <button className="w-10 h-10 rounded-full flex justify-center items-center hover:border-2  hover:border-primary text-secondary" type="button" onClick={() => signOutRequest()}>
+                            <HiLogout size={22} />
+                        </button>
                     </li>
                 </ul>
             )}

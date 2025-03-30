@@ -5,6 +5,7 @@ export interface ILink {
     label: string;
     icon: IconType;
     name: string;
+    className?: string;
 }
 
 export interface IActionButton {
