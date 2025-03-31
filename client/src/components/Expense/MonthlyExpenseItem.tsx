@@ -154,6 +154,11 @@ const MonthlyExpenseItem: FC<MonthlyExpenseItemProps> = ({
                         {expense.imageUrl && <div className="flex w-full items-center justify-center rounded-md overflow-hidden">
                             <img src={expense.imageUrl} alt={expense.label} className="object-contain" />
                         </div>}
+                        <div className="flex gap-2 justify-end">
+                            {actionButtons(expense).filter(item => item.id !== "view-expense").map(item => <button id={item.id} className={item.className} onClick={item.onClick}>
+                                <item.Icon size={20} />
+                            </button>)}
+                        </div>
                     </div>
                 </div>
             </Modal>
