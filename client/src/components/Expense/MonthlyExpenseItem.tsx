@@ -14,7 +14,6 @@ import { FC, useState } from "react";
 import { IconType } from "react-icons";
 import { HiOutlineEye, HiOutlinePencil } from "react-icons/hi";
 import { HiOutlineTrash } from "react-icons/hi2";
-import { useParams } from "react-router-dom";
 import ExpenseForm from "./ExpenseForm";
 interface MonthlyExpenseItemProps {
     expense: IExpense;
@@ -27,7 +26,6 @@ const MonthlyExpenseItem: FC<MonthlyExpenseItemProps> = ({
 }) => {
     const dispatch = useAppDispatch();
     const [hoveredId, setHoveredId] = useState("");
-    const params = useParams();
 
     const [deleteExpenseRequest] = useDeleteExpenseMutation();
 
@@ -142,8 +140,8 @@ const MonthlyExpenseItem: FC<MonthlyExpenseItemProps> = ({
                             </div>
                             <div className="flex flex-col w-1/2 p-1 text-quaternary">
                                 <div className="flex flex-col w-full p-2 rounded-md bg-primary">
-                                    <p className="text-sm font-semibold">Month</p>
-                                    <p className="text-sm text-right">{capitalize(params.month as string)}</p>
+                                    <p className="text-sm font-semibold">Type</p>
+                                    <p className="text-sm text-right">{capitalize(expense.type)}</p>
                                 </div>
                             </div>
                         </div>
