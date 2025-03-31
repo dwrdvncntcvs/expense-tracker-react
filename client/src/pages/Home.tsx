@@ -13,12 +13,12 @@ const Home: FC = () => {
 
     if (isLoading) return <YearlyExpenseLoader />;
 
-    if (Object.keys(data.months).length < 1) return <NoExpenses />;
+    if (data && Object.keys(data.months).length < 1) return <NoExpenses />;
 
     return (
         <>
             <ul className="year-list flex flex-col gap-5 divide-y divide-secondary overflow-y-auto">
-                {Object.keys(data.months).map((key) => (
+                {data && Object.keys(data.months).sort((a, b) => Number(b) - Number(a)).map((key) => (
                     <li key={key} className="year-item space-y-6 py-3">
                         <div className="space-y-3">
                             <ExpenseMonthHeader year={key} />

@@ -1,4 +1,4 @@
-import { ExpenseType, ICreateExpense, IExpense, ExpenseMonthDetails } from "@_types/expense";
+import { ExpenseType, ICreateExpense, IExpense, ExpenseMonthDetails, ExpenseMonths } from "@_types/expense";
 import api from "./api";
 import { ExpenseReportByMonth, ExpenseReportByYear, ExpenseReportByCategory } from "@_types/reports";
 
@@ -16,7 +16,7 @@ export interface YearlyExpensesParams {
 
 const expenseApi = api.injectEndpoints({
     endpoints: (build) => ({
-        getExpenses: build.query<ExpenseMonthDetails, void>({
+        getExpenses: build.query<ExpenseMonths, void>({
             query: () => ({ url: "/expenses", method: "get" }),
             providesTags: ["expense-months"],
         }),
