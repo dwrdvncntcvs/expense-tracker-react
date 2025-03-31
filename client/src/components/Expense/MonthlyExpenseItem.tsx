@@ -1,6 +1,7 @@
 import { IExpense } from "@_types/expense";
-import { formatCurrency, formatDate } from "@common/utils/str";
+import { capitalize, formatCurrency, formatDate } from "@common/utils/str";
 import ActionButtons from "@components/ActionButtons";
+import { Tag } from "@components/common";
 import { Modal } from "@components/Overlays";
 import { useAppDispatch } from "@hooks/storeHooks";
 import {
@@ -10,11 +11,11 @@ import {
 import { hide, show } from "@store/slices/modal";
 import { success } from "@store/slices/toast";
 import { FC, useState } from "react";
-import { HiOutlinePencil } from "react-icons/hi";
-import { HiOutlinePhoto, HiOutlineTrash } from "react-icons/hi2";
+import { IconType } from "react-icons";
+import { HiOutlineEye, HiOutlinePencil } from "react-icons/hi";
+import { HiOutlineTrash } from "react-icons/hi2";
+import { useParams } from "react-router-dom";
 import ExpenseForm from "./ExpenseForm";
-import { Tag } from "@components/common";
-
 interface MonthlyExpenseItemProps {
     expense: IExpense;
     index: number;
@@ -26,6 +27,7 @@ const MonthlyExpenseItem: FC<MonthlyExpenseItemProps> = ({
 }) => {
     const dispatch = useAppDispatch();
     const [hoveredId, setHoveredId] = useState("");
+    const params = useParams();
 
     const [deleteExpenseRequest] = useDeleteExpenseMutation();
 
@@ -33,6 +35,38 @@ const MonthlyExpenseItem: FC<MonthlyExpenseItemProps> = ({
         useUpdateExpenseMutation();
 
     const date = new Date(expense.purchaseDate);
+
+    type CardActionButton = {
+        id: string;
+        Icon: IconType;
+        onClick: () => void;
+        className?: string;
+    }
+
+
+    const actionButtonCommonClassName = "expense-item-action-btn w-8 h-8 rounded-full p-2 py-3 text-white flex items-center justify-center"
+    const actionButtons = (_expense: IExpense): CardActionButton[] => [
+        {
+            id: "view-expense",
+            Icon: HiOutlineEye,
+            onClick: () => dispatch(show(`expense-${_expense.id}`)),
+            className: `${actionButtonCommonClassName} bg-secondary hover:bg-secondary/80`,
+        },
+
+        {
+            id: "update-expense",
+            Icon: HiOutlinePencil,
+            onClick: () => dispatch(show(`update-expense-${_expense.id}`)),
+            className: `${actionButtonCommonClassName} bg-warning hover:bg-warning/80`,
+        },
+        {
+            id: "delete-expense",
+            Icon: HiOutlineTrash,
+            onClick: () => dispatch(show(`delete-expense-${_expense.id}`)),
+            className: `${actionButtonCommonClassName} bg-failure hover:bg-failure/80`,
+        },
+    ];
+
 
     return (
         <>
@@ -50,53 +84,16 @@ const MonthlyExpenseItem: FC<MonthlyExpenseItemProps> = ({
                     }}
                 >
                     {hoveredId === expense.id && (
-                        <div className="w-full absolute bottom-0 flex flex-col bg-white">
-                            {expense.imageUrl && (
-                                <button
-                                    id="view-expense-image"
-                                    className="expense-item-action-btn bg-secondary w-full p-2 py-3 text-white flex items-center justify-center hover:bg-secondary/80"
-                                    onClick={() => {
-                                        dispatch(
-                                            show(`expense-image-${expense.id}`)
-                                        );
-                                    }}
-                                >
-                                    <HiOutlinePhoto size={20} />
-                                </button>
-                            )}
-                            <button
-                                id="update-expense"
-                                className="expense-item-action-btn bg-warning w-full p-2 py-3 text-white flex items-center justify-center hover:bg-warning/80"
-                                onClick={() => {
-                                    dispatch(
-                                        show(`update-expense-${expense.id}`)
-                                    );
-                                }}
-                            >
-                                <HiOutlinePencil size={20} />
-                            </button>
-                            <button
-                                id="delete-expense"
-                                className="expense-item-action-btn bg-failure w-full p-2 py-3 text-white flex items-center justify-center hover:bg-failure/80"
-                                onClick={() => {
-                                    dispatch(
-                                        show(`delete-expense-${expense.id}`)
-                                    );
-                                }}
-                            >
-                                <HiOutlineTrash size={20} />
-                            </button>
+                        <div className="absolute top-0 right-0 flex gap-2 p-2">
+                            {actionButtons(expense).map(item => <button id={item.id} className={item.className} onClick={item.onClick}>
+                                <item.Icon size={20} />
+                            </button>)}
                         </div>
                     )}
                     <div className="p-4 flex flex-col gap-3">
-                        <h3 className="text-2xl font-semibold text-primary text-start">
+                        <h3 className="text-2xl font-semibold text-primary text-start truncate">
                             {expense.label}
                         </h3>
-                    </div>
-                    <div className="flex gap-1 px-3">
-                        {expense.tagList?.map((tag) => (
-                            <Tag key={tag.id} id={tag.id}>{tag.name}</Tag>
-                        ))}
                     </div>
                     <div className="flex gap-4 p-4 justify-between items-end">
                         <p className="italic text-sm text-gray-600">
@@ -119,6 +116,49 @@ const MonthlyExpenseItem: FC<MonthlyExpenseItemProps> = ({
                     </div>
                 </div>
             </div>
+            <Modal name={`expense-${expense.id}`} title={expense.label}>
+                <div className="flex flex-col gap-2">
+                    {!!expense.description && <p className="text-xs">{expense.description}</p>}
+                    <div className="flex flex-col gap-2">
+                        <p className="text-lg text-primary font-semibold">Details</p>
+                        <div className="flex flex-wrap">
+                            <div className="flex flex-col w-1/2 p-1 text-quaternary">
+                                <div className="flex flex-col w-full p-2 rounded-md bg-primary">
+                                    <p className="text-sm font-semibold">Purchased date</p>
+                                    <p className="text-sm text-right">{formatDate(date)}</p>
+                                </div>
+                            </div>
+                            <div className="flex flex-col w-1/2 p-1 text-quaternary">
+                                <div className="flex flex-col w-full p-2 rounded-md bg-primary">
+                                    <p className="text-sm font-semibold">Category</p>
+                                    <p className="text-sm text-right">{expense.category.name}</p>
+                                </div>
+                            </div>
+                            <div className="flex flex-col w-1/2 p-1 text-quaternary">
+                                <div className="flex flex-col w-full p-2 rounded-md bg-primary">
+                                    <p className="text-sm font-semibold">Amount</p>
+                                    <p className="text-sm text-right">{formatCurrency(expense.amount.toString(), "PHP")}</p>
+                                </div>
+                            </div>
+                            <div className="flex flex-col w-1/2 p-1 text-quaternary">
+                                <div className="flex flex-col w-full p-2 rounded-md bg-primary">
+                                    <p className="text-sm font-semibold">Month</p>
+                                    <p className="text-sm text-right">{capitalize(params.month as string)}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {expense.tags && !!expense.tags.length && <div className="flex flex-col gap-2">
+                            <p className='text-lg text-primary font-semibold'>Tags</p>
+                            <div className="flex flex-wrap gap-2">
+                                {expense.tagList?.map(tag => <Tag key={tag.id} id={tag.id}>{tag.name}</Tag>)}
+                            </div>
+                        </div>}
+                        {expense.imageUrl && <div className="flex w-full items-center justify-center rounded-md overflow-hidden">
+                            <img src={expense.imageUrl} alt={expense.label} className="object-contain" />
+                        </div>}
+                    </div>
+                </div>
+            </Modal>
             <Modal
                 name={`delete-expense-${expense.id}`}
                 title={`Delete ${expense.label}`}
@@ -159,7 +199,7 @@ const MonthlyExpenseItem: FC<MonthlyExpenseItemProps> = ({
             >
                 <ExpenseForm
                     onSubmit={async (val) => {
-                        await updateExpenseRequest(val);
+                        await updateExpenseRequest({ ...expense, ...val });
                         dispatch(
                             success({
                                 message: `${val.label} successfully updated!`,
@@ -176,18 +216,6 @@ const MonthlyExpenseItem: FC<MonthlyExpenseItemProps> = ({
                     isLoading={isUpdateLoading}
                     imageUrl={expense.imageUrl}
                 />
-            </Modal>
-            <Modal
-                name={`expense-image-${expense.id}`}
-                title={`${expense.label} Image`}
-            >
-                <div className="flex w-full items-center justify-center">
-                    <img
-                        src={expense.imageUrl}
-                        className="object-contain"
-                        alt=""
-                    />
-                </div>
             </Modal>
         </>
     );
