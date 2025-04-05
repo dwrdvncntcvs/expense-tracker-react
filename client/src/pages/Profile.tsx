@@ -95,7 +95,7 @@ const Profile: FC = () => {
                                 value={expenseType}
                                 className="md:w-auto w-full"
                                 buttonClassName="md:w-auto w-full"
-                                label="Select type"
+                                label={capitalize(expenseType) || "Select type"}
                                 options={expenseTypes.map((option) => {
                                     const optionObject = optionsObject[option];
                                     return {

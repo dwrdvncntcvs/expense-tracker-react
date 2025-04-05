@@ -48,10 +48,14 @@ export default class GenerateExpenseAggregate {
                             },
                         },
                         {
+                            $match: {
+                                category: { $ne: [] }
+                            }
+                        },
+                        {
                             $unwind: {
                                 path: "$category",
-                                includeArrayIndex: "string",
-                                preserveNullAndEmptyArrays: true,
+                                preserveNullAndEmptyArrays: false
                             },
                         },
                         {
