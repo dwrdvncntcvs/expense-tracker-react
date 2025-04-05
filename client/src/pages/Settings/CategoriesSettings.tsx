@@ -1,15 +1,16 @@
 import { ICategory } from "@_types/Settings/category";
 import { Field, Form } from "@components/Form";
+import { DeleteCategoryModal } from "@components/Modal";
 import { useAppDispatch } from "@hooks/storeHooks";
 import { SettingsContentLayout } from "@layouts";
 import {
-    useCreateCategoryMutation,
-    useDeleteCategoryMutation,
+    useCreateCategoryMutation
 } from "@store/queries/categories";
+import { show } from "@store/slices/modal";
 import { useSettings } from "@store/slices/settings";
 import { success } from "@store/slices/toast";
 import { categoriesSchema } from "@validation/settings";
-import { FC, useCallback } from "react";
+import { FC, useState } from "react";
 import {
     HiListBullet,
     HiOutlineTrash,
@@ -21,20 +22,14 @@ const CategoriesSettings: FC = () => {
     const dispatch = useAppDispatch();
     const { categories } = useSettings();
 
-    const [createCategoryRequest] = useCreateCategoryMutation();
-    const [deleteCategoryRequest] = useDeleteCategoryMutation();
+    const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(null);
 
-    const handleDeleteCategory = useCallback(
-        async (id: string, name: string) => {
-            await deleteCategoryRequest(id);
-            dispatch(
-                success({
-                    message: `Successfully deleted ${name}`,
-                })
-            );
-        },
-        []
-    );
+    const [createCategoryRequest] = useCreateCategoryMutation();
+
+    const openModalDeleteModal = (category: ICategory) => () => {
+        setSelectedCategory(category);
+        dispatch(show("delete-category"));
+    }
 
     return (
         <SettingsContentLayout icon={HiSquare3Stack3D} title="Category">
@@ -76,19 +71,21 @@ const CategoriesSettings: FC = () => {
                             <button
                                 data-testid={`delete-${category.name}`}
                                 className="hover:bg-failure text-failure p-2 rounded-full hover:text-white transition-all duration-75"
-                                onClick={async () => {
-                                    await handleDeleteCategory(
-                                        category.id,
-                                        category.name
-                                    );
-                                }}
+                                onClick={openModalDeleteModal(category)}
                             >
                                 <HiOutlineTrash />
                             </button>
+
                         </li>
                     ))}
                 </ul>
             </div>
+            {selectedCategory && (
+                <DeleteCategoryModal
+                    categoryId={selectedCategory.id}
+                    categoryName={selectedCategory.name}
+                />
+            )}
         </SettingsContentLayout>
     );
 };
