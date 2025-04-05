@@ -9,5 +9,11 @@ const router = new Router("/categories", { isAuthenticated: true });
 router.createRoutes("get", "/", categoryController.allCategories, []);
 router.createRoutes("post", "/", categoryController.addCategory, []);
 router.createRoutes("delete", "/:id", categoryController.removeCategory, []);
+router.createRoutes(
+    "get",
+    "/:id/used",
+    categoryController.checkCategoryUsage,
+    []
+);
 
 export default router.routerDetails();

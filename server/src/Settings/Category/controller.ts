@@ -51,6 +51,17 @@ class CategoryController {
             else next(ErrorService.BAD_REQUEST(error));
         }
     };
+
+    checkCategoryUsage: RequestHandler = async (req, res, next) => {
+        const { id } = req.params;
+
+        try {
+            const isUsed = await this.service.isCategoryUsed(id);
+            return res.status(200).send({ data: { isUsed } });
+        } catch (e) {
+            next(ErrorService.BAD_REQUEST(e as any));
+        }
+    };
 }
 
 export default CategoryController;

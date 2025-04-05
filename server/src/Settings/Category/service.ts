@@ -1,6 +1,7 @@
 import { formatData } from "../../database/mongoDb";
 import { CreateCategory } from "../../types/Settings/Category/category";
 import CategoryModel from "./model";
+import mongoose from "mongoose";
 
 class CategoryService {
     private model: typeof CategoryModel;
@@ -22,6 +23,31 @@ class CategoryService {
     async remove(id: string) {
         const data = await this.model.findByIdAndDelete({ _id: id });
         return formatData(data);
+    }
+
+    async isCategoryUsed(categoryId: string) {
+        const result = await this.model.aggregate([
+            {
+                $match: {
+                    _id: new mongoose.Types.ObjectId(categoryId),
+                },
+            },
+            {
+                $lookup: {
+                    from: "expenses",
+                    localField: "_id",
+                    foreignField: "categoryId",
+                    as: "expenses",
+                },
+            },
+            {
+                $project: {
+                    isUsed: { $gt: [{ $size: "$expenses" }, 0] },
+                },
+            },
+        ]);
+
+        return result[0]?.isUsed || false;
     }
 }
 
